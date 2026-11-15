@@ -21,7 +21,7 @@ def number(value):
     return value
 
 
-def monitored(measure, policy_id, contract, forecast):
+def observation_group(measure, policy_id, contract):
     require(measure["policy_id"] == policy_id and measure["head"] == contract["head"] and
             measure["unit"] == contract["unit"], "CURRENT_STRATUM_SCOPE")
     states = measure["source_states"]
@@ -31,6 +31,56 @@ def monitored(measure, policy_id, contract, forecast):
     missing = sum(s not in ("VERIFIED_OBSERVATION", "VERIFIED_ABSENCE") for s in states.values())
     rate = missing / len(states)
     group = "complete" if missing == 0 else "missing" if missing == len(states) else "partial"
+    return group, rate
+
+
+def refusal_reasons(contract, states, group):
+    """Version-2 contracts declare the exact source states that can be forecast.
+
+    A refusal is an observed disposition, not a zero forecast or a scored loss.
+    These conditions are part of the preregistered policy, never inferred from
+    which confirmation examples happen to be easy to predict.
+    """
+    if "prediction_groups" not in contract:
+        return []
+    reasons = []
+    if group not in contract["prediction_groups"]:
+        reasons.append("REPORT_GROUP_UNSUPPORTED:" + group)
+    for source, state in sorted(states.items()):
+        if state not in contract["prediction_source_states"][source]:
+            reasons.append("SOURCE_STATE_UNSUPPORTED:" + source + ":" + state)
+    return sorted(reasons)
+
+
+def _prediction_contract(contract, version):
+    fields = {"prediction_groups", "prediction_source_states", "minimum_predictions_by_group",
+              "minimum_refusals", "max_refusal_rate"}
+    if version == 1:
+        require(not fields.intersection(contract), "REFUSAL_POLICY_REQUIRES_V2")
+        return PERFORMANCE_GROUPS
+    require(fields <= set(contract), "REFUSAL_POLICY_REQUIRED")
+    groups = contract["prediction_groups"]
+    require(isinstance(groups, list) and groups and all(isinstance(g, str) for g in groups)
+            and len(groups) == len(set(groups)) and set(groups) <= PERFORMANCE_GROUPS,
+            "PREDICTION_GROUP_SCOPE")
+    states = contract["prediction_source_states"]
+    require(isinstance(states, dict) and set(states) == set(contract["source_ids"]),
+            "PREDICTION_SOURCE_SCOPE")
+    for values in states.values():
+        require(isinstance(values, list) and values and all(isinstance(v, str) for v in values)
+                and len(values) == len(set(values)) and set(values) <= set(OBSERVATION_STATES),
+                "PREDICTION_SOURCE_STATES")
+    minimum = contract["minimum_predictions_by_group"]
+    require(isinstance(minimum, dict) and set(minimum) == set(groups)
+            and all(type(n) is int and n > 0 for n in minimum.values()), "PREDICTION_GROUP_COUNTS")
+    require(type(contract["minimum_refusals"]) is int and contract["minimum_refusals"] >= 0
+            and 0 <= number(contract["max_refusal_rate"]) <= 1, "REFUSAL_COVERAGE_LIMITS")
+    return set(groups)
+
+
+def monitored(measure, policy_id, contract, forecast):
+    group, rate = observation_group(measure, policy_id, contract)
+    require(not refusal_reasons(contract, measure["source_states"], group), "CURRENT_SOURCE_SCOPE_UNSUPPORTED")
     after = number(forecast[contract["head"]])
     require(number(measure["head_after"]) == after, "CURRENT_HEAD_BINDING")
     shift = after - number(measure["same_fit_reporting_control_head"])
@@ -58,8 +108,8 @@ def validate_study(store, policy_id, results_id, procedure_id, target, start, en
     """Read hash-bound inputs. The enclosing protocol and review authorize these IDs."""
     require(isinstance(verifier, Ed25519Verifier), "TRUSTED_WITNESS_REQUIRED")
     policy, results = store.read(policy_id), store.read(results_id)
-    require(policy.get("schema") == "sports.missingness_policy.v1" and
-            results.get("schema") == "sports.missingness_evaluation.v1", "STUDY_SCHEMA")
+    version = {"sports.missingness_policy.v1": 1, "sports.missingness_policy.v2": 2}.get(policy.get("schema"))
+    require(version is not None and results.get("schema") == f"sports.missingness_evaluation.v{version}", "STUDY_SCHEMA")
     require(policy["procedure_id"] == procedure_id and policy["target"] == target and
             results["policy_id"] == policy_id, "STUDY_SCOPE_MISMATCH")
     require(_time(policy["calibration_end_utc"]) < start < end, "CALIBRATION_OVERLAP")
@@ -85,6 +135,7 @@ def validate_study(store, policy_id, results_id, procedure_id, target, start, en
         source_ids = c["source_ids"]
         require(isinstance(source_ids, list) and bool(source_ids) and all(type(x) is str and x for x in source_ids)
                 and len(source_ids) == len(set(source_ids)), "SOURCE_KEYS")
+        required_groups = _prediction_contract(c, version)
         require(isinstance(historical, list) and historical and
                 len({r["event_id"] for r in historical}) == len(historical), "CALIBRATION_ROWS")
         rates, shifts = [], []
@@ -102,6 +153,8 @@ def validate_study(store, policy_id, results_id, procedure_id, target, start, en
         data = store.read(observations[key])
         ids = set()
         groups = set()
+        predicted_rows = []
+        refused_count = 0
         for row in data["events"]:
             eid = row["event_id"]
             require(isinstance(eid, str) and eid and eid not in ids, "DUPLICATE_OR_MISSING_EVENT")
@@ -109,19 +162,38 @@ def validate_study(store, policy_id, results_id, procedure_id, target, start, en
             require(start <= _time(row["registered_at_utc"]) < _time(row["start_utc"])
                     <= _time(row["result_available_utc"]) <= end, "FORWARD_CHRONOLOGY")
             receipt = store.read(row["receipt_id"])
+            disposition = row.get("disposition", "FORECAST") if version == 1 else row["disposition"]
+            require(disposition in ("FORECAST", "REFUSED") and (version == 2 or disposition == "FORECAST"),
+                    "INVALID_MONITORING_DISPOSITION")
+            refused = disposition == "REFUSED"
             require(receipt.get("schema") == "sports.missingness_audit.v1" and
                     receipt.get("event_id") == eid and receipt.get("league") == target["league"] and
-                    receipt.get("model_id") == policy["model_id"] and c["head"] in receipt["products"],
+                    receipt.get("model_id") == policy["model_id"] and
+                    (receipt["products"] == ["coverage"] if refused else c["head"] in receipt["products"]),
                     "MONITORING_RECEIPT_SCOPE")
             forecast = store.read(row["forecast_id"])
             require(verify_audit(receipt, league=target["league"], event_id=eid, model_id=policy["model_id"],
                                  products=receipt["products"], forecast=forecast), "MONITORING_RECEIPT_BINDING")
-            group, rate, shift, prediction = monitored(receipt["details"]["monitored_strata"][key],
-                                                        policy_id, c, forecast)
+            measure = receipt["details"]["monitored_strata"][key]
+            if refused:
+                group, rate = observation_group(measure, policy_id, c)
+                reasons = refusal_reasons(c, measure["source_states"], group)
+                require(reasons and forecast == {"status": "REFUSED", "reason_codes": reasons}
+                        and row["reason_codes"] == reasons, "REFUSAL_NOT_SUPPORTED_BY_POLICY")
+                require(row.get("head_shift") is None and row.get("model_loss") is None
+                        and "head_after" not in measure and "same_fit_reporting_control_head" not in measure,
+                        "REFUSAL_HAS_NUMERIC_FORECAST")
+                shift, prediction = None, None
+                refused_count += 1
+            else:
+                group, rate, shift, prediction = monitored(measure, policy_id, c, forecast)
+                require(math.isclose(number(row["head_shift"]), shift, abs_tol=1e-12, rel_tol=0),
+                        "OBSERVATION_MEASUREMENT_MISMATCH")
+                groups.add(group)
+                predicted_rows.append(row)
             require(row["report_group"] == group and number(row["missing_rate"]) == rate and
-                    math.isclose(number(row["head_shift"]), shift, abs_tol=1e-12, rel_tol=0),
+                    (refused or prediction is not None),
                     "OBSERVATION_MEASUREMENT_MISMATCH")
-            groups.add(group)
             settlement = store.read(row["result_id"])
             require(settlement["event_id"] == eid and settlement["target"] == target and
                     settlement["status"] == "RECONCILED" and settlement["start_utc"] == row["start_utc"] and
@@ -130,6 +202,8 @@ def validate_study(store, policy_id, results_id, procedure_id, target, start, en
                       "receipt_id": row["receipt_id"], "start_utc": row["start_utc"],
                       "incumbent_forecast_id": row["incumbent_forecast_id"],
                       "independent_forecast_id": row["independent_forecast_id"]}
+            if version == 2:
+                record["disposition"] = disposition
             require(store.read(row["registration_id"]) == record, "REGISTRATION_BINDING")
             for subject, purpose, stamp, ref in (
                 (row["registration_id"], "missingness_pregame_registration", row["registered_at_utc"], row["registration_witness_id"]),
@@ -139,13 +213,22 @@ def validate_study(store, policy_id, results_id, procedure_id, target, start, en
                 require(attestation["signer_id"] == policy["witnesses"][purpose] and
                         _time(attestation["witnessed_at_utc"]) == _time(stamp), "WITNESS_BINDING")
             actual = settlement["actual"]
-            forecasts = {"model": prediction}
+            forecasts = {} if refused else {"model": prediction}
             for name in ("incumbent", "independent"):
                 ref = store.read(row[name + "_forecast_id"])
                 comparator_key = "incumbent_id" if name == "incumbent" else "independent_comparator_id"
                 require(ref["procedure_id"] == policy[comparator_key]
                         and ref["event_id"] == eid and ref["target"] == target
                         and _time(ref["frozen_utc"]) <= _time(row["registered_at_utc"]), "COMPARATOR_BINDING")
+                comparator_disposition = ref.get("disposition", "FORECAST")
+                require(comparator_disposition in ("FORECAST", "REFUSED"), "COMPARATOR_DISPOSITION")
+                if comparator_disposition == "REFUSED":
+                    reasons = ref.get("reason_codes")
+                    require(version == 2 and refused and "point" not in ref
+                            and row.get(name + "_loss") is None and isinstance(reasons, list) and reasons
+                            and all(isinstance(reason, str) and reason.strip() for reason in reasons)
+                            and len(reasons) == len(set(reasons)), "COMPARATOR_REFUSAL_INVALID")
+                    continue
                 forecasts[name] = ref["point"]
             for name, estimate in forecasts.items():
                 score = number(row[name + "_loss"])
@@ -154,12 +237,18 @@ def validate_study(store, policy_id, results_id, procedure_id, target, start, en
         expected = population["events_by_stratum"][key]
         require(isinstance(expected, list) and expected and set(expected) == ids and len(expected) == len(ids),
                 "MONITORING_POPULATION_MISMATCH")
-        require(groups == PERFORMANCE_GROUPS and type(c["minimum_events"]) is int and
+        require(groups == required_groups and type(c["minimum_events"]) is int and
                 len(ids) >= c["minimum_events"] > 0, "INSUFFICIENT_FORWARD_COVERAGE")
+        if version == 2:
+            require(refused_count >= c["minimum_refusals"] and
+                    refused_count / len(ids) <= c["max_refusal_rate"], "REFUSAL_COVERAGE_OUT_OF_BOUNDS")
+            for group, minimum in c["minimum_predictions_by_group"].items():
+                require(sum(r["report_group"] == group for r in predicted_rows) >= minimum,
+                        "INSUFFICIENT_GROUP_PREDICTIONS")
         require(data["stratum"] == key and data["policy_id"] == policy_id, "FORWARD_STRATUM_BINDING")
         # Compare paired loss by report group with independently identified benchmarks.
-        for group in PERFORMANCE_GROUPS:
-            records = [r for r in data["events"] if r["report_group"] == group]
+        for group in required_groups:
+            records = [r for r in predicted_rows if r["report_group"] == group]
             for comparator in ("incumbent", "independent"):
                 limit = number(c["max_mean_loss_delta"][comparator])
                 delta = sum(number(r["model_loss"]) - number(r[comparator + "_loss"]) for r in records)/len(records)
@@ -224,14 +313,28 @@ def release_reason(scope, at_utc, *, league=None, receipt=None, forecast=None):
         if receipt is not None:
             require(receipt["model_id"] == policy["model_id"] and
                     receipt["league"] == policy["target"]["league"], "CURRENT_MODEL_BINDING")
-            measured = receipt["details"].get("monitored_strata")
+            details = receipt["details"]
+            require(("status" not in details or (isinstance(details["status"], str) and details["status"].strip()
+                     and details["status"] not in ("BLOCKED", "TRACE_BLOCKED", "REFUSED", "UNREGISTERED_OR_UNSUPPORTED")))
+                    and details.get("comparison_status") != "CHILD_SENSITIVITY_NOT_ESTABLISHED"
+                    and ("parent_receipt_verified" not in details or details["parent_receipt_verified"] is True),
+                    "CURRENT_TRACE_UNSUPPORTED")
+            contracts = details.get("feature_contracts")
+            require(contracts is None or (isinstance(contracts, dict) and
+                    contracts.get("status") == "COMPLETE_ENGINEERING_INVENTORY"
+                    and contracts.get("model_scope_matches") is True
+                    and contracts.get("head_scope_matches") is True
+                    and type(contracts.get("unregistered_features")) is list
+                    and contracts["unregistered_features"] == []),
+                    "CURRENT_FEATURE_CONTRACTS_INCOMPLETE")
+            measured = details.get("monitored_strata")
             require(isinstance(measured, dict) and set(measured) == set(policy["strata"]),
                     "CURRENT_STRATA_UNMEASURED")
             for key, limit in policy["strata"].items():
                 row = measured[key]
                 monitored(row, scope_policy_id(scope), limit, forecast)
         return None
-    except (OSError, TypeError, ValueError, KeyError, OverflowError) as exc:
+    except (OSError, TypeError, ValueError, KeyError, AttributeError, OverflowError) as exc:
         return str(exc) if isinstance(exc, RegistryError) else "MISSINGNESS_REVIEW_INVALID"
 
 

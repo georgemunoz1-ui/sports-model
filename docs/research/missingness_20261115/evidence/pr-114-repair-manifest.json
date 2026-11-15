@@ -1,0 +1,49 @@
+{
+  "schema": "sports.personnel_refusal_repair_verification.v1",
+  "created_at_utc": "2026-11-15T23:02:11.808479+00:00",
+  "base_commit": "3246bd3e6b356abe47ead1a298ce329d4622b57a",
+  "tested_commit": "54631e115216d1ab4216e348aa5e0772ad198f8f",
+  "tested_tree": "bd9d4d533cb224a7b118797da5c0d86725d0766b",
+  "test_scope": [
+    "tests/test_nba_personnel_minutes.py",
+    "tests/test_cfb_personnel_v2.py",
+    "tests/test_efficiency_integrity.py"
+  ],
+  "counts": {
+    "tests": 135,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "pre_fix_result": "2 FAILED: missing refusal receipt keys",
+  "logs": {
+    "pre-fix.log": "8852eff4cb5f0cb6c9297686480671ef06755a8d1101736f176fbd787d331798",
+    "post-fix.log": "76b5e5d728dcef69f7d6f2bec1062a483f7d89dc0fe1722412934a0101431523",
+    "post-fix.xml": "dfa32648d781a273cbba78b0f36a6aaa97ac9c77e121bb68c354e2883c839d65"
+  },
+  "unchanged_source_and_defaults": {
+    "models/experiments/nba_personnel.py": {
+      "before": "780197a5959bc2b5c0a89abfc72e4e4b54430fb48d97b9a48a986b954393905d",
+      "after": "780197a5959bc2b5c0a89abfc72e4e4b54430fb48d97b9a48a986b954393905d",
+      "byte_identical": true
+    },
+    "scripts/run_nba_personnel_experiment.py": {
+      "before": "c83946327d8bb5b518a4b6ed93b91abd44c6ffcfaccb7f28739a63d7e3c72d2a",
+      "after": "c83946327d8bb5b518a4b6ed93b91abd44c6ffcfaccb7f28739a63d7e3c72d2a",
+      "byte_identical": true
+    },
+    "data/model_selection/defaults_v1.json": {
+      "before": "8bbfb63ee0f8eeb99fc728fb25db3f1d9959c863ccb4f517abde058e3424b3eb",
+      "after": "8bbfb63ee0f8eeb99fc728fb25db3f1d9959c863ccb4f517abde058e3424b3eb",
+      "byte_identical": true
+    },
+    "state.json": {
+      "before": "b11eaae146d0ad6f01cbcf8cd2be8b6164074a013e03d1cd5977c664a728cd19",
+      "after": "b11eaae146d0ad6f01cbcf8cd2be8b6164074a013e03d1cd5977c664a728cd19",
+      "byte_identical": true
+    }
+  },
+  "card_sidecar_function_unchanged": true,
+  "card_sidecar_function_sha256": "433bc886dff0300f711e03b7f8e34ecb15913e7acd7416d1d2664c945e05d674",
+  "scope": "Additive historical-experiment refusal audit. No predictive change, publication approval, external branch update, or live monitoring."
+}

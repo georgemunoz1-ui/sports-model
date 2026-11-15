@@ -15,7 +15,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from research.missingness_review import release_reason, release_inventory
-from pipelines.cards.missingness import verify_audit
+from pipelines.cards.missingness import content_digest, verify_audit
 
 LEGACY_SPORTS = ("mlb", "wnba", "nfl", "cfb")
 SPORTS = (*LEGACY_SPORTS, "nba", "nhl", "mls", "cbb")
@@ -37,8 +37,24 @@ def _utc(value):
     return dt.datetime.fromisoformat(value[:-1] + "+00:00")
 
 
+def _mapping(value):
+    return value if isinstance(value, dict) else {}
+
+
+def _event_rows(block):
+    value = block.get("events")
+    return value if isinstance(value, list) else []
+
+
+def _reason_codes(value):
+    return (isinstance(value, list) and all(isinstance(v, str) and v.strip() for v in value)
+            and len(value) == len(set(value)))
+
+
 def _problems(evidence, leagues):
     problems = []
+    if not isinstance(evidence, dict):
+        return ["EVIDENCE_OBJECT_REQUIRED"]
     enabled = evidence.get("enabled_sports")
     if enabled != list(leagues):
         problems.append("ENABLED_SPORT_SET_MISMATCH")
@@ -48,29 +64,43 @@ def _problems(evidence, leagues):
     except (TypeError, ValueError):
         cutoff = None
         problems.append("DECISION_TIME_INVALID")
-    sports = evidence.get("sports") or {}
+    sports = _mapping(evidence.get("sports"))
+    if not isinstance(evidence.get("sports"), dict):
+        problems.append("SPORT_EVIDENCE_OBJECT_REQUIRED")
     for sport in leagues:
         block = sports.get(sport)
         if not isinstance(block, dict):
             problems.append(f"{sport}:SPORT_EVIDENCE_MISSING")
             continue
-        gates = block.get("gates") or {}
+        gates = _mapping(block.get("gates"))
         for gate in REQUIRED_GATES:
-            state = (gates.get(gate) or {}).get("status")
-            if state not in GATE_STATES:
+            row = _mapping(gates.get(gate))
+            state = row.get("status")
+            if not isinstance(state, str) or state not in GATE_STATES:
                 problems.append(f"{sport}:{gate}:GATE_UNCLASSIFIED")
-        events = block.get("events") or []
+            if "reason_codes" in row and not _reason_codes(row["reason_codes"]):
+                problems.append(f"{sport}:{gate}:GATE_REASON_CODES_INVALID")
+        events = _event_rows(block)
+        if not isinstance(block.get("events"), list):
+            problems.append(f"{sport}:EVENTS_LIST_REQUIRED")
         expected = block.get("expected_event_count")
-        if not isinstance(expected, int) or expected != len(events):
+        if type(expected) is not int or expected < 0 or expected != len(events):
             problems.append(f"{sport}:EVENT_COUNT_MISMATCH")
         seen = set()
         for event in events:
+            if not isinstance(event, dict):
+                problems.append(f"{sport}:EVENT_OBJECT_REQUIRED")
+                continue
             key = event.get("event_key")
-            if not key or key in seen:
+            if not isinstance(key, str) or not key.strip() or key in seen:
                 problems.append(f"{sport}:EVENT_KEY_MISSING_OR_DUPLICATE")
-            seen.add(key)
-            if event.get("disposition") not in EVENT_STATES:
+            else:
+                seen.add(key)
+            disposition = event.get("disposition")
+            if not isinstance(disposition, str) or disposition not in EVENT_STATES:
                 problems.append(f"{sport}:{key}:EVENT_UNCLASSIFIED")
+            if "reason_codes" in event and not _reason_codes(event["reason_codes"]):
+                problems.append(f"{sport}:{key}:EVENT_REASON_CODES_INVALID")
             if event.get("disposition") == "EXPLICITLY_BLOCKED" and not event.get("reason_codes"):
                 problems.append(f"{sport}:{key}:BLOCK_REASON_MISSING")
             for field in ("available_at_utc", "feature_cutoff_utc", "odds_snapshot_utc"):
@@ -87,12 +117,13 @@ def _problems(evidence, leagues):
 
 def _evaluate(evidence, leagues):
     problems = _problems(evidence, leagues)
+    evidence = _mapping(evidence)
     sports_out = {}
     for sport in leagues:
-        block = (evidence.get("sports") or {}).get(sport) or {}
-        gates = block.get("gates") or {}
-        states = [(gates.get(g) or {}).get("status") for g in REQUIRED_GATES]
-        if any(s == "BLOCKED" or s not in GATE_STATES for s in states):
+        block = _mapping(_mapping(evidence.get("sports")).get(sport))
+        gates = _mapping(block.get("gates"))
+        states = [_mapping(gates.get(g)).get("status") for g in REQUIRED_GATES]
+        if any(not isinstance(s, str) or s == "BLOCKED" or s not in GATE_STATES for s in states):
             status = "BLOCKED"
         elif any(s == "SHADOW_ONLY" for s in states):
             status = "SHADOW_ONLY"
@@ -100,16 +131,22 @@ def _evaluate(evidence, leagues):
             status = "HEALTHY"
         reasons = []
         for gate in REQUIRED_GATES:
-            row = gates.get(gate) or {}
-            if row.get("status") in {"BLOCKED", "SHADOW_ONLY"}:
-                reasons.extend(row.get("reason_codes") or [f"{gate.upper()}_{row.get('status')}"])
+            row = _mapping(gates.get(gate))
+            state = row.get("status")
+            if isinstance(state, str) and state in {"BLOCKED", "SHADOW_ONLY"}:
+                codes = row.get("reason_codes")
+                reasons.extend(codes if _reason_codes(codes) and codes else [f"{gate.upper()}_{state}"])
         if leagues == SPORTS:
+            local_problems = [p for p in problems if p.startswith(sport + ":")]
+            if local_problems:
+                status = "BLOCKED"
+                reasons.extend(local_problems)
             inventory_problem = release_inventory(block, sport, evidence.get("decision_time_utc"))
             if inventory_problem:
                 reasons.append(inventory_problem)
                 status = "BLOCKED"
             checks = block.get("missingness_reviews")
-            coverage = block.get("events") or []
+            coverage = _event_rows(block)
             if not coverage and inventory_problem is None:
                 checks = []
             elif not isinstance(checks, list) or not checks:
@@ -128,6 +165,8 @@ def _evaluate(evidence, leagues):
                     else:
                         scope_keys[key] = review
                 for event in coverage:
+                    if not isinstance(event, dict):
+                        continue
                     if event.get("disposition") != "COMPLETE":
                         continue
                     outputs = event.get("model_outputs")
@@ -155,7 +194,7 @@ def _evaluate(evidence, leagues):
         sports_out[sport] = {
             "status": status,
             "expected_event_count": block.get("expected_event_count"),
-            "classified_event_count": len(block.get("events") or []),
+            "classified_event_count": len(_event_rows(block)),
             "reason_codes": sorted(set(reasons)),
         }
     if problems:
@@ -192,20 +231,29 @@ def verify_artifact(evidence_path, artifact_path):
     evidence = json.loads(raw)
     with open(artifact_path, encoding="utf-8") as handle:
         artifact = json.load(handle)
-    leagues = LEGACY_SPORTS if artifact.get("schema") in {"ops.release_manifest.v1","ops.release_artifact.v1"} else SPORTS
+    if not isinstance(artifact, dict):
+        return evaluate(evidence), ["ARTIFACT_OBJECT_REQUIRED"]
+    schema = artifact.get("schema")
+    leagues = LEGACY_SPORTS if isinstance(schema, str) and schema in {"ops.release_manifest.v1","ops.release_artifact.v1"} else SPORTS
     expected = _evaluate(evidence, leagues)
     problems = []
     if artifact.get("evidence_sha256") != hashlib.sha256(raw).hexdigest():
         problems.append("EVIDENCE_HASH_MISMATCH")
-    if artifact.get("release_id") != expected["release_id"]:
-        problems.append("RELEASE_ID_MISMATCH")
-    if artifact.get("global_status") != expected["global_status"]:
-        problems.append("GLOBAL_STATUS_MISMATCH")
-    if artifact.get("contract_problems") != expected["contract_problems"]:
-        problems.append("CONTRACT_PROBLEMS_MISMATCH")
-    for sport in leagues:
-        if (artifact.get("sports") or {}).get(sport) != expected["sports"][sport]:
-            problems.append(f"{sport}:SPORT_RESULT_MISMATCH")
+    # Legacy artifacts omitted some descriptive fields. They remain readable,
+    # but cannot pass the current --gate. Every current decision field is bound.
+    fields = expected.keys() if leagues == SPORTS else (
+        "release_id", "global_status", "contract_problems", "action_authority", "sports")
+    for field in fields:
+        try:
+            matches = field in artifact and content_digest(artifact[field]) == content_digest(expected[field])
+        except (TypeError, ValueError, OverflowError):
+            matches = False
+        if not matches:
+            problems.append(field.upper() + "_MISMATCH")
+    if leagues == SPORTS:
+        envelope = {"evidence_sha256", "evidence_path", "generated_utc", "generated_at_utc", "release_note"}
+        if set(artifact) - set(expected) - envelope:
+            problems.append("UNRECOGNIZED_ARTIFACT_FIELDS")
     return expected, problems
 
 

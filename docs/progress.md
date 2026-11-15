@@ -5040,3 +5040,18 @@ reproduced. CIN–ATL retained-input retrospective replay preserved five arms an
 100,000 winner draws byte-for-byte; reporting-dominated attribution is visible.
 Reviewed product limits and forward monitoring remain pending; approvals empty.
 See docs/research/missingness_20261108/ACCEPTANCE_RECHECK.md. Wagering OFF.
+
+### 2026-11-15 — Cross-model missingness enforcement recheck
+
+Extended the existing draft missingness implementation after independent failure
+reproduction. Shared census now classifies 133 discoverable entry points and
+20 inline workflows; direct CFB/MLB Monte Carlo and NFL margin CLIs emit audited
+receipts. Consumed feature/head contracts reject undeclared scope. Current
+release readback binds all decision fields and malformed leagues remain isolated.
+Versioned v2 studies retain policy-required refusals without invented forecasts
+or losses. Full shared suite: 2,462 passed; all six pinned companion workflow
+scopes passed separately. Ten retained CIN–ATL arm/edition predictions replayed;
+the reporting-state dominated shift remains visible. Independent statistical
+contracts/limits, source-bound forward monitoring and default-branch deployment
+remain outstanding. Defaults, fitted NFL state and approval anchors unchanged;
+wagering OFF. See docs/research/missingness_20261115/ACCEPTANCE_RECHECK.md.

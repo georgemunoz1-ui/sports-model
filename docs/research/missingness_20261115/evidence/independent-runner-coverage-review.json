@@ -1,0 +1,27 @@
+{
+  "scope": "INDEPENDENT_SOFTWARE_REVIEW_ONLY",
+  "reviewed_commit": "590ee657008a329b4eb29826e8aab4442492f419",
+  "baseline_commit": "14ccf3edacd6a5ad1463b66bbdd08582aab589e7",
+  "non_main_ast_comparisons": {
+    "models/cfb/monte_carlo_v1.py": {
+      "non_main_ast_unchanged": true,
+      "file_sha256": "7ef201c1235196b649b96d85a7bbf6edf4bf1ac6f905816b229e675b49c7e8a8"
+    },
+    "models/mlb/monte_carlo_v1.py": {
+      "non_main_ast_unchanged": true,
+      "file_sha256": "9f31836171035d37014a6c7717fc81d16e8b6c15c7458a9c0fe8f0747f00cea8"
+    },
+    "models/nfl/contextual/margin_distribution.py": {
+      "non_main_ast_unchanged": true,
+      "file_sha256": "96be4068e6078dc7ca39f6d225fd6d23c3d6cd406181ea1683239d2444369120"
+    }
+  },
+  "entrypoint_count": 133,
+  "runtime_invocation_verified_by_inventory": false,
+  "dedicated_tests_passed": 19,
+  "limitations": [
+    "Static census does not prove arbitrary dynamic or undeclared commands are covered.",
+    "Same-revision native CLI output/seed checks are not a claim that old runtime-commit output hashes remain identical.",
+    "No source authenticity, child-product sensitivity qualification, threshold calibration or release approval established."
+  ]
+}

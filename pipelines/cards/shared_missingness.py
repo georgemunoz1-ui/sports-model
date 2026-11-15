@@ -9,14 +9,123 @@ import math
 from pathlib import Path
 from functools import lru_cache
 
-from .missingness import factorial_attribution, seal_audit, verify_audit
+from .missingness import content_digest, factorial_attribution, seal_audit, verify_audit
 
 INITIAL = {"nba", "nhl", "mls"}
 LINEAR = INITIAL | {"cfb"}
 @lru_cache(maxsize=1)
 def shared_contracts():
     raw=(Path(__file__).resolve().parents[2]/"data/model_selection/missingness/shared_contracts.json").read_bytes()
-    return hashlib.sha256(raw).hexdigest(), json.loads(raw)["league"]
+    return hashlib.sha256(raw).hexdigest(), json.loads(raw)
+
+
+def _declared_feature(league, name, registry):
+    """Resolve an explicit feature name; a familiar-looking suffix is not a contract."""
+    scope = registry["league"].get(league, {})
+    feature_set = registry.get("linear_feature_sets", {}).get(scope.get("feature_contract_set"), {})
+    entry = feature_set.get(name)
+    if not isinstance(entry, dict):
+        return None
+    rule = registry.get("feature_group_contracts", {}).get(entry.get("group"))
+    fields = ("source", "freshness_requirement", "missing_representation", "imputation_rule",
+              "missingness_indicator_usage", "fallback_or_refusal", "input_unit")
+    if not isinstance(rule, dict) or not isinstance(entry.get("definition"), str) or not entry["definition"].strip():
+        return None
+    if any(not isinstance(rule.get(key), str) or not rule[key].strip() for key in fields):
+        return None
+    return {**rule, **entry}
+
+
+def _historical_feature_pattern(package, name):
+    """Expose recorded fit-vector counts without upgrading them to source coverage."""
+    support = package.get("missingness_training_support")
+    unknown = {"status": "UNMEASURED", "provider_coverage": "NOT_ESTABLISHED"}
+    if not isinstance(support, dict) or not isinstance(support.get("by_season"), dict):
+        return unknown
+    seasons = {}
+    for season, values in support["by_season"].items():
+        if not isinstance(values, dict):
+            return {**unknown, "status": "INVALID_RECORDED_SUPPORT"}
+        missing = values.get("missing", {})
+        cold = values.get("cold_indicators", {})
+        if not isinstance(missing, dict) or not isinstance(cold, dict):
+            return {**unknown, "status": "INVALID_RECORDED_SUPPORT"}
+        if name not in missing and name not in cold:
+            continue
+        count = values.get("rows")
+        if type(count) is not int or count <= 0:
+            return {**unknown, "status": "INVALID_RECORDED_SUPPORT"}
+        measured = {"rows": count, "missing": missing.get(name), "cold_indicator": cold.get(name)}
+        if any(v is not None and (type(v) is not int or not 0 <= v <= count)
+               for key, v in measured.items() if key != "rows"):
+            return {**unknown, "status": "INVALID_RECORDED_SUPPORT"}
+        seasons[str(season)] = measured
+    if not seasons:
+        return unknown
+    return {"status": "PACKAGE_RECORDED_NOT_INDEPENDENTLY_REVIEWED",
+            "basis": support.get("basis"), "limitation": support.get("limitation"),
+            "provider_coverage": "NOT_ESTABLISHED", "by_season": seasons}
+
+
+def _feature_contract_inventory(league, row, event, package, registry):
+    """Bind declarations to the actual consumed columns, arm and fitted heads.
+
+    This is an engineering inventory. No declaration supplies missing statistical
+    approval, historic source availability, or reviewed sensitivity limits.
+    """
+    features = row["model_input_snapshot"]
+    names = package.get("feature_names")
+    if names is None and league in INITIAL:
+        from models.current.baseline import FEATURES
+        names = FEATURES
+    if not isinstance(names, list) or len(names) != len(set(names)) or set(names) != set(features):
+        raise ValueError("FEATURE_SCHEMA_MISMATCH")
+    fit = package["fitted_model"]
+    if not isinstance(fit, dict) or not fit:
+        raise ValueError("FITTED_HEAD_CONTRACT_REQUIRED")
+    for params in fit.values():
+        if not isinstance(params, dict) or any(
+                not isinstance(params.get(key), (list, tuple)) or len(params[key]) != len(names)
+                for key in ("impute", "mean", "scale", "coefficient")):
+            raise ValueError("FITTED_HEAD_CONTRACT_SHAPE_MISMATCH")
+    scope = registry["league"].get(league, {})
+    fitted_hash = content_digest(fit)
+    expected_heads = scope.get("fitted_heads", {})
+    head_matches = (isinstance(expected_heads, dict) and set(fit) == set(expected_heads)
+                    and all(params.get("kind") == expected_heads[target] for target, params in fit.items()))
+    model_matches = row.get("model_id") in scope.get("arms", [])
+    entries, unknown = {}, []
+    score_unit = {"nhl": "goals", "mls": "goals"}.get(league, "points")
+    for index, name in enumerate(names):
+        rule = _declared_feature(league, name, registry)
+        if rule is None:
+            unknown.append(name)
+            entries[name] = {"status": "UNREGISTERED_FEATURE", "current_pattern": {
+                "raw_value": features[name], "input_state": "UNREGISTERED_FEATURE"}}
+            continue
+        head_use = {}
+        for target, params in fit.items():
+            head_use[target] = {"consumed": True, "fitted_kind": params["kind"],
+                                "fitted_artifact_sha256": fitted_hash,
+                                "imputation_value": params["impute"][index],
+                                "training_center_after_imputation": params["mean"][index],
+                                "training_scale_after_imputation": params["scale"][index],
+                                "unit": "probability" if target == "winner" else score_unit}
+        entries[name] = {**rule, "status": "DECLARED_NOT_STATISTICALLY_REVIEWED",
+                         "input_unit": score_unit if rule["input_unit"] == "NATIVE_SCORE" else rule["input_unit"],
+                         "model_id": row["model_id"], "heads": head_use,
+                         "historical_pattern": _historical_feature_pattern(package, name),
+                         "current_pattern": {"raw_value": features[name], "input_state":
+                                             _feature_status(league, name, features[name], package, event)}}
+    complete = not unknown and model_matches and head_matches
+    return {"status": "COMPLETE_ENGINEERING_INVENTORY" if complete else "INCOMPLETE_ENGINEERING_INVENTORY",
+            "review_status": registry["review_status"], "model_scope_matches": model_matches,
+            "head_scope_matches": head_matches, "unregistered_features": sorted(unknown),
+            "fitted_artifact_sha256": fitted_hash, "features": entries,
+            "source_binding": {"package_ttl_hours": package.get("ttl_hours"),
+                               "training_cutoff_utc": package.get("training_cutoff_utc"),
+                               "source_fetches": package.get("source_fetches", [])},
+            "reviewed_product_limits": None}
 
 
 def binding(row, league, cutoff):
@@ -97,6 +206,8 @@ def check_source_inputs(package):
 
 
 def _feature_status(league, name, value, package, event):
+    if league in LINEAR and _declared_feature(league, name, shared_contracts()[1]) is None:
+        return "UNREGISTERED_FEATURE"
     if value is None:
         return "IMPUTED_TRAINING_MEDIAN"
     if league in INITIAL:
@@ -115,8 +226,10 @@ def _feature_status(league, name, value, package, event):
     if league == "cfb" and name == "elo_diff_with_home_advantage":
         if any(event[s+"_team"] not in package["team_state"]["elo"] for s in ("home","away")):
             return "ELO_1500_PRIOR"
+        if any(event[s+"_team"] not in package["team_state"]["last_season"] for s in ("home","away")):
+            return "ELO_SEASON_MARKER_UNRESOLVED"
     if name in ("neutral_site","conference_game"):
-        return "NORMALIZED_SCHEDULE_FLAG"
+        return "NORMALIZED_SCHEDULE_FLAG_RAW_MISSINGNESS_UNRESOLVED"
     return "OBSERVED_TRANSFORMED"
 
 
@@ -143,6 +256,8 @@ def _linear_trace(league, row, event, package):
     actual = _head_outputs(league,row)
     heads = {}
     states = {key:_feature_status(league,key,features[key],package,event) for key in names}
+    if any(value == "UNREGISTERED_FEATURE" for value in states.values()):
+        raise ValueError("UNREGISTERED_FEATURE_CONTRACT")
     for target, params in package["fitted_model"].items():
         center = predict(params, values)
         if target not in actual or actual[target] is None or not math.isclose(center,actual[target],rel_tol=1e-11,abs_tol=1e-12):
@@ -283,7 +398,8 @@ def attach_shared_audit(league,row,event,context,cutoff,previous=None):
              "limits":"NO_REVIEWED_PRODUCT_LIMIT","source_freshness":"PACKAGE_SOURCE_CUTOFF_AND_TTL",
              "units":{"nhl":"goals","mls":"goals","mlb":"runs"}.get(league,"points"),
              "refresh":{"status":"NO_PAIRED_PARENT" if previous is None else "ATTRIBUTION_UNRESOLVED"}}
-    registry_hash, rules=shared_contracts()
+    registry_hash, registry=shared_contracts()
+    rules=registry["league"]
     details["contract_registry_sha256"]=registry_hash
     if league in rules:
         details["registered_scope"]=rules[league]
@@ -293,6 +409,10 @@ def attach_shared_audit(league,row,event,context,cutoff,previous=None):
                                       else "UNRESOLVED_IDENTITY_OR_COVERAGE"))
     elif league in LINEAR and package.get("schema")=="sports.current_research_package.v1":
         try:
+            contracts = _feature_contract_inventory(league, row, event, package, registry)
+            details["feature_contracts"] = contracts
+            if contracts["status"] != "COMPLETE_ENGINEERING_INVENTORY":
+                raise ValueError("UNREGISTERED_FEATURE_MODEL_OR_HEAD_CONTRACT")
             heads=_linear_trace(league,row,event,package)
             fit_hash=digest({"fitted_model":package["fitted_model"],"parameters":package.get("parameters"),
                              "prior":package.get("prior"),"code_pins":package.get("code_pins")})

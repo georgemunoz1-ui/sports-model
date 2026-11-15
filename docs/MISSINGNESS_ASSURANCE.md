@@ -1,5 +1,14 @@
 # Model and runner missingness review
 
+November 15 follow-up: [runner coverage](research/missingness_20261115/RUNNER_COVERAGE.md),
+[consumed-feature contracts](research/missingness_20261115/FEATURE_CONTRACT_REVIEW.md)
+and [model-specific refusal cohorts](research/missingness_20261115/REFUSAL_POLICY_V2.md)
+extend the existing draft implementation. Current release readback verifies all
+published decision fields and isolates malformed league evidence. An earlier
+review cannot override a currently blocked trace or incomplete feature inventory. These are
+engineering repairs; reviewed limits, source-bound forward monitoring and
+default-branch deployment remain separate acceptance requirements.
+
 Run diagnostics on the current card before enabling a product for review. A report that was never published, a failed collection and a complete report with zero absences have different meanings. The original event remains visible when a product refuses a forecast.
 
 ## Where the checks run

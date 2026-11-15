@@ -1,0 +1,53 @@
+{
+  "pr": 115,
+  "commit": "b480f7690f154bc0a0d7247bb7508c1502543f43",
+  "tree": "f2dc4ef5598a7d516a3f6a9dd9cd28f3fb352ced",
+  "workflow_path": ".github/workflows/cfb-personnel-freshness.yml",
+  "workflow_sha256": "00c53ea02ffd1960e45596e44be8dbda6a12a3db1e11abdd2b9fb849e0ccd76d",
+  "workflow_tests": [
+    "tests/test_cfb_personnel_freshness.py",
+    "tests/test_cfb_personnel_v2.py",
+    "tests/test_cfb_efficiency_experiment.py",
+    "tests/test_efficiency_runner_dispatch.py",
+    "tests/test_efficiency_integrity.py",
+    "tests/test_efficiency_adversarial.py",
+    "tests/test_model_control_dispatch.py"
+  ],
+  "command": [
+    "/workspace/scratch/98ffee5de969/audit-venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_cfb_personnel_freshness.py",
+    "tests/test_cfb_personnel_v2.py",
+    "tests/test_cfb_efficiency_experiment.py",
+    "tests/test_efficiency_runner_dispatch.py",
+    "tests/test_efficiency_integrity.py",
+    "tests/test_efficiency_adversarial.py",
+    "tests/test_model_control_dispatch.py",
+    "--junitxml=/workspace/scratch/98ffee5de969/verification/companions/pr-115-pytest.xml"
+  ],
+  "exit_code": 0,
+  "test_counts": {
+    "tests": 183,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "elapsed_seconds": 33.709,
+  "log_file": "pr-115-pytest.log",
+  "log_sha256": "d7be1168fd80d02d629dccdcbe5e47a2687e5d4111b91dbf541c47bed17e127c",
+  "junit_file": "pr-115-pytest.xml",
+  "finding_evidence": {
+    "command": [
+      "/workspace/scratch/98ffee5de969/audit-venv/bin/python",
+      "-m",
+      "research.finding_evidence",
+      "docs/research/cfb_missingness_evidence_20261108/FINDING_EVIDENCE.json"
+    ],
+    "exit_code": 0,
+    "log_file": "pr-115-finding-evidence.log",
+    "log_sha256": "9ec970cb37f55feaffd4656fb6beb2ab8d5b28c7d1214c8131fc2267113474ff"
+  },
+  "git_status_after": ""
+}

@@ -1,0 +1,895 @@
+{
+  "schema": "sports.missingness_entrypoints.v1",
+  "review_scope": "14ccf3ed shared branch plus November 15 runner-inventory repair. Separate branch models are not certified by this checkout.",
+  "discovery_scope": {
+    "source_roots": [
+      "scripts",
+      "models",
+      "research",
+      "sportsim",
+      "pipelines"
+    ],
+    "python": "AST main guards and module-scope argument parsing",
+    "console": "pyproject project.scripts and gui-scripts",
+    "workflows": "Literal Python commands plus content-pinned reviews of inline Python; step/job working directories resolved.",
+    "limitations": [
+      "Dynamically generated Python commands and arbitrary shell indirection require manual review.",
+      "Static inventory alone is not execution, sensitivity validation, or statistical approval."
+    ]
+  },
+  "entrypoints": {
+    "harness/anchor_verify.py": {
+      "role": "review",
+      "reason": "ANCHOR VERIFY \u2014 the check the CI clock runs, kept in the repository instead of inside YAML.",
+      "official_release_eligible": false
+    },
+    "harness/cfb_spread_simulation_validator.py": {
+      "role": "review",
+      "reason": "Fail-closed validation for CFB margin/ATS forecast artifacts.",
+      "official_release_eligible": false
+    },
+    "harness/execution_readiness.py": {
+      "role": "review",
+      "reason": "Executable support or verification tool; does not authorize a forecast release.",
+      "official_release_eligible": false
+    },
+    "harness/healthcheck.py": {
+      "role": "review",
+      "reason": "Session-start integrity gate. Run BEFORE any work. Exit 0 = healthy. Mechanically enforces",
+      "official_release_eligible": false
+    },
+    "harness/promotion_gate.py": {
+      "role": "review",
+      "reason": "PROMOTION GATE \u2014 the binding conditions, and the separate real-money gate.",
+      "official_release_eligible": false
+    },
+    "harness/readiness_gate.py": {
+      "role": "review",
+      "reason": "SYSTEM_NOT_DECISION_READY \u2014 section 7's product-level gate.",
+      "official_release_eligible": false
+    },
+    "harness/recovery_jobs.py": {
+      "role": "review",
+      "reason": "Executable recovery jobs. A job has an id, a next run, progress, a deadline and a disposition.",
+      "official_release_eligible": false
+    },
+    "harness/release_gate.py": {
+      "role": "review",
+      "reason": "Fail-closed multi-sport release evaluation.",
+      "official_release_eligible": false
+    },
+    "harness/validate_cfb_margin_model_state.py": {
+      "role": "review",
+      "reason": "Executable support or verification tool; does not authorize a forecast release.",
+      "official_release_eligible": false
+    },
+    "models/cfb/fit_margin_distribution_v1.py": {
+      "role": "historical_research",
+      "reason": "Fit an isolated shadow candidate with disjoint train/calibration/test windows.",
+      "official_release_eligible": false
+    },
+    "models/cfb/monte_carlo_v1.py": {
+      "role": "audited_forecast",
+      "reason": "Reproducible CFB Monte Carlo inference for DIAGNOSTIC_SHADOW.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "pipelines/cards/legacy_cli_missingness.py:persist"
+      ],
+      "invocation_tests": [
+        "tests/test_missingness_runner_inventory.py::test_actual_monte_carlo_cli_retains_native_output_and_audited_sidecar"
+      ]
+    },
+    "models/mlb/monte_carlo_v1.py": {
+      "role": "audited_forecast",
+      "reason": "Reproducible MLB V13.1-style diagnostic Monte Carlo engine.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "pipelines/cards/legacy_cli_missingness.py:persist"
+      ],
+      "invocation_tests": [
+        "tests/test_missingness_runner_inventory.py::test_actual_monte_carlo_cli_retains_native_output_and_audited_sidecar"
+      ]
+    },
+    "models/nfl/contextual/margin_distribution.py": {
+      "role": "audited_forecast",
+      "reason": "Optional same-parent NFL margin product; frozen winner forecasts stay intact.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "pipelines/cards/nfl_missingness.py:persist_child_review"
+      ],
+      "invocation_tests": [
+        "tests/test_missingness_runner_inventory.py::test_actual_native_margin_cli_writes_child_receipt"
+      ]
+    },
+    "pipelines/cards/runner_contract.py": {
+      "role": "review",
+      "reason": "Final diagnostic workflow gate on the process exit, bound schedule and recipient card.",
+      "official_release_eligible": false
+    },
+    "research/audits/2026-09-10/engine_snapshot.py": {
+      "role": "frozen_legacy",
+      "reason": "Retained September 10 engine source used to reproduce historical artifacts; current CLI is separately audited.",
+      "official_release_eligible": false,
+      "source_sha256": "4c30875077208b50a965b12d7a294856ba817b15241e40ae57a49bfc6b6ba34b",
+      "successor": "models/mlb/monte_carlo_v1.py"
+    },
+    "research/candidate_methods/replay.py": {
+      "role": "review",
+      "reason": "Verify retained artifact hashes and replay fitted predictions without retraining.",
+      "official_release_eligible": false
+    },
+    "research/candidate_methods/run.py": {
+      "role": "historical_research",
+      "reason": "Reproducible isolated candidate experiment; explicit input files, no downloads.",
+      "official_release_eligible": false
+    },
+    "research/cfb_binary_isotonic_proposal/original_calibration.py": {
+      "role": "historical_research",
+      "reason": "Calibration layer \u2014 method ladder, sample-size gate, leakage rules, metrics, decision table.",
+      "official_release_eligible": false
+    },
+    "research/cfb_lineage/run.py": {
+      "role": "review",
+      "reason": "Executed source/registry/storage pilot, not a CFB modeling or forecast run.",
+      "official_release_eligible": false
+    },
+    "research/evaluate_frozen_forecasts.py": {
+      "role": "historical_research",
+      "reason": "Read-only deterministic scorer for manifest-pinned frozen forecasts and grades.",
+      "official_release_eligible": false
+    },
+    "research/evaluate_margin_system.py": {
+      "role": "historical_research",
+      "reason": "Strict, descriptive evaluation of retained discrete margin/total forecasts.",
+      "official_release_eligible": false
+    },
+    "research/finding_evidence.py": {
+      "role": "review",
+      "reason": "Validate version-bound defect evidence without conferring model approval.",
+      "official_release_eligible": false
+    },
+    "research/markets/capture_20260910.py": {
+      "role": "acquisition",
+      "reason": "Executable support or verification tool; does not authorize a forecast release.",
+      "official_release_eligible": false
+    },
+    "research/missingness/nfl_report_count.py": {
+      "role": "historical_research",
+      "reason": "Opt-in offline NFL count-support challenger; reads supported artifacts and emits distinct research heads.",
+      "official_release_eligible": false
+    },
+    "research/mlb_distribution_experiment.py": {
+      "role": "historical_research",
+      "reason": "Paired evaluation for the MLB fixed-Poisson vs Gamma-Poisson workload experiment.",
+      "official_release_eligible": false
+    },
+    "research/news_information/benchmark_cli.py": {
+      "role": "historical_research",
+      "reason": "Run historical news-information model benchmarking.",
+      "official_release_eligible": false
+    },
+    "research/news_information/capture_postgame_20260908.py": {
+      "role": "acquisition",
+      "reason": "Executable support or verification tool; does not authorize a forecast release.",
+      "official_release_eligible": false
+    },
+    "research/news_information/capture_postgame_20260909.py": {
+      "role": "acquisition",
+      "reason": "Executable support or verification tool; does not authorize a forecast release.",
+      "official_release_eligible": false
+    },
+    "research/news_information/materialize_models.py": {
+      "role": "operations",
+      "reason": "Materialize pinned Hugging Face research candidates and emit immutable receipts.",
+      "official_release_eligible": false
+    },
+    "research/news_information/official_pilot.py": {
+      "role": "acquisition",
+      "reason": "Explicit public-source pilot. Run in a network-enabled research worker, not forecasting.",
+      "official_release_eligible": false
+    },
+    "research/news_information/replay_official_pilot.py": {
+      "role": "review",
+      "reason": "Offline verification of an Actions ZIP; never recapture or rewrite historic output.",
+      "official_release_eligible": false
+    },
+    "research/nfl_fusion/run.py": {
+      "role": "historical_research",
+      "reason": "Build verified fusion evidence. Run as python -m research.nfl_fusion.run.",
+      "official_release_eligible": false
+    },
+    "scripts/accumulate_mlb_calibration.py": {
+      "role": "grading_registration",
+      "reason": "Grade frozen MLB forecast cards against final results and accumulate calibration evidence.",
+      "official_release_eligible": false
+    },
+    "scripts/acquire_efficiency_history.py": {
+      "role": "acquisition",
+      "reason": "Capture SportsDataverse efficiency sources without asserting historical PIT truth.",
+      "official_release_eligible": false
+    },
+    "scripts/advance_nfl_weekly_state.py": {
+      "role": "state_preparation",
+      "reason": "Initialize or advance the immutable NFL research state store from captured bytes.",
+      "official_release_eligible": false
+    },
+    "scripts/audit_latest_model_capabilities.py": {
+      "role": "test_tool",
+      "reason": "Machine-readable latest-capability ledger.",
+      "official_release_eligible": false
+    },
+    "scripts/audit_margin_integration.py": {
+      "role": "review",
+      "reason": "Compare pinned PR sources on identical inputs; software evidence only.",
+      "official_release_eligible": false
+    },
+    "scripts/audit_nfl_arm_deltas.py": {
+      "role": "review",
+      "reason": "Additional descriptive intervals from frozen OOF predictions; no fitting.",
+      "official_release_eligible": false
+    },
+    "scripts/audit_nfl_frozen_distribution.py": {
+      "role": "review",
+      "reason": "Read-only eight-step trace of a frozen V2 forecast; writes a separate audit.",
+      "official_release_eligible": false
+    },
+    "scripts/audit_roster_cards.py": {
+      "role": "review",
+      "reason": "Review roster coverage for preserved cards without regenerating predictions.",
+      "official_release_eligible": false
+    },
+    "scripts/build_fresh_nfl_event_package.py": {
+      "role": "state_preparation",
+      "reason": "Build a fresh NFL event package for a requested date.",
+      "official_release_eligible": false
+    },
+    "scripts/build_nfl_context.py": {
+      "role": "state_preparation",
+      "reason": "Build causal context features and fit fixed chronological comparison arms.",
+      "official_release_eligible": false
+    },
+    "scripts/build_nfl_mode_data.py": {
+      "role": "state_preparation",
+      "reason": "Build mode training data from retained inputs.",
+      "official_release_eligible": false
+    },
+    "scripts/build_nfl_qb_margin_cohort.py": {
+      "role": "state_preparation",
+      "reason": "Qualify retained QB-parent OOF margins for retrospective distribution research.",
+      "official_release_eligible": false
+    },
+    "scripts/build_operational_rest_candidate.py": {
+      "role": "state_preparation",
+      "reason": "Build immutable operational-rest candidate inputs; never fit or infer a model.",
+      "official_release_eligible": false
+    },
+    "scripts/canonical_forecasts.py": {
+      "role": "grading_registration",
+      "reason": "Prospective research receipts and append-only scores for supported shared cards.",
+      "official_release_eligible": false
+    },
+    "scripts/canonical_grading_preflight.py": {
+      "role": "grading_registration",
+      "reason": "Operational readiness only: never create a registry, forecast or grade.",
+      "official_release_eligible": false
+    },
+    "scripts/canonical_results.py": {
+      "role": "grading_registration",
+      "reason": "Retain and normalize provider finals for immutable research forecasts.",
+      "official_release_eligible": false
+    },
+    "scripts/capture_cfb_context_review.py": {
+      "role": "acquisition",
+      "reason": "Acquire event-bound context separately; capture never implies fitted use.",
+      "official_release_eligible": false
+    },
+    "scripts/capture_efficiency_current.py": {
+      "role": "acquisition",
+      "reason": "Capture current CFB/NBA schedules and completed-game summaries for research.",
+      "official_release_eligible": false
+    },
+    "scripts/capture_model_recovery.py": {
+      "role": "acquisition",
+      "reason": "Acquire replayable historical/current inputs for seven-league research recovery.",
+      "official_release_eligible": false
+    },
+    "scripts/capture_nfl_fusion.py": {
+      "role": "acquisition",
+      "reason": "Research acquisition/build. Preserves raw sources; does not issue live forecasts.",
+      "official_release_eligible": false
+    },
+    "scripts/capture_operational_inputs.py": {
+      "role": "acquisition",
+      "reason": "Acquire current seven-league evidence and NFL weekly sources; never infer readiness.",
+      "official_release_eligible": false
+    },
+    "scripts/capture_priority_schedules.py": {
+      "role": "acquisition",
+      "reason": "Acquire immutable, explicitly scoped schedule evidence for priority leagues.",
+      "official_release_eligible": false
+    },
+    "scripts/capture_team_histories.py": {
+      "role": "acquisition",
+      "reason": "Capture complete team-season schedules; overlaps reconcile by provider ID.",
+      "official_release_eligible": false
+    },
+    "scripts/check_cutoff_integrity.py": {
+      "role": "review",
+      "reason": "Validate point-in-time provenance on a diagnostic card.",
+      "official_release_eligible": false
+    },
+    "scripts/ci_evidence_archive.py": {
+      "role": "operations",
+      "reason": "Package CI evidence and verify a configured Drive adapter by byte read-back.",
+      "official_release_eligible": false
+    },
+    "scripts/ci_storage_monitor.py": {
+      "role": "operations",
+      "reason": "Measure visible repository artifacts and persist threshold transitions.",
+      "official_release_eligible": false
+    },
+    "scripts/cross_sport_distribution_research.py": {
+      "role": "audited_forecast",
+      "reason": "Fit/calibrate/score opt-in distribution challengers; never select defaults.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "pipelines/cards/derived_missingness.py:attach"
+      ],
+      "invocation_tests": [
+        "tests/test_cross_sport_distributions.py"
+      ]
+    },
+    "scripts/diagnostic_winner_grading.py": {
+      "role": "grading_registration",
+      "reason": "Strict, read-only winner identity correction for descriptive assessments.",
+      "official_release_eligible": false
+    },
+    "scripts/evaluate_efficiency_selection.py": {
+      "role": "review",
+      "reason": "Exercise frozen-grid forecaster/selector diagnostics on retained runner output.",
+      "official_release_eligible": false
+    },
+    "scripts/evaluate_margin_ladders.py": {
+      "role": "review",
+      "reason": "Score fixed hypothetical handicap ladders from frozen study distributions.",
+      "official_release_eligible": false
+    },
+    "scripts/evaluate_mlb_postseason_context.py": {
+      "role": "review",
+      "reason": "Chronological retrospective screen, with separate fitted calibration and holdout.",
+      "official_release_eligible": false
+    },
+    "scripts/evaluate_nfl_score_kernel.py": {
+      "role": "review",
+      "reason": "Later-year interval checks using only residuals from earlier OOF years.",
+      "official_release_eligible": false
+    },
+    "scripts/evaluate_research_selections.py": {
+      "role": "review",
+      "reason": "Evaluate preserved selection receipts against an explicit, hash-pinned population.",
+      "official_release_eligible": false
+    },
+    "scripts/fit_margin_challenger.py": {
+      "role": "historical_research",
+      "reason": "Fit the opt-in margin challenger from explicit same-parent OOF records.",
+      "official_release_eligible": false
+    },
+    "scripts/fit_nfl_modes.py": {
+      "role": "historical_research",
+      "reason": "Fit declared market ensemble and live three-way model on chronological windows.",
+      "official_release_eligible": false
+    },
+    "scripts/fit_nfl_qb_margin.py": {
+      "role": "historical_research",
+      "reason": "Fit the preregistered QB-only residual law; evaluate past-season-only pools.",
+      "official_release_eligible": false
+    },
+    "scripts/fit_nfl_qb_margin_calibration.py": {
+      "role": "historical_research",
+      "reason": "Nested chronological, globally optimized one-weight QB margin calibration.",
+      "official_release_eligible": false
+    },
+    "scripts/fit_nfl_spread_calibration.py": {
+      "role": "historical_research",
+      "reason": "Chronological ATS calibration; no retrospective promotion or test tuning.",
+      "official_release_eligible": false
+    },
+    "scripts/generate_card_force.py": {
+      "role": "audited_forecast",
+      "reason": "Always-output diagnostic card orchestrator wired through sport adapters.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "pipelines/cards/shared_missingness.py:attach_shared_audit"
+      ],
+      "invocation_tests": [
+        "tests/test_runtime_acceptance_matrix.py",
+        "tests/test_shared_missingness.py"
+      ]
+    },
+    "scripts/grade_mlb_registry.py": {
+      "role": "grading_registration",
+      "reason": "Grade registered immutable MLB forecast-card artifacts and verify grading invariants.",
+      "official_release_eligible": false
+    },
+    "scripts/grade_nfl_qb_margin.py": {
+      "role": "grading_registration",
+      "reason": "Grade immutable research registrations against two source-bound final feeds.",
+      "official_release_eligible": false
+    },
+    "scripts/grade_research_board.py": {
+      "role": "grading_registration",
+      "reason": "Descriptive grading for retained research-board rows, never a canonical ledger.",
+      "official_release_eligible": false
+    },
+    "scripts/investigate_mlb_model_sim_divergence.py": {
+      "role": "review",
+      "reason": "Investigate MLB Analytic P vs Stochastic Sim P divergence.",
+      "official_release_eligible": false
+    },
+    "scripts/mlb_context_current.py": {
+      "role": "acquisition",
+      "reason": "Collect complete current context independently; no forecasts or auto-review.",
+      "official_release_eligible": false
+    },
+    "scripts/mlb_context_history.py": {
+      "role": "acquisition",
+      "reason": "Official historical acquisition. Captured-now evidence is NOT pregame evidence.",
+      "official_release_eligible": false
+    },
+    "scripts/mlb_postseason_audited.py": {
+      "role": "audited_forecast",
+      "reason": "Add source-bound personnel/workload checks around the frozen postseason kernel.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "pipelines/cards/postseason_missingness.py:write_sidecar"
+      ],
+      "invocation_tests": [
+        "tests/test_postseason_missingness.py"
+      ]
+    },
+    "scripts/mlb_postseason_workflow.py": {
+      "role": "audited_forecast",
+      "reason": "Collect/review/run/verify a separate MLB postseason research card.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "pipelines/cards/postseason_missingness.py:write_sidecar"
+      ],
+      "invocation_tests": [
+        "tests/test_postseason_missingness.py"
+      ]
+    },
+    "scripts/model_defaults.py": {
+      "role": "review",
+      "reason": "Show or validate the selected model for an exact sport/product scope.",
+      "official_release_eligible": false
+    },
+    "scripts/pack_nfl_context_model.py": {
+      "role": "state_preparation",
+      "reason": "Reproducible portable parameter packaging and explicit tie-frequency fit.",
+      "official_release_eligible": false
+    },
+    "scripts/package_nfl_modes.py": {
+      "role": "state_preparation",
+      "reason": "Package already fitted mode models.",
+      "official_release_eligible": false
+    },
+    "scripts/prepare_card_workflow_inputs.py": {
+      "role": "state_preparation",
+      "reason": "Restore an explicitly supplied immutable package, never acquire or refit one.",
+      "official_release_eligible": false
+    },
+    "scripts/prepare_cfb_current.py": {
+      "role": "state_preparation",
+      "reason": "Reproduce the incumbent historical features, then assimilate captured 2026 finals.",
+      "official_release_eligible": false
+    },
+    "scripts/prepare_cfb_efficiency_history.py": {
+      "role": "state_preparation",
+      "reason": "Prepare source-reconciled CFB efficiency history without altering input bytes.",
+      "official_release_eligible": false
+    },
+    "scripts/prepare_det_buf_20260917.py": {
+      "role": "state_preparation",
+      "reason": "One-event, source-pinned research package; no fitting and no simulations.",
+      "official_release_eligible": false
+    },
+    "scripts/prepare_efficiency_current_nba.py": {
+      "role": "state_preparation",
+      "reason": "Normalize captured ESPN current NBA finals/events; no invented historic observation times.",
+      "official_release_eligible": false
+    },
+    "scripts/prepare_initial_baselines.py": {
+      "role": "state_preparation",
+      "reason": "Preregistered train/validation/later-period audit, then current research fit.",
+      "official_release_eligible": false
+    },
+    "scripts/prepare_mlb_current.py": {
+      "role": "state_preparation",
+      "reason": "Build an immutable current MLB research packet from retained acquired sources.",
+      "official_release_eligible": false
+    },
+    "scripts/prepare_mlb_official_current.py": {
+      "role": "state_preparation",
+      "reason": "Complete official season census, D-1 team form and prior-date pitcher inputs.",
+      "official_release_eligible": false
+    },
+    "scripts/prepare_mlb_postseason.py": {
+      "role": "state_preparation",
+      "reason": "Prepare an isolated official-source postseason research package.",
+      "official_release_eligible": false
+    },
+    "scripts/prepare_nfl_event.py": {
+      "role": "state_preparation",
+      "reason": "Package explicit event, source-bound current context, and fitted model.",
+      "official_release_eligible": false
+    },
+    "scripts/prepare_nfl_mode_packet.py": {
+      "role": "state_preparation",
+      "reason": "Bind an acquired market observation or nflverse pre-play row to an event.",
+      "official_release_eligible": false
+    },
+    "scripts/prepare_nfl_weekly_events.py": {
+      "role": "state_preparation",
+      "reason": "Prepare next-week research events from a verified published weekly state.",
+      "official_release_eligible": false
+    },
+    "scripts/prepare_rosters.py": {
+      "role": "state_preparation",
+      "reason": "Capture current rosters for all seven sports, retaining every requested team.",
+      "official_release_eligible": false
+    },
+    "scripts/prepare_wnba_current.py": {
+      "role": "state_preparation",
+      "reason": "Refresh the selected WNBA state from independently confirmed official boxes.",
+      "official_release_eligible": false
+    },
+    "scripts/recovery_capture.py": {
+      "role": "acquisition",
+      "reason": "Capture evidence for seven sports; never manufactures features or registers forecasts.",
+      "official_release_eligible": false
+    },
+    "scripts/recovery_features.py": {
+      "role": "state_preparation",
+      "reason": "Materialize hash-bound diagnostic inputs from recovery source bytes; no model execution.",
+      "official_release_eligible": false
+    },
+    "scripts/refresh_all_sports.py": {
+      "role": "state_preparation",
+      "reason": "Rebuild current sports state from an explicit, immutable acquisition bundle.",
+      "official_release_eligible": false
+    },
+    "scripts/register_mlb_calibration.py": {
+      "role": "grading_registration",
+      "reason": "Writer-owned pregame registration of one immutable MLB calibration card per date.",
+      "official_release_eligible": false
+    },
+    "scripts/render_card_disclosures.py": {
+      "role": "review",
+      "reason": "Create an immutable disclosure sidecar without rewriting a frozen card.",
+      "official_release_eligible": false
+    },
+    "scripts/run_cfb_joint_empirical.py": {
+      "role": "audited_forecast",
+      "reason": "Fit/evaluate or explicitly run the isolated empirical joint-score challenger.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "pipelines/cards/derived_missingness.py:attach"
+      ],
+      "invocation_tests": [
+        "tests/test_cfb_joint_empirical_v1.py"
+      ]
+    },
+    "scripts/run_distribution_history.py": {
+      "role": "historical_research",
+      "reason": "Execute the frozen retrospective study; never register historical forecasts.",
+      "official_release_eligible": false
+    },
+    "scripts/run_efficiency_experiments.py": {
+      "role": "audited_forecast",
+      "reason": "Fit and evaluate separate CFB/NBA research challengers against real controls.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "research/efficiency/integrity.py:build_component_receipt"
+      ],
+      "invocation_tests": [
+        "tests/test_efficiency_runner_dispatch.py"
+      ]
+    },
+    "scripts/run_fresh_nfl_research.py": {
+      "role": "audited_forecast",
+      "reason": "Prepare a new NFL package from verified state, then run frozen default inference.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "pipelines/cards/shared_missingness.py:attach_shared_audit"
+      ],
+      "invocation_tests": [
+        "tests/test_fresh_nfl_research.py"
+      ]
+    },
+    "scripts/run_margin_system.py": {
+      "role": "audited_forecast",
+      "reason": "Create an additive all-sports research margin/cover card from retained PMFs.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "pipelines/cards/derived_missingness.py:attach"
+      ],
+      "invocation_tests": [
+        "tests/test_margin_contract.py"
+      ]
+    },
+    "scripts/run_margin_system_study.py": {
+      "role": "historical_research",
+      "reason": "Evaluate a preregistered margin challenger on retained chronological cohorts.",
+      "official_release_eligible": false
+    },
+    "scripts/run_mc_precision_research.py": {
+      "role": "historical_research",
+      "reason": "Explicit opt-in MC precision research; never replaces a registered forecast.",
+      "official_release_eligible": false
+    },
+    "scripts/run_mlb_legacy_tracking.py": {
+      "role": "audited_forecast",
+      "reason": "Checked successor for the frozen V13 tracking CLI. New research editions only.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "pipelines/cards/derived_missingness.py:attach"
+      ],
+      "invocation_tests": [
+        "tests/test_legacy_mlb_missingness.py"
+      ]
+    },
+    "scripts/run_mlb_postseason_context.py": {
+      "role": "audited_forecast",
+      "reason": "Explicit context challenger operator and append-only diagnostic registry.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "pipelines/cards/postseason_missingness.py:write_sidecar"
+      ],
+      "invocation_tests": [
+        "tests/test_postseason_missingness.py"
+      ]
+    },
+    "scripts/run_nba_efficiency_shadow.py": {
+      "role": "audited_forecast",
+      "reason": "Explicitly opt-in, market-free NBA efficiency shadow; never the selected adapter.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "pipelines/cards/missingness.py:seal_audit"
+      ],
+      "invocation_tests": [
+        "tests/test_efficiency_runner_dispatch.py"
+      ]
+    },
+    "scripts/run_nfl_assimilation.py": {
+      "role": "state_preparation",
+      "reason": "Reconcile a captured current week and optionally reconstruct historical state.",
+      "official_release_eligible": false
+    },
+    "scripts/run_nfl_halftime_research.py": {
+      "role": "audited_forecast",
+      "reason": "Build, chronologically evaluate, and run a dedicated joint-half research arm.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "pipelines/cards/nfl_missingness.py:persist_child_review"
+      ],
+      "invocation_tests": [
+        "tests/test_nfl_halftime.py"
+      ]
+    },
+    "scripts/run_nfl_integrated.py": {
+      "role": "audited_forecast",
+      "reason": "One command: canonical adapter, all model arms, binary and score simulations.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "pipelines/cards/nfl_missingness.py:audit"
+      ],
+      "invocation_tests": [
+        "tests/test_nfl_runner_contract.py",
+        "tests/test_nfl_missingness_audit.py"
+      ]
+    },
+    "scripts/run_nfl_qb_margin_study.py": {
+      "role": "historical_research",
+      "reason": "Execute a preregistered, source-bound QB margin study and deployment refit.",
+      "official_release_eligible": false
+    },
+    "scripts/run_nfl_spread_calibration.py": {
+      "role": "audited_forecast",
+      "reason": "Calibrate saved NFL final-score draws at supplied full-game spread lines.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "pipelines/cards/nfl_missingness.py:persist_child_review"
+      ],
+      "invocation_tests": [
+        "tests/test_nfl_spread_calibration.py"
+      ]
+    },
+    "scripts/run_research_selection.py": {
+      "role": "review",
+      "reason": "Read sealed research inputs and emit immutable, non-authoritative decisions.",
+      "official_release_eligible": false
+    },
+    "scripts/seal_det_buf_20260917.py": {
+      "role": "historical_research",
+      "reason": "Dated DET\u2013BUF September 17 reproduction/seal; hardcoded event and start checks prevent new current forecasts. Original historical identity retained.",
+      "official_release_eligible": false
+    },
+    "scripts/standing_health_triage.py": {
+      "role": "review",
+      "reason": "Validate issue cards and append-only triage sessions; never grants release clearance.",
+      "official_release_eligible": false
+    },
+    "scripts/validate_current_nfl_weekly_state.py": {
+      "role": "review",
+      "reason": "Replay fresh captured NFL bytes into an isolated store and retain refusal evidence.",
+      "official_release_eligible": false
+    },
+    "scripts/verify_all_current_runtimes.py": {
+      "role": "review",
+      "reason": "Build and exercise all current league packages; coverage errors are fatal.",
+      "official_release_eligible": false
+    },
+    "scripts/verify_cfb_consumption.py": {
+      "role": "review",
+      "reason": "Prove selected-model state consumption, without waiving the wider CFB gate.",
+      "official_release_eligible": false
+    },
+    "scripts/verify_distribution_study.py": {
+      "role": "review",
+      "reason": "Replay retained real-cohort forecasts, paired metrics and sampling receipts.",
+      "official_release_eligible": false
+    },
+    "scripts/verify_mlb_calibration_acceptance.py": {
+      "role": "review",
+      "reason": "Read-only acceptance of PR46's recovered cohort; replays use isolated copies.",
+      "official_release_eligible": false
+    },
+    "scripts/verify_nfl_current_acceptance.py": {
+      "role": "review",
+      "reason": "Reproduce the reviewed real Week 3 repair and canonical forecast consumption.",
+      "official_release_eligible": false
+    },
+    "scripts/verify_nfl_modes.py": {
+      "role": "review",
+      "reason": "Persist computational replays without labeling them new pregame forecasts.",
+      "official_release_eligible": false
+    },
+    "scripts/verify_nfl_qb_margin.py": {
+      "role": "review",
+      "reason": "Independent reconstruction and inverse-CDF replay of a QB margin run.",
+      "official_release_eligible": false
+    },
+    "scripts/verify_nfl_qb_margin_calibration.py": {
+      "role": "review",
+      "reason": "Independent CDF reconstruction, optimizer replay and saved-draw audit.",
+      "official_release_eligible": false
+    },
+    "scripts/verify_nfl_weekly_sources.py": {
+      "role": "review",
+      "reason": "Replay pinned real sources without importing code from the audited branches.",
+      "official_release_eligible": false
+    },
+    "scripts/verify_semantic_identity.py": {
+      "role": "review",
+      "reason": "Reproduce MI-002 before/after on real adapters with retained fixture identities.",
+      "official_release_eligible": false
+    },
+    "sports/phase1_1/test_durability.py": {
+      "role": "test_tool",
+      "reason": "Executable support or verification tool; does not authorize a forecast release.",
+      "official_release_eligible": false
+    },
+    "sportsim/__main__.py": {
+      "role": "audited_forecast",
+      "reason": "Executable support or verification tool; does not authorize a forecast release.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "sportsim/scenario_audit.py:finish"
+      ],
+      "invocation_tests": [
+        "tests/test_sportsim_missingness.py"
+      ]
+    },
+    "sportsim/cli.py": {
+      "role": "audited_forecast",
+      "reason": "Command line interface.",
+      "official_release_eligible": false,
+      "audit_boundaries": [
+        "sportsim/scenario_audit.py:finish"
+      ],
+      "invocation_tests": [
+        "tests/test_sportsim_missingness.py"
+      ]
+    }
+  },
+  "separate_revision_dependencies": {
+    "111": "Standalone CBB issuer/verifier; unmerged branch revision 92c1080895a55fa3060fff663835e82341484319",
+    "112": "Joint volatility; unmerged branch revision 4e0710c45d744e407fdd694d2cd19734b9dbdf21",
+    "113": "NBA combination; unmerged branch revision 7433619cc8fab62df1cda33000cbf11384cd84cc",
+    "114": "NBA/CFB personnel; unmerged branch revision 3246bd3e6b356abe47ead1a298ce329d4622b57a",
+    "115": "CFB freshness; unmerged branch revision b480f7690f154bc0a0d7247bb7508c1502543f43",
+    "116": "Joint route; unmerged branch revision 5d07f9372590ec73d1e8c02f62959471c026404c"
+  },
+  "inline_workflow_reviews": {
+    ".github/workflows/canonical-release-preflight.yml": {
+      "source_sha256": "9968217aaa77c08204937dd534fac2db295d99aac0c4fbbc3ca62ff7ac5c9fc8",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/cfb-fit-forecast.yml": {
+      "source_sha256": "bd0d5225ad02530aa27cf63f9e58645f1a4db91a632d33114563ee31562d65de",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/cfb-generate-card.yml": {
+      "source_sha256": "cb580dca2942df71f08fefeeeaddd742be99f0935b1145c0ca6d491d1d450124",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/cfb-lineage-capture.yml": {
+      "source_sha256": "367e26714d420b8694e13264b020e907b6eb3114ca4ef8af690c99c22aec74ed",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/cfb-lineage-verify.yml": {
+      "source_sha256": "6b92b254ab7955f546aeb00bcd4fb91d61a377ee1115e8ff60d6fb680e43aefd",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/consolidation.yml": {
+      "source_sha256": "82af7e28f95481ce8c009b4e1a397a2f5bf4fee0150dc47c6902bf9335669228",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/diagnostic-shadow-card.yml": {
+      "source_sha256": "2306838ba0b416ba53bf9b1bc98066725ba77779297b2c48bd515e365e8e3096",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/margin-contract-integration.yml": {
+      "source_sha256": "25d2c78c99c48d87fe7093904835448a81c8857b23790eb5e589c06c92b56080",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/mlb-calibration-grading.yml": {
+      "source_sha256": "21dc0746fbf87c1e428e46ca618f4d11a878762df0e1aa1686d4a1cccdbdc25d",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/model-default-selection.yml": {
+      "source_sha256": "33e116a8476f9a6e841fd98586205e9a004db2245a7d8f422310b32e97b4a087",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/monte-carlo-integrity.yml": {
+      "source_sha256": "a939eb4fed60124cf59c8de1683669299797bbfd4f3ebefe6d5a502c0b70250b",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/nfl-assimilation-source.yml": {
+      "source_sha256": "397814fb10f193d89d82142eca482c5754379f311636a9c617c519b32a36952e",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/nfl-fusion-build.yml": {
+      "source_sha256": "fe84dd5d560d2810da36323f0d6a4aeb83471a045a0b2776590772b54c06a830",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/nfl-fusion-verify.yml": {
+      "source_sha256": "46b6daad6f8d2826d47767926501eca5da001290c6c321852ef7cfff98e32df0",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/nfl-week2-repair.yml": {
+      "source_sha256": "85a7d8a7bfe2fb214c2dfc82a9b4db548810439f4d1a5d870bf4bd6301c22500",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/nfl-weekly-state.yml": {
+      "source_sha256": "46564ca1d872b0354cda4c5c798350e4d285c10eec77eac44261bb9c6c440807",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/pr-reconciliation-acceptance.yml": {
+      "source_sha256": "14c3a2d0fdfff01860ecc5dda7dc87f44034ff4d8d05e246c4ca4e9a46ac483e",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/research-overhaul.yml": {
+      "source_sha256": "800a3dc77788d3c79d0c3257a63c102369a5900ef572107ac2e1d7288463d66e",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/standing-health-triage.yml": {
+      "source_sha256": "7585b02ec3092a8d402824ed76b97ccdc9552b9ad15c51fd7092f94cfd1936dd",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    },
+    ".github/workflows/timestamp-anchor.yml": {
+      "source_sha256": "c619ff51286674d3e06c07362d6ca46f26429c29382a08b4a00557aa4d22bae5",
+      "reason": "Inline operational, acquisition, verification, replay, or historical study code remains research-only. Any source edit requires renewed classification; this pin does not grant statistical approval."
+    }
+  }
+}

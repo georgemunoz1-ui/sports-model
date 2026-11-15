@@ -52,6 +52,18 @@
     ],
     "scripts/run_mlb_legacy_tracking.py": [
       "mlb legacy tracking successor"
+    ],
+    "models/cfb/monte_carlo_v1.py": [
+      "cfb legacy diagnostic CLI"
+    ],
+    "models/mlb/monte_carlo_v1.py": [
+      "mlb legacy diagnostic CLI"
+    ],
+    "models/nfl/contextual/margin_distribution.py": [
+      "nfl explicit selected-QB margin child"
+    ],
+    "sportsim/__main__.py": [
+      "module alias for unregistered scenarios"
     ]
   },
   "other_run_commands": {
@@ -69,5 +81,6 @@
     "105": "joint-volatility child with league-specific settlement",
     "106": "operator-level joint-volatility route",
     "108": "standalone men's CBB capture, issue, verification and grade attachment"
-  }
+  },
+  "entrypoint_registry": "data/model_selection/missingness/entrypoints.json"
 }

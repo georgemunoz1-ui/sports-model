@@ -1,0 +1,244 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_signed_inventory_cannot_override_current_unsupported_trace[details_patch0] _
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+study = ({'at_utc': '2026-10-22T21:00:00Z', 'config_id': '0dba92680ccb1fee96ea0f14b9c12823ce17ad767fc9e1b087c55402a47c107f', '...278a10d15a96fdadf4bb03c0', 'b31fa745c3070a4d61440afed3fac92420fcca09eff0f9b6e073cc4a30eac2ac', 'fixture-report-season')
+details_patch = {'status': 'TRACE_BLOCKED'}
+
+    @pytest.mark.parametrize("details_patch", [
+        {"status": "TRACE_BLOCKED"},
+        {"status": "REFUSED"},
+        {"status": "UNREGISTERED_OR_UNSUPPORTED"},
+        {"feature_contracts": {"status": "INCOMPLETE_ENGINEERING_INVENTORY"}},
+        {"comparison_status": "CHILD_SENSITIVITY_NOT_ESTABLISHED"},
+        {"parent_receipt_verified": False},
+    ])
+    def test_signed_inventory_cannot_override_current_unsupported_trace(release_case, study, details_patch):
+        evidence, sport = release_case
+        fixture, store, *_ = study
+        block = evidence["sports"][sport]
+        event = block["events"][0]
+        output = event["model_outputs"][0]
+        old = output["missingness_audit"]
+        output["missingness_audit"] = seal_audit(
+            league=sport, event_id=event["event_key"], model_id=output["model_id"],
+            products=output["products"], forecast=output["forecast"],
+            details={**old["details"], **details_patch})
+        inventory = store.read(block["inventory_id"])
+        inventory["event_products"][event["event_key"]]["model_outputs"][0]["receipt_sha256"] = (
+            output["missingness_audit"]["receipt_sha256"])
+        block["inventory_id"] = store.put(inventory)
+        block["inventory_witness_id"] = fixture["sign"](
+            block["inventory_id"], "missingness_release_inventory", "TEST_ONLY_witness", evidence["decision_time_utc"])
+        report = release_gate.evaluate(evidence)
+>       assert report["sports"][sport]["status"] == "BLOCKED"
+E       AssertionError: assert 'HEALTHY' == 'BLOCKED'
+E         
+E         - BLOCKED
+E         + HEALTHY
+
+tests/test_missingness_release_review_regressions.py:109: AssertionError
+_ test_signed_inventory_cannot_override_current_unsupported_trace[details_patch1] _
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+study = ({'at_utc': '2026-10-22T21:00:00Z', 'config_id': '0dba92680ccb1fee96ea0f14b9c12823ce17ad767fc9e1b087c55402a47c107f', '...278a10d15a96fdadf4bb03c0', 'ad8d26d674f297800ebcfbf8501c013a2490bf77b3e672fee21ace3254d86b28', 'fixture-report-season')
+details_patch = {'status': 'REFUSED'}
+
+    @pytest.mark.parametrize("details_patch", [
+        {"status": "TRACE_BLOCKED"},
+        {"status": "REFUSED"},
+        {"status": "UNREGISTERED_OR_UNSUPPORTED"},
+        {"feature_contracts": {"status": "INCOMPLETE_ENGINEERING_INVENTORY"}},
+        {"comparison_status": "CHILD_SENSITIVITY_NOT_ESTABLISHED"},
+        {"parent_receipt_verified": False},
+    ])
+    def test_signed_inventory_cannot_override_current_unsupported_trace(release_case, study, details_patch):
+        evidence, sport = release_case
+        fixture, store, *_ = study
+        block = evidence["sports"][sport]
+        event = block["events"][0]
+        output = event["model_outputs"][0]
+        old = output["missingness_audit"]
+        output["missingness_audit"] = seal_audit(
+            league=sport, event_id=event["event_key"], model_id=output["model_id"],
+            products=output["products"], forecast=output["forecast"],
+            details={**old["details"], **details_patch})
+        inventory = store.read(block["inventory_id"])
+        inventory["event_products"][event["event_key"]]["model_outputs"][0]["receipt_sha256"] = (
+            output["missingness_audit"]["receipt_sha256"])
+        block["inventory_id"] = store.put(inventory)
+        block["inventory_witness_id"] = fixture["sign"](
+            block["inventory_id"], "missingness_release_inventory", "TEST_ONLY_witness", evidence["decision_time_utc"])
+        report = release_gate.evaluate(evidence)
+>       assert report["sports"][sport]["status"] == "BLOCKED"
+E       AssertionError: assert 'HEALTHY' == 'BLOCKED'
+E         
+E         - BLOCKED
+E         + HEALTHY
+
+tests/test_missingness_release_review_regressions.py:109: AssertionError
+_ test_signed_inventory_cannot_override_current_unsupported_trace[details_patch2] _
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+study = ({'at_utc': '2026-10-22T21:00:00Z', 'config_id': '0dba92680ccb1fee96ea0f14b9c12823ce17ad767fc9e1b087c55402a47c107f', '...278a10d15a96fdadf4bb03c0', '58d495c31eaae31701e994304a74f1e7cfca1f6a1d7cac0a6f35ef082520a067', 'fixture-report-season')
+details_patch = {'status': 'UNREGISTERED_OR_UNSUPPORTED'}
+
+    @pytest.mark.parametrize("details_patch", [
+        {"status": "TRACE_BLOCKED"},
+        {"status": "REFUSED"},
+        {"status": "UNREGISTERED_OR_UNSUPPORTED"},
+        {"feature_contracts": {"status": "INCOMPLETE_ENGINEERING_INVENTORY"}},
+        {"comparison_status": "CHILD_SENSITIVITY_NOT_ESTABLISHED"},
+        {"parent_receipt_verified": False},
+    ])
+    def test_signed_inventory_cannot_override_current_unsupported_trace(release_case, study, details_patch):
+        evidence, sport = release_case
+        fixture, store, *_ = study
+        block = evidence["sports"][sport]
+        event = block["events"][0]
+        output = event["model_outputs"][0]
+        old = output["missingness_audit"]
+        output["missingness_audit"] = seal_audit(
+            league=sport, event_id=event["event_key"], model_id=output["model_id"],
+            products=output["products"], forecast=output["forecast"],
+            details={**old["details"], **details_patch})
+        inventory = store.read(block["inventory_id"])
+        inventory["event_products"][event["event_key"]]["model_outputs"][0]["receipt_sha256"] = (
+            output["missingness_audit"]["receipt_sha256"])
+        block["inventory_id"] = store.put(inventory)
+        block["inventory_witness_id"] = fixture["sign"](
+            block["inventory_id"], "missingness_release_inventory", "TEST_ONLY_witness", evidence["decision_time_utc"])
+        report = release_gate.evaluate(evidence)
+>       assert report["sports"][sport]["status"] == "BLOCKED"
+E       AssertionError: assert 'HEALTHY' == 'BLOCKED'
+E         
+E         - BLOCKED
+E         + HEALTHY
+
+tests/test_missingness_release_review_regressions.py:109: AssertionError
+_ test_signed_inventory_cannot_override_current_unsupported_trace[details_patch3] _
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+study = ({'at_utc': '2026-10-22T21:00:00Z', 'config_id': '0dba92680ccb1fee96ea0f14b9c12823ce17ad767fc9e1b087c55402a47c107f', '...278a10d15a96fdadf4bb03c0', '448503c8978495139998ebd16efb87187d61e1fcd2e55ec1667baa91fc2eed18', 'fixture-report-season')
+details_patch = {'feature_contracts': {'status': 'INCOMPLETE_ENGINEERING_INVENTORY'}}
+
+    @pytest.mark.parametrize("details_patch", [
+        {"status": "TRACE_BLOCKED"},
+        {"status": "REFUSED"},
+        {"status": "UNREGISTERED_OR_UNSUPPORTED"},
+        {"feature_contracts": {"status": "INCOMPLETE_ENGINEERING_INVENTORY"}},
+        {"comparison_status": "CHILD_SENSITIVITY_NOT_ESTABLISHED"},
+        {"parent_receipt_verified": False},
+    ])
+    def test_signed_inventory_cannot_override_current_unsupported_trace(release_case, study, details_patch):
+        evidence, sport = release_case
+        fixture, store, *_ = study
+        block = evidence["sports"][sport]
+        event = block["events"][0]
+        output = event["model_outputs"][0]
+        old = output["missingness_audit"]
+        output["missingness_audit"] = seal_audit(
+            league=sport, event_id=event["event_key"], model_id=output["model_id"],
+            products=output["products"], forecast=output["forecast"],
+            details={**old["details"], **details_patch})
+        inventory = store.read(block["inventory_id"])
+        inventory["event_products"][event["event_key"]]["model_outputs"][0]["receipt_sha256"] = (
+            output["missingness_audit"]["receipt_sha256"])
+        block["inventory_id"] = store.put(inventory)
+        block["inventory_witness_id"] = fixture["sign"](
+            block["inventory_id"], "missingness_release_inventory", "TEST_ONLY_witness", evidence["decision_time_utc"])
+        report = release_gate.evaluate(evidence)
+>       assert report["sports"][sport]["status"] == "BLOCKED"
+E       AssertionError: assert 'HEALTHY' == 'BLOCKED'
+E         
+E         - BLOCKED
+E         + HEALTHY
+
+tests/test_missingness_release_review_regressions.py:109: AssertionError
+_ test_signed_inventory_cannot_override_current_unsupported_trace[details_patch4] _
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+study = ({'at_utc': '2026-10-22T21:00:00Z', 'config_id': '0dba92680ccb1fee96ea0f14b9c12823ce17ad767fc9e1b087c55402a47c107f', '...278a10d15a96fdadf4bb03c0', 'dd904a6b36c020ce539db5a2c77a6e3178081139109994a9dfd8a0d48933d5fe', 'fixture-report-season')
+details_patch = {'comparison_status': 'CHILD_SENSITIVITY_NOT_ESTABLISHED'}
+
+    @pytest.mark.parametrize("details_patch", [
+        {"status": "TRACE_BLOCKED"},
+        {"status": "REFUSED"},
+        {"status": "UNREGISTERED_OR_UNSUPPORTED"},
+        {"feature_contracts": {"status": "INCOMPLETE_ENGINEERING_INVENTORY"}},
+        {"comparison_status": "CHILD_SENSITIVITY_NOT_ESTABLISHED"},
+        {"parent_receipt_verified": False},
+    ])
+    def test_signed_inventory_cannot_override_current_unsupported_trace(release_case, study, details_patch):
+        evidence, sport = release_case
+        fixture, store, *_ = study
+        block = evidence["sports"][sport]
+        event = block["events"][0]
+        output = event["model_outputs"][0]
+        old = output["missingness_audit"]
+        output["missingness_audit"] = seal_audit(
+            league=sport, event_id=event["event_key"], model_id=output["model_id"],
+            products=output["products"], forecast=output["forecast"],
+            details={**old["details"], **details_patch})
+        inventory = store.read(block["inventory_id"])
+        inventory["event_products"][event["event_key"]]["model_outputs"][0]["receipt_sha256"] = (
+            output["missingness_audit"]["receipt_sha256"])
+        block["inventory_id"] = store.put(inventory)
+        block["inventory_witness_id"] = fixture["sign"](
+            block["inventory_id"], "missingness_release_inventory", "TEST_ONLY_witness", evidence["decision_time_utc"])
+        report = release_gate.evaluate(evidence)
+>       assert report["sports"][sport]["status"] == "BLOCKED"
+E       AssertionError: assert 'HEALTHY' == 'BLOCKED'
+E         
+E         - BLOCKED
+E         + HEALTHY
+
+tests/test_missingness_release_review_regressions.py:109: AssertionError
+_ test_signed_inventory_cannot_override_current_unsupported_trace[details_patch5] _
+
+release_case = ({'decision_time_utc': '2026-10-22T21:00:00Z', 'enabled_sports': ['mlb', 'wnba', 'nfl', 'cfb', 'nba', 'nhl', ...], 'sp... 'PASS'}, ...}, 'inventory_id': '964b9d23b27981ec40adf343417e8d658f3346f37d1bb6a41288ba302fde4f33', ...}, ...}}, 'nfl')
+study = ({'at_utc': '2026-10-22T21:00:00Z', 'config_id': '0dba92680ccb1fee96ea0f14b9c12823ce17ad767fc9e1b087c55402a47c107f', '...278a10d15a96fdadf4bb03c0', '93ec26748bed946f893545ea1e535de2bf8da52c8eb365db5a4c2aff674442d6', 'fixture-report-season')
+details_patch = {'parent_receipt_verified': False}
+
+    @pytest.mark.parametrize("details_patch", [
+        {"status": "TRACE_BLOCKED"},
+        {"status": "REFUSED"},
+        {"status": "UNREGISTERED_OR_UNSUPPORTED"},
+        {"feature_contracts": {"status": "INCOMPLETE_ENGINEERING_INVENTORY"}},
+        {"comparison_status": "CHILD_SENSITIVITY_NOT_ESTABLISHED"},
+        {"parent_receipt_verified": False},
+    ])
+    def test_signed_inventory_cannot_override_current_unsupported_trace(release_case, study, details_patch):
+        evidence, sport = release_case
+        fixture, store, *_ = study
+        block = evidence["sports"][sport]
+        event = block["events"][0]
+        output = event["model_outputs"][0]
+        old = output["missingness_audit"]
+        output["missingness_audit"] = seal_audit(
+            league=sport, event_id=event["event_key"], model_id=output["model_id"],
+            products=output["products"], forecast=output["forecast"],
+            details={**old["details"], **details_patch})
+        inventory = store.read(block["inventory_id"])
+        inventory["event_products"][event["event_key"]]["model_outputs"][0]["receipt_sha256"] = (
+            output["missingness_audit"]["receipt_sha256"])
+        block["inventory_id"] = store.put(inventory)
+        block["inventory_witness_id"] = fixture["sign"](
+            block["inventory_id"], "missingness_release_inventory", "TEST_ONLY_witness", evidence["decision_time_utc"])
+        report = release_gate.evaluate(evidence)
+>       assert report["sports"][sport]["status"] == "BLOCKED"
+E       AssertionError: assert 'HEALTHY' == 'BLOCKED'
+E         
+E         - BLOCKED
+E         + HEALTHY
+
+tests/test_missingness_release_review_regressions.py:109: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_missingness_release_review_regressions.py::test_signed_inventory_cannot_override_current_unsupported_trace[details_patch0]
+FAILED tests/test_missingness_release_review_regressions.py::test_signed_inventory_cannot_override_current_unsupported_trace[details_patch1]
+FAILED tests/test_missingness_release_review_regressions.py::test_signed_inventory_cannot_override_current_unsupported_trace[details_patch2]
+FAILED tests/test_missingness_release_review_regressions.py::test_signed_inventory_cannot_override_current_unsupported_trace[details_patch3]
+FAILED tests/test_missingness_release_review_regressions.py::test_signed_inventory_cannot_override_current_unsupported_trace[details_patch4]
+FAILED tests/test_missingness_release_review_regressions.py::test_signed_inventory_cannot_override_current_unsupported_trace[details_patch5]
+6 failed in 0.18s

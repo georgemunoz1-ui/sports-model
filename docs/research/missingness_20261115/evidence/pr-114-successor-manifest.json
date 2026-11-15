@@ -1,0 +1,50 @@
+{
+  "schema": "sports.personnel_refusal_repair_verification.v1",
+  "created_at_utc": "2026-11-15T23:07:28.026972+00:00",
+  "base_commit": "3246bd3e6b356abe47ead1a298ce329d4622b57a",
+  "supersedes_unpublished_commit": "54631e115216d1ab4216e348aa5e0772ad198f8f",
+  "tested_commit": "d1dd65c03a288b59032076170080e3b2ded67fd3",
+  "tested_tree": "956a61bab722855f22ed0d2153faa39806175d5f",
+  "test_scope": [
+    "tests/test_nba_personnel_minutes.py",
+    "tests/test_cfb_personnel_v2.py",
+    "tests/test_efficiency_integrity.py"
+  ],
+  "counts": {
+    "tests": 141,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "independent_review_regressions": "4 cases reproduced on prior iteration; rerun by independent reviewer required for final attestation",
+  "logs": {
+    "successor.log": "f2415c990cfafc43dcb24b42e3f1e09b82c085c4c60f819b245904bcd6c9bbb9",
+    "successor.xml": "d0c70e80119f333265caa2dde4b485ea6c176310b60c713ad2740e87916e7da0"
+  },
+  "prior_verification_manifest_sha256": "9f970c82a289b32e713fb379ae832cf7538b2bab19d2e78ce26ed979d81a6c03",
+  "unchanged_source_and_defaults": {
+    "models/experiments/nba_personnel.py": {
+      "before": "780197a5959bc2b5c0a89abfc72e4e4b54430fb48d97b9a48a986b954393905d",
+      "after": "780197a5959bc2b5c0a89abfc72e4e4b54430fb48d97b9a48a986b954393905d",
+      "byte_identical": true
+    },
+    "scripts/run_nba_personnel_experiment.py": {
+      "before": "c83946327d8bb5b518a4b6ed93b91abd44c6ffcfaccb7f28739a63d7e3c72d2a",
+      "after": "c83946327d8bb5b518a4b6ed93b91abd44c6ffcfaccb7f28739a63d7e3c72d2a",
+      "byte_identical": true
+    },
+    "data/model_selection/defaults_v1.json": {
+      "before": "8bbfb63ee0f8eeb99fc728fb25db3f1d9959c863ccb4f517abde058e3424b3eb",
+      "after": "8bbfb63ee0f8eeb99fc728fb25db3f1d9959c863ccb4f517abde058e3424b3eb",
+      "byte_identical": true
+    },
+    "state.json": {
+      "before": "b11eaae146d0ad6f01cbcf8cd2be8b6164074a013e03d1cd5977c664a728cd19",
+      "after": "b11eaae146d0ad6f01cbcf8cd2be8b6164074a013e03d1cd5977c664a728cd19",
+      "byte_identical": true
+    }
+  },
+  "card_sidecar_function_unchanged": true,
+  "card_sidecar_function_sha256": "433bc886dff0300f711e03b7f8e34ecb15913e7acd7416d1d2664c945e05d674",
+  "scope": "Additive source-row inventory, run/refusal receipts, malformed-row isolation and original-input reconstruction. No predictive change, publication approval, external branch update, or live monitoring."
+}

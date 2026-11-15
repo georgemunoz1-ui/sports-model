@@ -401,9 +401,12 @@ def main():
 
     snapshot = json.load(open(args.snapshot))
     config = json.load(open(args.config))
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    from pipelines.cards.legacy_cli_missingness import preflight, persist
+    preflight(snapshot, config, args.output)
     out = run(snapshot, config, args.simulations, args.home_runline, args.total_line)
-    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
-    Path(args.output).write_text(json.dumps(out, indent=2, sort_keys=True) + "\n")
+    persist(args.output, out, league="mlb", snapshot=snapshot, state=config)
     print(
         json.dumps(
             {

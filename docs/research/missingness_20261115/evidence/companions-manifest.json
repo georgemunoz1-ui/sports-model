@@ -1,0 +1,231 @@
+{
+  "schema": "sports.missingness_companion_recheck.v1",
+  "started_at_utc": "2026-11-15T22:57:22.534971+00:00",
+  "completed_at_utc": "2026-11-15T22:58:00.430681+00:00",
+  "python": "Python 3.12.14",
+  "environment_file": "environment.txt",
+  "environment_sha256": "3ed4d77398a8b1c528fa6f8614431ac0b27f5673228917b29e3e7f14fc72fd97",
+  "scope": "Pinned-head local rerun of existing companion CI scopes; overlapping test populations are not additive; no live sports/predictive validation or deployment.",
+  "results": [
+    {
+      "pr": 111,
+      "commit": "92c1080895a55fa3060fff663835e82341484319",
+      "tree": "fed1cdb972433fe1790e7228cdf866ca3083d2c7",
+      "workflow_path": ".github/workflows/missingness-assurance.yml",
+      "workflow_sha256": "087f349d74cb985dd9778433224307b7220b1b9499a4e792f30a4431b5bf7b8a",
+      "workflow_tests": [
+        "tests/test_cbb_missingness.py",
+        "tests/test_cbb_shadow.py",
+        "tests/test_cbb_market_and_grades.py"
+      ],
+      "command": [
+        "/workspace/scratch/98ffee5de969/audit-venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_cbb_missingness.py",
+        "tests/test_cbb_shadow.py",
+        "tests/test_cbb_market_and_grades.py",
+        "--junitxml=/workspace/scratch/98ffee5de969/verification/companions/pr-111-pytest.xml"
+      ],
+      "exit_code": 0,
+      "test_counts": {
+        "tests": 28,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      "elapsed_seconds": 1.45,
+      "log_file": "pr-111-pytest.log",
+      "log_sha256": "ac4795abd75e0db138224e1aa06e948c21ccb080db15b33da217cfce87ed1b47",
+      "junit_file": "pr-111-pytest.xml",
+      "git_status_after": ""
+    },
+    {
+      "pr": 112,
+      "commit": "4e0710c45d744e407fdd694d2cd19734b9dbdf21",
+      "tree": "7ada51470999641b633834c9193df1566d958364",
+      "workflow_path": ".github/workflows/missingness-assurance.yml",
+      "workflow_sha256": "f02b3967268c87a9e32852dece84821b7699c486cb43c789db9a07ef4da0088c",
+      "workflow_tests": [
+        "tests/test_volatility_matrix_v1.py"
+      ],
+      "command": [
+        "/workspace/scratch/98ffee5de969/audit-venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_volatility_matrix_v1.py",
+        "--junitxml=/workspace/scratch/98ffee5de969/verification/companions/pr-112-pytest.xml"
+      ],
+      "exit_code": 0,
+      "test_counts": {
+        "tests": 49,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      "elapsed_seconds": 1.092,
+      "log_file": "pr-112-pytest.log",
+      "log_sha256": "9221a7fe52fd3fd0246aa80ea49e450f0642f7dfe6ff9583ebb4b05d110352f0",
+      "junit_file": "pr-112-pytest.xml",
+      "git_status_after": ""
+    },
+    {
+      "pr": 113,
+      "commit": "7433619cc8fab62df1cda33000cbf11384cd84cc",
+      "tree": "f6753675db9571473f22078c6b94298f40cff320",
+      "workflow_path": ".github/workflows/missingness-assurance.yml",
+      "workflow_sha256": "ed6fa5ea432018afb18e3adfe1cb82768250a2ad9a11986bd9b15404bf615f1f",
+      "workflow_tests": [
+        "tests/test_nba_combination_missingness.py",
+        "tests/test_nba_forecast_combination.py"
+      ],
+      "command": [
+        "/workspace/scratch/98ffee5de969/audit-venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_nba_combination_missingness.py",
+        "tests/test_nba_forecast_combination.py",
+        "--junitxml=/workspace/scratch/98ffee5de969/verification/companions/pr-113-pytest.xml"
+      ],
+      "exit_code": 0,
+      "test_counts": {
+        "tests": 32,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      "elapsed_seconds": 1.124,
+      "log_file": "pr-113-pytest.log",
+      "log_sha256": "0beaf653486db489e7e89aa241cf082cc67fec3e68f21cb20a449623557ca3de",
+      "junit_file": "pr-113-pytest.xml",
+      "git_status_after": ""
+    },
+    {
+      "pr": 114,
+      "commit": "3246bd3e6b356abe47ead1a298ce329d4622b57a",
+      "tree": "fdecdc84f22eaac60281d334caf6366318c99f50",
+      "workflow_path": ".github/workflows/missingness-assurance.yml",
+      "workflow_sha256": "92401c4326c593c3c53bbf6b2568a9bbb7eeb065444e526cae7d77c92a1c1009",
+      "workflow_tests": [
+        "tests/test_nba_personnel_minutes.py",
+        "tests/test_cfb_personnel_v2.py",
+        "tests/test_efficiency_integrity.py"
+      ],
+      "command": [
+        "/workspace/scratch/98ffee5de969/audit-venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_nba_personnel_minutes.py",
+        "tests/test_cfb_personnel_v2.py",
+        "tests/test_efficiency_integrity.py",
+        "--junitxml=/workspace/scratch/98ffee5de969/verification/companions/pr-114-pytest.xml"
+      ],
+      "exit_code": 0,
+      "test_counts": {
+        "tests": 128,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      "elapsed_seconds": 9.685,
+      "log_file": "pr-114-pytest.log",
+      "log_sha256": "a6dac0b53baffc4ff2a5a68b32758e1ea03bc6da5d0252df091693b3407b7648",
+      "junit_file": "pr-114-pytest.xml",
+      "git_status_after": ""
+    },
+    {
+      "pr": 115,
+      "commit": "b480f7690f154bc0a0d7247bb7508c1502543f43",
+      "tree": "f2dc4ef5598a7d516a3f6a9dd9cd28f3fb352ced",
+      "workflow_path": ".github/workflows/cfb-personnel-freshness.yml",
+      "workflow_sha256": "00c53ea02ffd1960e45596e44be8dbda6a12a3db1e11abdd2b9fb849e0ccd76d",
+      "workflow_tests": [
+        "tests/test_cfb_personnel_freshness.py",
+        "tests/test_cfb_personnel_v2.py",
+        "tests/test_cfb_efficiency_experiment.py",
+        "tests/test_efficiency_runner_dispatch.py",
+        "tests/test_efficiency_integrity.py",
+        "tests/test_efficiency_adversarial.py",
+        "tests/test_model_control_dispatch.py"
+      ],
+      "command": [
+        "/workspace/scratch/98ffee5de969/audit-venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_cfb_personnel_freshness.py",
+        "tests/test_cfb_personnel_v2.py",
+        "tests/test_cfb_efficiency_experiment.py",
+        "tests/test_efficiency_runner_dispatch.py",
+        "tests/test_efficiency_integrity.py",
+        "tests/test_efficiency_adversarial.py",
+        "tests/test_model_control_dispatch.py",
+        "--junitxml=/workspace/scratch/98ffee5de969/verification/companions/pr-115-pytest.xml"
+      ],
+      "exit_code": 0,
+      "test_counts": {
+        "tests": 183,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      "elapsed_seconds": 33.709,
+      "log_file": "pr-115-pytest.log",
+      "log_sha256": "d7be1168fd80d02d629dccdcbe5e47a2687e5d4111b91dbf541c47bed17e127c",
+      "junit_file": "pr-115-pytest.xml",
+      "finding_evidence": {
+        "command": [
+          "/workspace/scratch/98ffee5de969/audit-venv/bin/python",
+          "-m",
+          "research.finding_evidence",
+          "docs/research/cfb_missingness_evidence_20261108/FINDING_EVIDENCE.json"
+        ],
+        "exit_code": 0,
+        "log_file": "pr-115-finding-evidence.log",
+        "log_sha256": "9ec970cb37f55feaffd4656fb6beb2ab8d5b28c7d1214c8131fc2267113474ff"
+      },
+      "git_status_after": ""
+    },
+    {
+      "pr": 116,
+      "commit": "5d07f9372590ec73d1e8c02f62959471c026404c",
+      "tree": "766b42e4494db4721a6122f7a05960cdd1012f2c",
+      "workflow_path": ".github/workflows/missingness-assurance.yml",
+      "workflow_sha256": "c4aee601072f4de562e5abb841de4031f28dc61fc0894b39b78e3c03497379ee",
+      "workflow_tests": [
+        "tests/test_volatility_matrix_v1.py",
+        "tests/test_volatility_routing.py"
+      ],
+      "command": [
+        "/workspace/scratch/98ffee5de969/audit-venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_volatility_matrix_v1.py",
+        "tests/test_volatility_routing.py",
+        "--junitxml=/workspace/scratch/98ffee5de969/verification/companions/pr-116-pytest.xml"
+      ],
+      "exit_code": 0,
+      "test_counts": {
+        "tests": 125,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      "elapsed_seconds": 3.755,
+      "log_file": "pr-116-pytest.log",
+      "log_sha256": "fe67e99ee74baff980e8db4399dad0db5075e15a41c8525c23e15403fe6fcd97",
+      "junit_file": "pr-116-pytest.xml",
+      "git_status_after": ""
+    }
+  ],
+  "supplementary_evidence": {
+    "invocation_review.json": "f9c516c017f56de0f4d312e3aef32f7ee42bb5252ce61d44ef351f2de06148ce",
+    "pr-114-fit-refusal-probe.json": "db17ba71d2a17302b3991495c74db2893e5645a40c072644fdd909a6ad9eef6b",
+    "pr-114-fit-refusal-report.json": "58f72128aa453ac7a4fa1052b44d59f33844e0096061f9f578385ad2e7375186"
+  }
+}

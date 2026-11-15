@@ -98,6 +98,14 @@ def run(snapshot, state, n_sims, home_spread=None):
 
 def main():
     ap=argparse.ArgumentParser(); ap.add_argument("--event-id",required=True); ap.add_argument("--schedule",required=True); ap.add_argument("--model-state",required=True); ap.add_argument("--elo-state",required=True); ap.add_argument("--simulations",type=int,default=100000); ap.add_argument("--home-spread",type=float); ap.add_argument("--output",required=True); a=ap.parse_args()
-    state=json.load(open(a.model_state)); elo=json.load(open(a.elo_state)); row=load_row(a.schedule,a.event_id); snap=build_snapshot(row,elo); out=run(snap,state,a.simulations,a.home_spread)
-    Path(a.output).parent.mkdir(parents=True,exist_ok=True); Path(a.output).write_text(json.dumps(out,indent=2,sort_keys=True)+"\n"); print(json.dumps({"status":"PASS","event_id":a.event_id,"seed":out["simulation"]["random_seed"],"output_hash":out["output_hash"],"home_win_p_sim":out["projection"]["home_win_p_sim"]}))
+    state=json.load(open(a.model_state)); elo=json.load(open(a.elo_state)); row=load_row(a.schedule,a.event_id); snap=build_snapshot(row,elo)
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    from pipelines.cards.legacy_cli_missingness import cfb_schedule_preflight, preflight, persist
+    cfb_schedule_preflight(a.schedule, a.event_id)
+    preflight(snap, state, a.output)
+    preflight({**elo, "event_id": snap["event_id"]}, state, a.output)
+    out=run(snap,state,a.simulations,a.home_spread)
+    persist(a.output, out, league="cfb", snapshot=snap, state=state, source_inputs={"schedule_row":row,"elo_state":elo})
+    print(json.dumps({"status":"PASS","event_id":a.event_id,"seed":out["simulation"]["random_seed"],"output_hash":out["output_hash"],"home_win_p_sim":out["projection"]["home_win_p_sim"]}))
 if __name__=="__main__": main()

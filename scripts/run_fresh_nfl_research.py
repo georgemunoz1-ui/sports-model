@@ -19,6 +19,118 @@ from scripts.source_attestation import attest_sources, retained_file
 from scripts.recovery_capture import save_json, utc
 
 
+def _adapter_row_from_trace(trace, sources, recorded_dir):
+    """Independently project the frozen NFL adapter contract for exact display verification."""
+    from models.nfl.contextual.recovered_inference import digest
+
+    event = trace['event']
+    home_p = trace['prediction']['home_win']
+    home_leads = home_p >= 0.5
+    sim_home = trace['winner_simulation']['home_win_probability']
+    analytic = home_p if home_leads else 1 - home_p
+    simulated = sim_home if home_leads else 1 - sim_home
+    joint = trace['joint_distribution']
+    margin = joint['mean_margin'] if joint else None
+    return {
+        'model_id': trace['model_id'], 'coverage_label': trace['coverage_label'],
+        'model_winner': event['home_team'] if home_leads else event['away_team'],
+        'model_p': analytic, 'sim_p': simulated, 'analytic_p': analytic, 'stochastic_sim_p': simulated,
+        'projected_margin': -margin if margin is not None and not home_leads else margin,
+        'projected_total': joint['mean_total'] if joint else None,
+        'projected_home_points': joint['mean_home_score'] if joint else None,
+        'projected_away_points': joint['mean_away_score'] if joint else None,
+        'forecast_tier': 'REDUCED', 'data_quality': 'PARTIAL_CURRENT_CONTEXT_APPLIED',
+        'diagnostics': trace, 'model_input_snapshot': trace['features'],
+        'input_snapshot_hash': digest(trace['features']), 'model_state_config_hash': trace['model_artifact_sha256'],
+        'simulation': {'binary': trace['winner_simulation'], 'joint_scores': trace['score_simulation'],
+                       'draw_directory': str(recorded_dir)},
+        'warnings': trace['warnings'], 'provenance': {'source_fetches': sources, 'model_id': trace['model_id']},
+    }
+
+
+def verify_inference_traces(card, selected, package, state_id, output, *, recorded_output=None):
+    """Read back frozen files and reproduce exactly the rows displayed by this runner."""
+    import numpy as np
+    from models.nfl.contextual.model import load_artifact
+    from models.nfl.contextual.recovered_inference import digest, utc as timestamp
+    from pipelines.cards.nfl_flip_integration import attach_diagnostic
+    from pipelines.cards.selected import apply_default
+    from scripts.generate_card_force import attach_grading, normalize
+    from sports.rosters import attach
+
+    output = Path(output).resolve()
+    # Relocation affects only the spelling of the captured display path, never where we read.
+    recorded_output = output if recorded_output is None else Path(recorded_output)
+    if not recorded_output.is_absolute():
+        raise ValueError('ABSOLUTE_RECORDED_OUTPUT_REQUIRED')
+    rows = card['forecasts']
+    events = {event['event_id']: event for event in selected}
+    if (not rows or card.get('incidents') or len(rows) != len(selected)
+            or len(events) != len(selected) or {row['event_id'] for row in rows} != set(events)
+            or any(row.get('forecast_status') != 'FORECAST_GENERATED' for row in rows)):
+        raise ValueError('FRESH_INFERENCE_COVERAGE_INCOMPLETE')
+    model = load_artifact(output / package['model_path'])
+    if digest(model) != package['model_digest']:
+        raise ValueError('FROZEN_MODEL_CONSUMPTION_UNVERIFIED')
+
+    traces = []
+    expected_rows = []
+    for row in rows:
+        event = events[row['event_id']]
+        relative_dir = Path('draws') / event['event_id'].replace(':', '_')
+        draw_dir = (output / relative_dir).resolve()
+        recorded_dir = recorded_output / relative_dir
+        if (not draw_dir.is_relative_to(output / 'draws') or
+                row['simulation'].get('draw_directory') != str(recorded_dir)):
+            raise ValueError('RETAINED_INFERENCE_TRACE_REQUIRED')
+        manifest_path = retained_file(draw_dir, 'manifest.json')
+        files = json.loads(manifest_path.read_text())
+        if 'forecast.json' not in files or 'winner_draws.npy' not in files:
+            raise ValueError('RETAINED_DRAW_FILES_REQUIRED')
+        for relative, expected_hash in files.items():
+            if hashlib.sha256(retained_file(draw_dir, relative).read_bytes()).hexdigest() != expected_hash:
+                raise ValueError('INFERENCE_TRACE_DIGEST_MISMATCH')
+        retained = json.loads((draw_dir / 'forecast.json').read_text())
+        if retained['model_id'] != package['selected_model_id']:
+            raise ValueError('SELECTED_MODEL_IDENTITY_MISMATCH')
+        if retained['model_artifact_sha256'] != package['model_digest']:
+            raise ValueError('FROZEN_MODEL_CONSUMPTION_UNVERIFIED')
+        if (digest(retained['event']) != digest(event) or retained['cutoff_utc'] != card['as_of_utc']
+                or not timestamp(card['as_of_utc']) <= timestamp(card['generated_at_utc']) < timestamp(event['start_time_utc'])):
+            raise ValueError('INFERENCE_TRACE_EVENT_OR_CUTOFF_MISMATCH')
+        if (retained.get('assimilation') or {}).get('state_id') != state_id:
+            raise ValueError('WEEKLY_STATE_CONSUMPTION_UNVERIFIED')
+        features = retained.get('features')
+        if not isinstance(features, dict) or not features:
+            raise ValueError('INFERENCE_FEATURES_REQUIRED')
+        sim = retained['winner_simulation']
+        draws = np.load(draw_dir / 'winner_draws.npy', allow_pickle=False)
+        if (not draws.size or draws.shape != (card['simulation_count'],)
+                or sim['count'] != draws.size or hashlib.sha256(draws.tobytes()).hexdigest() != sim['sha256']
+                or not np.isin(draws, (0, 1)).all() or float(draws.mean()) != sim['home_win_probability']):
+            raise ValueError('INFERENCE_WINNER_DRAW_MISMATCH')
+
+        # The adapter persists the numerical result before selection and presentation.
+        # Rebuild both layers from it; never trust or strip fields from the display.
+        if {'default_selection', 'arm_feature_references', 'flip_diagnostics'}.intersection(retained):
+            raise ValueError('INFERENCE_TRACE_CONTAINS_CARD_METADATA')
+        raw = _adapter_row_from_trace(retained, package['source_fetches'], recorded_dir)
+        raw = apply_default('nfl', event, raw)
+        raw['diagnostics'] = attach_diagnostic(raw['diagnostics'], model)
+        expected_rows.append(normalize(event, attach(raw, 'nfl', event, card['as_of_utc'])))
+        traces.append({'event_id': event['event_id'], 'model_id': retained['model_id'],
+                       'input_snapshot_hash': digest(features),
+                       'model_state_config_hash': retained['model_artifact_sha256'],
+                       'draw_manifest_sha256': hashlib.sha256(manifest_path.read_bytes()).hexdigest(),
+                       'forecast_file_sha256': files['forecast.json'],
+                       'display_row_sha256': digest(row)})
+
+    projected = attach_grading({**card, 'forecasts': expected_rows})
+    if digest(projected['forecasts']) != digest(rows):
+        raise ValueError('INFERENCE_TRACE_CARD_MISMATCH')
+    return traces
+
+
 def run(store, state_id, seed_id, source_bundles, date, output, simulations=100000):
     from scripts.prepare_nfl_weekly_events import build
     from scripts.generate_card_force import generate
@@ -56,42 +168,7 @@ def run(store, state_id, seed_id, source_bundles, date, output, simulations=1000
         if hashlib.sha256(package_path.read_bytes()).hexdigest() != package_hash:
             raise ValueError('PACKAGE_CHANGED_DURING_INFERENCE')
         save_json(output / 'diagnostic_card.json', card)
-        rows = [r for r in card['forecasts'] if r.get('forecast_status') == 'FORECAST_GENERATED']
-        if card.get('incidents') or {r['event_id'] for r in rows} != {e['event_id'] for e in selected}:
-            raise ValueError('FRESH_INFERENCE_COVERAGE_INCOMPLETE')
-        traces = []
-        for row in rows:
-            if row.get('model_id') != package['selected_model_id']:
-                raise ValueError('SELECTED_MODEL_IDENTITY_MISMATCH')
-            draw_dir = Path(row['simulation']['draw_directory']).resolve()
-            if not draw_dir.is_relative_to(output) or not (draw_dir / 'manifest.json').is_file():
-                raise ValueError('RETAINED_INFERENCE_TRACE_REQUIRED')
-            if not row.get('input_snapshot_hash') or not row.get('model_state_config_hash'):
-                raise ValueError('INFERENCE_BINDING_REQUIRED')
-            diagnostics = row.get('diagnostics') or {}
-            features = diagnostics.get('features')
-            if not isinstance(features, dict) or not features:
-                raise ValueError('INFERENCE_FEATURES_REQUIRED')
-            feature_hash = hashlib.sha256(json.dumps(features, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
-            if row['input_snapshot_hash'] != feature_hash or row.get('model_input_snapshot') != features:
-                raise ValueError('INFERENCE_FEATURE_DIGEST_MISMATCH')
-            if (diagnostics.get('assimilation') or {}).get('state_id') != state_id:
-                raise ValueError('WEEKLY_STATE_CONSUMPTION_UNVERIFIED')
-            if row['model_state_config_hash'] != package['model_digest']:
-                raise ValueError('FROZEN_MODEL_CONSUMPTION_UNVERIFIED')
-            files = json.loads((draw_dir / 'manifest.json').read_text())
-            if 'forecast.json' not in files or 'winner_draws.npy' not in files:
-                raise ValueError('RETAINED_DRAW_FILES_REQUIRED')
-            for relative, expected_hash in files.items():
-                if hashlib.sha256(retained_file(draw_dir, relative).read_bytes()).hexdigest() != expected_hash:
-                    raise ValueError('INFERENCE_TRACE_DIGEST_MISMATCH')
-            retained = json.loads((draw_dir / 'forecast.json').read_text())
-            if retained != diagnostics:
-                raise ValueError('INFERENCE_TRACE_CARD_MISMATCH')
-            traces.append({'event_id': row['event_id'], 'model_id': row['model_id'],
-                           'input_snapshot_hash': row['input_snapshot_hash'],
-                           'model_state_config_hash': row['model_state_config_hash'],
-                           'draw_manifest_sha256': hashlib.sha256((draw_dir / 'manifest.json').read_bytes()).hexdigest()})
+        traces = verify_inference_traces(card, selected, package, state_id, output)
         report.update(status='FRESH_RESEARCH_INFERENCE_GENERATED',
                       forecast_consumption_verified=True, inference_traces=traces,
                       card_sha256=hashlib.sha256((output / 'diagnostic_card.json').read_bytes()).hexdigest())

@@ -73,6 +73,112 @@ def _audit_check(forecast,receipt):
         raise ValueError("NBA_PERSONNEL_MISSINGNESS_READBACK_FAILED")
 
 
+def _evaluation_inputs(rows):
+    """Inventory original JSON rows without assuming their containers are valid."""
+    from pipelines.cards.missingness import content_digest
+    if not isinstance(rows, list):
+        raise ValueError("NBA_PERSONNEL_EVALUATION_LIST_REQUIRED")
+    out = []
+    for index, row in enumerate(rows):
+        event = row.get("event") if isinstance(row, dict) else None
+        out.append({"input_row_index": index, "input_row_sha256": content_digest(row),
+                    "declared_event_id": event.get("event_id") if isinstance(event, dict) else None,
+                    "row_container": type(row).__name__, "event_container": type(event).__name__})
+    return out
+
+
+def _exclusion_binding(report, exclusion, row_index):
+    eid = exclusion.get("event_id")
+    supplied = isinstance(eid, str) and bool(eid.strip())
+    scope_id = eid if supplied else f"UNRESOLVED_EVALUATION_ROW:{report['run_id']}:{row_index}"
+    context = {key: report[key] for key in ("run_id", "created_at_utc", "model_id", "mode", "evidence_scope",
+                                           "input_sha256", "fit_cutoff_utc", "state_sha256", "code_sha256")}
+    return dict(league="nba", model_id=model.MODEL_ID, event_id=scope_id, products=["coverage"],
+                forecast={"exclusion": {k:v for k,v in exclusion.items() if k != "missingness_audit"},
+                          "input_row_index": row_index, "run_context": context,
+                          "input_inventory_row": report["evaluation_inventory"][row_index]})
+
+
+def verify_experiment_report(report, *, input_path=None):
+    """Check the whole retained inventory; a supplied input independently rebuilds it.
+
+    The writer always supplies the original input path. Receipt integrity alone
+    does not establish provider authenticity if a caller regenerates all bytes.
+    """
+    from pipelines.cards.missingness import content_digest, verify_audit
+    if not verify_audit(report.get("missingness_audit"), league="nba", model_id=model.MODEL_ID,
+            event_id=report["run_id"], products=["coverage"],
+            forecast={k:v for k,v in report.items() if k != "missingness_audit"}):
+        raise ValueError("NBA_PERSONNEL_EXCLUSION_READBACK_RUN_BINDING")
+    inventory = report["evaluation_inventory"]
+    count = report["evaluation_opportunities"]
+    if (type(count) is not int or count < 0 or not isinstance(inventory, list) or len(inventory) != count
+            or any(not isinstance(entry, dict) or type(entry.get("input_row_index")) is not int for entry in inventory)
+            or [entry.get("input_row_index") for entry in inventory] != list(range(count))):
+        raise ValueError("NBA_PERSONNEL_EVALUATION_INVENTORY_READBACK")
+    if input_path is not None:
+        raw = Path(input_path).read_bytes()
+        if hashlib.sha256(raw).hexdigest() != report["input_sha256"]:
+            raise ValueError("NBA_PERSONNEL_INPUT_READBACK")
+        packet = json.loads(raw)
+        original = _evaluation_inputs(packet["evaluation"])
+        actual = [{key: entry[key] for key in source} for entry, source in zip(inventory, original, strict=True)]
+        if (content_digest(original) != content_digest(actual)
+                or len(packet["training"]) != report["training_opportunities"]
+                or packet["fit_cutoff_utc"] != report["fit_cutoff_utc"]
+                or packet["evidence_scope"] != report["evidence_scope"]):
+            raise ValueError("NBA_PERSONNEL_SOURCE_INVENTORY_READBACK")
+    if "state_sha256" not in report:
+        if (report["status"] != "BLOCKED" or report["n_paired"] != 0
+                or any(entry["disposition"] != "FIT_BLOCKED" or entry["forecast_emitted"] is not False
+                       or entry["forecast_sha256"] is not None or entry["reason"] != report["reason"]
+                       for entry in inventory)):
+            raise ValueError("NBA_PERSONNEL_FIT_REFUSAL_READBACK")
+        return {"input_reconstructed": input_path is not None, "evaluation_rows": count}
+    excluded = report["exclusions"]
+    expected = {entry["input_row_index"]: entry for entry in inventory if entry["disposition"] == "EXCLUDED"}
+    paired = [entry for entry in inventory if entry["disposition"] == "PAIRED"]
+    paired_count, excluded_count = report["n_paired"], report["n_excluded"]
+    if (type(paired_count) is not int or type(excluded_count) is not int
+            or len(excluded) != excluded_count or len(expected) != excluded_count or len(paired) != paired_count
+            or paired_count + excluded_count != count):
+        raise ValueError("NBA_PERSONNEL_EXCLUSION_READBACK")
+    status = "COMPLETED" if paired_count and not excluded_count else "PARTIAL" if paired_count else "BLOCKED"
+    if report["status"] != status or any(entry["forecast_emitted"] is not True or not entry["forecast_sha256"] for entry in paired):
+        raise ValueError("NBA_PERSONNEL_EVALUATION_DISPOSITION_READBACK")
+    indices = set()
+    for exclusion in excluded:
+        receipt = exclusion.get("missingness_audit")
+        index = (receipt or {}).get("details", {}).get("input_row_index")
+        if (type(index) is not int or index in indices or index not in expected
+                or content_digest(exclusion.get("event_id")) != content_digest(expected[index]["declared_event_id"])
+                or exclusion["reason"] != expected[index]["reason"]
+                or receipt["details"]["forecast_emitted"] is not expected[index]["forecast_emitted"]
+                or not verify_audit(receipt, **_exclusion_binding(report, exclusion, index))):
+            raise ValueError("NBA_PERSONNEL_EXCLUSION_READBACK")
+        indices.add(index)
+    if indices != set(expected):
+        raise ValueError("NBA_PERSONNEL_EXCLUSION_READBACK")
+    return {"input_reconstructed": input_path is not None, "evaluation_rows": count}
+
+
+def _write_experiment_report(path, report, input_path):
+    from pipelines.cards.missingness import seal_audit
+    if hashlib.sha256(Path(input_path).read_bytes()).hexdigest() != report["input_sha256"]:
+        raise ValueError("NBA_PERSONNEL_INPUT_READBACK")
+    if "missingness_audit" not in report:
+        report["missingness_audit"] = seal_audit(league="nba", model_id=model.MODEL_ID,
+            event_id=report["run_id"], products=["coverage"], forecast=dict(report), details={
+                "scope": "RUN_WITH_FITTED_STATE", "input_sha256": report["input_sha256"],
+                "inventory_basis": "ORIGINAL_EVALUATION_ROWS_IN_INPUT_ORDER",
+                "feature_values": None, "provider_authenticity": "NOT_ASSESSED"})
+    write(path, report)
+    stored = json.loads(Path(path).read_bytes())
+    if stored != report:
+        raise ValueError("NBA_PERSONNEL_EXPERIMENT_REPORT_READBACK")
+    verify_experiment_report(stored, input_path=input_path)
+
+
 def experiment(input_path, output):
     """Fit an explicit earlier split, then score the exact later paired events.
 
@@ -89,24 +195,48 @@ def experiment(input_path, output):
     report = {**common_report("HISTORICAL_DIAGNOSTIC"), "evidence_scope": packet["evidence_scope"],
               "input_sha256": hashlib.sha256(raw).hexdigest(), "fit_cutoff_utc": packet["fit_cutoff_utc"],
               "training_opportunities": len(packet["training"]), "evaluation_opportunities": len(packet["evaluation"])}
+    inventory = _evaluation_inputs(packet["evaluation"])
+    report["evaluation_inventory"] = inventory
     try:
         state = model.fit(packet["training"], base=p.parent, fit_cutoff_utc=packet["fit_cutoff_utc"])
     except (ValueError, KeyError, TypeError, OSError) as exc:
+        from pipelines.cards.missingness import seal_audit
         report.update(status="BLOCKED", reason=str(exc), n_paired=0)
-        write(out / "report.json", report)
+        for entry in inventory:
+            entry.update(disposition="FIT_BLOCKED", forecast_emitted=False, forecast_sha256=None, reason=str(exc))
+        report["missingness_audit"] = seal_audit(league="nba", model_id=model.MODEL_ID,
+            event_id=report["run_id"], products=["coverage"], forecast=dict(report), details={
+                "scope": "RUN_WITHOUT_FITTED_STATE", "failed_stage": "FIT", "reason": str(exc),
+                "observation_state": "ACQUISITION_FAILURE" if isinstance(exc, OSError) else "UNRESOLVED_IDENTITY_OR_COVERAGE",
+                "forecast_emitted": False, "feature_values": None, "historical_support": "NOT_ASSESSED",
+                "evaluation_opportunities_unforecasted": report["evaluation_opportunities"]})
+        _write_experiment_report(out / "report.json", report, p)
         return report
     write(out / "state.json", state)
     ids, forecasts, paired, excluded = set(), [], [], []
     audit_by_event={}
-    for row in packet["evaluation"]:
-        eid = row.get("event", {}).get("event_id")
+    exclusion_context = []
+    for index, row in enumerate(packet["evaluation"]):
+        eid = None
+        stage, emitted = "IDENTITY", False
+        forecast = None
         try:
+            if not isinstance(row, dict):
+                raise ValueError("NBA_PERSONNEL_EVALUATION_ROW_OBJECT_REQUIRED")
+            event = row.get("event")
+            if not isinstance(event, dict):
+                raise ValueError("NBA_PERSONNEL_EVALUATION_EVENT_OBJECT_REQUIRED")
+            eid = event.get("event_id")
+            if not isinstance(eid, str) or not eid.strip():
+                raise ValueError("NBA_PERSONNEL_EVALUATION_EVENT_ID_REQUIRED")
             if eid in ids:
                 raise ValueError("NBA_PERSONNEL_DUPLICATE_EVALUATION_EVENT")
             ids.add(eid)
+            stage = "PREDICTION"
             forecast,receipt = _audited_prediction(state,row,p.parent)
             audit_by_event[eid]=receipt
             forecasts.append(forecast)
+            stage, emitted = "RESULT_RECONCILIATION", True
             if forecast["conditional_scenarios"]:
                 raise ValueError("NBA_PERSONNEL_CONDITIONAL_OUTCOME_MATCH_NOT_ESTABLISHED")
             result = row["result"]
@@ -122,13 +252,27 @@ def experiment(input_path, output):
                            "parent_absolute_error": abs(actual - forecast["parent_home_margin"]),
                            "challenger_absolute_error": abs(actual - forecast["home_margin"]),
                            "forecast_sha256": forecast["forecast_sha256"]})
-        except (ValueError, KeyError, TypeError, OSError) as exc:
+            inventory[index].update(disposition="PAIRED", forecast_emitted=True,
+                                    forecast_sha256=forecast["forecast_sha256"], reason=None)
+        except (ValueError, KeyError, TypeError, OSError, AttributeError) as exc:
             excluded.append({"event_id": eid, "reason": str(exc)})
+            inventory[index].update(disposition="EXCLUDED", forecast_emitted=emitted,
+                forecast_sha256=forecast["forecast_sha256"] if emitted else None, reason=str(exc))
+            exclusion_context.append({"input_row_index": index, "failed_stage": stage,
+                "forecast_emitted": emitted, "feature_values": None,
+                "declared_event_id_present": isinstance(eid, str) and bool(eid.strip()),
+                "identity_validation": "NATIVE_PREDICTION_COMPLETED" if emitted else "NOT_ESTABLISHED_BY_THIS_RECEIPT",
+                "observation_state": "ACQUISITION_FAILURE" if isinstance(exc, OSError) else "UNRESOLVED_IDENTITY_OR_COVERAGE",
+                "interpretation": "Evaluation coverage only; no numerical replacement or missingness-effect estimate."})
     report.update(status="COMPLETED" if paired and not excluded else "PARTIAL" if paired else "BLOCKED",
                   state_sha256=state["state_sha256"], n_paired=len(paired), n_excluded=len(excluded),
                   baseline_mae=sum(r["parent_absolute_error"] for r in paired) / len(paired) if paired else None,
                   challenger_mae=sum(r["challenger_absolute_error"] for r in paired) / len(paired) if paired else None,
                   uncertainty="NOT_ESTIMATED; exploratory point summary is not qualification", exclusions=excluded)
+    from pipelines.cards.missingness import seal_audit
+    for exclusion, details in zip(excluded, exclusion_context, strict=True):
+        exclusion["missingness_audit"] = seal_audit(
+            **_exclusion_binding(report, exclusion, details["input_row_index"]), details=details)
     if p.read_bytes() != raw:
         raise ValueError("NBA_PERSONNEL_INPUT_CHANGED_DURING_RUN")
     write(out / "forecasts.json", forecasts)
@@ -137,7 +281,7 @@ def experiment(input_path, output):
     for f in json.loads((out/"forecasts.json").read_bytes()):
         _audit_check(f,stored[f["event_id"]])
     write(out / "paired.json", paired)
-    write(out / "report.json", report)
+    _write_experiment_report(out / "report.json", report, p)
     return report
 
 

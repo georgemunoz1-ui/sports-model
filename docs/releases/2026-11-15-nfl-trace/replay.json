@@ -1,0 +1,81 @@
+{
+  "schema": "nfl.research_trace_verifier_evidence.v1",
+  "slate_date": "2026-11-15",
+  "verified_utc": "2026-11-15T12:38:05.067185+00:00",
+  "verification_source_commit": "557c157f6a055035015b850ec980179032723b69",
+  "wrapper_source_sha256": "d24ee6c5b9d4ec1cdcaa4e5b5d0b04590dffda6731a17cba77d8ef5a288e7928",
+  "scope": "Local verification on research code. The remote evidence commit records a later readback and execution. Original local freeze times were not remotely attested.",
+  "original": {
+    "base_commit": "b7a46b50985eb7dfb6b6c32135ab2f4cb50e5592",
+    "status": "BLOCKED",
+    "reason": "INFERENCE_TRACE_CARD_MISMATCH",
+    "archive_sha256": "5680b7659ecd9647f9460e5699c0e7361d7a111f7da6a5e06595d9d8c89bfce6",
+    "archive_payloads_verified": 233,
+    "shared_card_sha256": "4366e0f7839c60f873c1fe7c2dc13f1d1e6686badf6ffdae5045c757dbf61202",
+    "blocked_receipt_sha256": "5a758081624c494dc5a71ee9af597a56741c70791f7248a6777fe88e3beac5b3",
+    "original_integrated_freezes_utc": [
+      "2026-11-15T12:06:16.013836+00:00",
+      "2026-11-15T12:10:32.135843+00:00"
+    ]
+  },
+  "historical_readback": {
+    "rows_verified": 12,
+    "relocated_copy": true,
+    "original_tree_reads": 0,
+    "exact_head_estimates_reproduced": 36,
+    "original_integrated_draws_verified": 1200000,
+    "negative_controls_rejected": [
+      "raw_prediction",
+      "raw_feature",
+      "derived_policy_authority",
+      "derived_flip",
+      "derived_model_reference",
+      "all_derived_keys_removed",
+      "missing_derived_key",
+      "unrecognized_field",
+      "type_confusion",
+      "top_level_winner_probability",
+      "top_level_side_probability",
+      "top_level_promoted_authority",
+      "top_level_orientation",
+      "duplicate_fixture",
+      "cross_fixture_draw_reuse",
+      "swapped_fixture_ids",
+      "altered_draw_bytes"
+    ]
+  },
+  "new_wrapper_execution": {
+    "command": "scripts/run_fresh_nfl_research.py",
+    "source_policy": "Same retained November 15 input bytes and completed Week 9 state. The later invocation used its actual clock and retained its own output receipt.",
+    "cutoff_utc": "2026-11-15T12:32:32.366223Z",
+    "card_created_utc": "2026-11-15T12:37:52.530703Z",
+    "wrapper_status": "FRESH_RESEARCH_INFERENCE_GENERATED",
+    "consumption_verified": true,
+    "verified_rows": 12,
+    "winner_draws_executed": 1200000,
+    "matching_original_seeded_draw_arrays": 12,
+    "matching_original_shared_numerical_identities": 12,
+    "point_estimates_identical_to_early_card": 36,
+    "new_card_sha256": "00e9105750798c267e261b1a86cd02de2eb5ece009a1dadee4a6bb0373ad66e0",
+    "receipt_sha256": "8fa98ea7b2336cbbe35eb855675bfe240670361ec22877b8cfbcbbc2a7dfa1e0",
+    "package_sha256": "36efc2396ba56f2062ebcd38bdeaafaa5d49f9da276fa6ee5ff468a79a23b34d",
+    "weekly_state_sha256": "27dff0d0c159eba98f3fcfb84a5a9e2407edcdf708842ab04e0ef68ae1d22ee6",
+    "source_attestation": "RAW_BYTES_AND_RECEIPTS_VERIFIED"
+  },
+  "repository_acceptance": {
+    "source_commit": "557c157f6a055035015b850ec980179032723b69",
+    "junit_tests": 2226,
+    "receipt_sha256": "50e92c741dc74ab66a3166b247b22ce4e19b62b6cbe4134f31d889aeca96cb1f"
+  },
+  "standing_health": {
+    "result": "RED",
+    "failures": 6,
+    "warnings": 7,
+    "clean_patched_checkout_log_sha256": "a4cfd5b6a0237166e136ec409d69ce7ee9fb61af79bfbad0f1e9b4a274f5dbee"
+  },
+  "model_refitted": false,
+  "canonical_forecast_registrations": 0,
+  "production_publication": false,
+  "wagering_authority": "OFF",
+  "official_units": 0
+}

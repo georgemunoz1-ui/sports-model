@@ -175,3 +175,51 @@ def test_external_distribution_requires_exact_parent_then_discloses_sign():
     row["input_snapshot_hash"] = "b" * 64
     m = integrity_report(c)["events"][0]["margins"]
     assert not m["sibling_distributions"] and m["reasons"] == ["SIBLING_DISTRIBUTION_INVALID_OR_UNBOUND"]
+
+
+@pytest.mark.parametrize("change,reason", [
+    ("wrong_team", "HOME:STATE_TEAM_IDENTITY_UNBOUND"),
+    ("legacy_parent_without_ids", "HOME:STATE_TEAM_IDENTITY_UNBOUND"),
+    ("false_rest_trace", "HOME:REST_CONSUMPTION_TRACE_UNPROVEN"),
+    ("missing_fit", "TRAINING_CUTOFF_UNKNOWN"),
+    ("future_fit", "FIT_NOT_AVAILABLE_PREFORECAST"),
+    ("omitted_side_blocker", "HOME:SOURCE_UNVERIFIED"),
+])
+def test_resealed_receipt_cannot_hide_state_evidence_gaps(change, reason):
+    from pipelines.cards.selection_integration import build_card_selection
+    c = freshness(card("NBA"))
+    row = c["forecasts"][0]
+    c["generated_at_utc"] = CUTOFF
+    raw = row["diagnostics"]["state_freshness_receipt"]
+    home = raw["per_side"]["home"]
+    if change == "wrong_team":
+        home["team_id"] = row["away_id"]
+    elif change == "legacy_parent_without_ids":
+        del row["home_id"]
+    elif change == "false_rest_trace":
+        home["consumed_state_last_start_utc"] = "2026-10-20T18:00:00Z"
+        home["state_age_at_cutoff_hours"] = 45.
+    elif change == "missing_fit":
+        raw.pop("training_cutoff_utc")
+    elif change == "future_fit":
+        raw["training_cutoff_utc"] = row["start_time_utc"]
+    else:
+        home["blocking_reasons"].append("SOURCE_UNVERIFIED")
+    raw.pop("receipt_sha256")
+    raw["receipt_sha256"] = digest(raw)
+    before = copy.deepcopy(c)
+    result = build_card_selection(c, source_sha256=HASH, source_ref="test",
+                                  evaluated_at_utc=CUTOFF)
+    assert reason in result["decisions"][0]["blocking_reasons"]
+    assert result["decisions"][0]["raw_probability"] == row["model_p"]
+    assert c == before
+
+
+def test_normalized_shared_row_binds_team_ids_from_schedule():
+    from scripts.generate_card_force import normalize
+    c = freshness(card("NBA"))
+    row = c["forecasts"][0]
+    raw = {**row, "sim_p": row["model_p"]}
+    raw["diagnostics"]["state_freshness_receipt"]["per_side"]["home"]["team_id"] = "wrong"
+    normalized = normalize(row, raw)
+    assert normalized["home_id"] == row["home_id"] and normalized["away_id"] == row["away_id"]

@@ -188,6 +188,168 @@ def test_real_runner_immutable_and_blocked_missing_training(tmp_path):
     assert refusal["status"] == "BLOCKED" and refusal["n_paired"] == 0
 
 
+def test_fit_failure_retains_verified_run_coverage_receipt(tmp_path):
+    from pipelines.cards.missingness import verify_audit
+    rows = data(tmp_path)
+    manifest = {"schema": "nba-personnel-experiment.v1", "evidence_scope": "TEST_ONLY",
+                "fit_cutoff_utc": "2020-01-25T12:00:00Z", "training": [], "evaluation": rows[24:]}
+    source = tmp_path / "input.json"
+    source.write_text(json.dumps(manifest))
+    report = experiment(source, tmp_path / "blocked")
+    receipt = report["missingness_audit"]
+    assert report["status"] == "BLOCKED" and report["n_paired"] == 0
+    assert receipt["products"] == ["coverage"]
+    assert receipt["details"]["scope"] == "RUN_WITHOUT_FITTED_STATE"
+    assert receipt["details"]["feature_values"] is None
+    assert receipt["details"]["forecast_emitted"] is False
+    assert verify_audit(receipt, league="nba", event_id=report["run_id"], model_id=m.MODEL_ID,
+                        products=["coverage"], forecast={k:v for k,v in report.items() if k != "missingness_audit"})
+    assert json.loads((tmp_path / "blocked" / "report.json").read_bytes()) == report
+    assert not (tmp_path / "blocked" / "state.json").exists()
+    assert not (tmp_path / "blocked" / "forecasts.json").exists()
+
+
+@pytest.mark.parametrize("failure", ["personnel", "result", "identity", "duplicate", "row", "event"])
+def test_experiment_exclusions_are_audited_without_replacing_valid_forecasts(tmp_path, failure):
+    from research.efficiency import nba_personnel_runner as runner
+    rows = data(tmp_path)
+    bad = copy.deepcopy(rows[25])
+    if failure == "personnel":
+        bad["personnel"]["players"].pop()
+    elif failure == "result":
+        bad["result"]["home_margin"] += 10
+    elif failure == "identity":
+        bad["event"]["event_id"] = None
+    elif failure == "duplicate":
+        bad = copy.deepcopy(rows[24])
+    elif failure == "row":
+        bad = None
+    else:
+        bad["event"] = None
+    manifest = {"schema": "nba-personnel-experiment.v1", "evidence_scope": "TEST_ONLY",
+                "fit_cutoff_utc": "2020-01-25T12:00:00Z", "training": rows[:22],
+                "evaluation": [rows[24], bad]}
+    source = tmp_path / "input.json"
+    source.write_text(json.dumps(manifest))
+    output = tmp_path / "run"
+    report = experiment(source, output)
+    exclusion, = report["exclusions"]
+    receipt = exclusion["missingness_audit"]
+    assert report["status"] == "PARTIAL" and report["n_paired"] == report["n_excluded"] == 1
+    assert receipt["products"] == ["coverage"] and receipt["action_authority"] is False
+    assert receipt["details"]["input_row_index"] == 1
+    assert receipt["details"]["forecast_emitted"] is (failure == "result")
+    assert receipt["details"]["feature_values"] is None
+    assert (receipt["details"]["declared_event_id_present"] is False) is (failure in ("identity", "row", "event"))
+    assert (receipt["details"]["identity_validation"] == "NATIVE_PREDICTION_COMPLETED") is (failure == "result")
+    if failure in ("identity", "row", "event"):
+        assert exclusion["event_id"] is None and receipt["event_id"].startswith("UNRESOLVED_EVALUATION_ROW:")
+    stored = json.loads((output / "report.json").read_bytes())
+    verified = runner.verify_experiment_report(stored, input_path=source)
+    assert verified["input_reconstructed"] and verified["evaluation_rows"] == 2
+    forecasts = json.loads((output / "forecasts.json").read_bytes())
+    assert len(forecasts) == (2 if failure == "result" else 1)
+    native_state = json.loads((output / "state.json").read_bytes())
+    assert forecasts[0] == m.predict(native_state, rows[24], base=tmp_path)
+    changed = copy.deepcopy(stored)
+    changed["exclusions"][0]["reason"] += "changed"
+    with pytest.raises(ValueError, match="EXCLUSION_READBACK"):
+        runner.verify_experiment_report(changed)
+
+
+@pytest.mark.parametrize("rewrite_counters", [False, True])
+def test_experiment_full_inventory_rejects_removed_exclusions(tmp_path, rewrite_counters):
+    from research.efficiency import nba_personnel_runner as runner
+    rows = data(tmp_path)
+    bad = copy.deepcopy(rows[25])
+    bad["personnel"]["players"].pop()
+    packet = {"schema": "nba-personnel-experiment.v1", "evidence_scope": "TEST_ONLY",
+              "fit_cutoff_utc": "2020-01-25T12:00:00Z", "training": rows[:22],
+              "evaluation": [rows[24], bad]}
+    source = tmp_path / "input.json"
+    source.write_text(json.dumps(packet))
+    report = experiment(source, tmp_path / "run")
+    assert [row["disposition"] for row in report["evaluation_inventory"]] == ["PAIRED", "EXCLUDED"]
+    changed = copy.deepcopy(report)
+    changed["exclusions"] = []
+    changed["n_excluded"] = 0
+    if rewrite_counters:
+        changed.update(n_paired=2, status="COMPLETED")
+    with pytest.raises(ValueError, match="READBACK"):
+        runner.verify_experiment_report(changed)
+
+
+def test_original_input_inventory_is_rebuilt_after_fit_failure(tmp_path):
+    from pipelines.cards.missingness import seal_audit
+    from research.efficiency import nba_personnel_runner as runner
+    rows = data(tmp_path)
+    packet = {"schema": "nba-personnel-experiment.v1", "evidence_scope": "TEST_ONLY",
+              "fit_cutoff_utc": "2020-01-25T12:00:00Z", "training": [], "evaluation": [rows[24], None]}
+    source = tmp_path / "input.json"
+    source.write_text(json.dumps(packet))
+    report = experiment(source, tmp_path / "run")
+    inventory = report["evaluation_inventory"]
+    assert [row["input_row_index"] for row in inventory] == [0, 1]
+    assert all(row["disposition"] == "FIT_BLOCKED" for row in inventory)
+    assert inventory[1]["declared_event_id"] is None and inventory[1]["row_container"] == "NoneType"
+    runner.verify_experiment_report(report, input_path=source)
+    packet["evaluation"][0]["event"]["event_id"] = "changed-source-id"
+    source.write_text(json.dumps(packet))
+    with pytest.raises(ValueError, match="INPUT_READBACK"):
+        runner.verify_experiment_report(report, input_path=source)
+    # Even regenerating the outer checksum with a new input hash cannot make
+    # the old row inventory match the actual source. This is not authenticity.
+    altered = copy.deepcopy(report)
+    altered["input_sha256"] = hashlib.sha256(source.read_bytes()).hexdigest()
+    details = altered.pop("missingness_audit")["details"]
+    altered["missingness_audit"] = seal_audit(league="nba", model_id=m.MODEL_ID,
+        event_id=altered["run_id"], products=["coverage"], forecast=dict(altered), details=details)
+    with pytest.raises(ValueError, match="SOURCE_INVENTORY_READBACK"):
+        runner.verify_experiment_report(altered, input_path=source)
+
+
+def test_input_mutation_during_failed_fit_cannot_publish_refusal(tmp_path, monkeypatch):
+    from research.efficiency import nba_personnel_runner as runner
+    rows = data(tmp_path)
+    packet = {"schema": "nba-personnel-experiment.v1", "evidence_scope": "TEST_ONLY",
+              "fit_cutoff_utc": "2020-01-25T12:00:00Z", "training": [], "evaluation": rows[24:]}
+    source = tmp_path / "input.json"
+    source.write_text(json.dumps(packet))
+    def failed_fit(*args, **kwargs):
+        source.write_text(json.dumps({**packet, "evaluation": []}))
+        raise ValueError("TEST_ONLY_FAILED_FIT")
+    monkeypatch.setattr(runner.model, "fit", failed_fit)
+    with pytest.raises(ValueError, match="INPUT_READBACK"):
+        experiment(source, tmp_path / "run")
+    assert not (tmp_path / "run" / "report.json").exists()
+
+
+@pytest.mark.parametrize("fit_failure", [True, False])
+def test_experiment_invokes_report_readback_after_refusal_write(tmp_path, monkeypatch, fit_failure):
+    from research.efficiency import nba_personnel_runner as runner
+    rows = data(tmp_path)
+    bad = copy.deepcopy(rows[25])
+    bad["personnel"]["players"].pop()
+    manifest = {"schema": "nba-personnel-experiment.v1", "evidence_scope": "TEST_ONLY",
+                "fit_cutoff_utc": "2020-01-25T12:00:00Z",
+                "training": [] if fit_failure else rows[:22], "evaluation": [rows[24], bad]}
+    source = tmp_path / "input.json"
+    source.write_text(json.dumps(manifest))
+    original_write = runner.write
+    def remove_refusal_receipt(path, value):
+        original_write(path, value)
+        if path.name == "report.json":
+            changed = json.loads(path.read_bytes())
+            if fit_failure:
+                del changed["missingness_audit"]
+            else:
+                del changed["exclusions"][0]["missingness_audit"]
+            path.write_text(json.dumps(changed))
+    monkeypatch.setattr(runner, "write", remove_refusal_receipt)
+    with pytest.raises(ValueError, match="EXPERIMENT_REPORT_READBACK"):
+        experiment(source, tmp_path / "run")
+
+
 def test_shadow_binds_actual_parent_card_and_keeps_missing_events(tmp_path):
     rows = data(tmp_path); state = fit(rows, tmp_path)
     row = copy.deepcopy(rows[24]); event = row["event"]
@@ -201,6 +363,26 @@ def test_shadow_binds_actual_parent_card_and_keeps_missing_events(tmp_path):
     config_path = tmp_path / "config.json"; config_path.write_text(json.dumps({"schema": "nba-personnel-shadow.v1", "state": refs(state_path), "inputs": refs(inputs_path)}))
     report = shadow_from_card(card_path, config_path, tmp_path / "shadow")
     assert report["completed_count"] == report["blocked_count"] == 1
+    cli_output=tmp_path/"shadow_cli"
+    cmd=[sys.executable,"scripts/run_nba_personnel_experiment.py","--card",str(card_path),
+         "--input",str(config_path),"--output",str(cli_output)]
+    process=subprocess.run(cmd,capture_output=True,text=True)
+    assert process.returncode==2, process.stderr
+    readback=json.loads((cli_output/"report.json").read_bytes())
+    assert readback["completed_count"]==readback["blocked_count"]==1
+    from pipelines.cards.missingness import verify_audit
+    for entry in report["coverage"]:
+        audit=entry["missingness_audit"]
+        if entry["status"]=="DIAGNOSTIC":
+            actual=entry["forecast"]
+            assert set(audit["details"]["probes"])=={"missing_rotation_member","duplicate_rotation_member"}
+            assert verify_audit(audit,league="nba",model_id=actual["model_id"],event_id=entry["event_id"],
+                                products=["home_margin_points"],forecast=actual)
+            changed={**actual,"home_margin":1234}
+            assert not verify_audit(audit,league="nba",model_id=actual["model_id"],event_id=entry["event_id"],
+                                    products=["home_margin_points"],forecast=changed)
+        else:
+            assert audit["products"]==["coverage"] and audit["action_authority"] is False
     assert card_path.read_bytes() == original
     altered = copy.deepcopy(card)
     altered["forecasts"][0]["numerical_identity"]["fitted_state_sha256"] = "f" * 64

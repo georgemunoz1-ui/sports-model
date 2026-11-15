@@ -17,7 +17,7 @@ def main():
     args = parser.parse_args()
     report = shadow_from_card(args.card, args.input, args.output) if args.card else experiment(args.input, args.output)
     print(json.dumps(report, sort_keys=True, allow_nan=False))
-    return 2 if report.get("status") == "BLOCKED" or (args.card and report["completed_count"] == 0) else 0
+    return 2 if report.get("status") == "BLOCKED" or (args.card and (report["completed_count"] == 0 or report["blocked_count"] > 0)) else 0
 
 
 if __name__ == "__main__":

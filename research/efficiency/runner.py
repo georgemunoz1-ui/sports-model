@@ -247,7 +247,38 @@ def component_receipt(league, stage, example, fitted, forecast, history, *, mode
     files += [ROOT / p for p in (["harness/cfb_v1_port.py", "models/current/cfb.py", "models/current/linear.py"] if league == "cfb" else ["models/current/baseline.py", "scripts/prepare_initial_baselines.py", "models/current/linear.py"])]
     if league == "cfb" and fitted.get("stage_id") == "personnel_v2":
         files.append(ROOT / "models/experiments/cfb_personnel.py")
-    return build_component_receipt(model_id=forecast["model_id"], stage_id=stage,
+    missingness=None
+    if league=="cfb" and stage=="personnel_v2":
+        from models.experiments.cfb_personnel import values
+        from models.current.linear import predict
+        consumed=values(example)
+        probe_reasons={}
+        for source in ("personnel_evidence","personnel_schedule_coverage"):
+            probe={k:v for k,v in example.items() if k!=source}
+            try:
+                values(probe)
+            except (ValueError,KeyError) as exc:
+                probe_reasons[source]=str(exc)
+            else:
+                raise ValueError("CFB_PERSONNEL_MISSING_EVIDENCE_ACCEPTED:"+source)
+        names=fitted["feature_names"]
+        original=[forecast["input_snapshot"][k] for k in names]
+        heads={}
+        for target,params in fitted["fitted_model"].items():
+            actual=predict(params,original)
+            if actual!=forecast["p_home" if target=="winner" else "home_margin"]:
+                raise ValueError("CFB_PERSONNEL_HEAD_REPLAY_MISMATCH")
+            changes={}
+            for name in consumed:
+                alter=list(original)
+                alter[names.index(name)]=None
+                changes[name]=predict(params,alter)-actual
+            heads[target]={"value":actual,"isolated_fitted_median_deltas":changes}
+        missingness={"status":"CFB_PERSONNEL_SCOPE_PROBED","observed_personnel_values":consumed,
+                     "inputs_withheld":probe_reasons,"heads":heads,"units":{"winner":"probability","margin":"points"},
+                     "interpretation":"Missing evidence refuses in serving. Replacing one fitted value with its training median is a diagnostic intervention.",
+                     "upstream_authenticity":"UNVERIFIED"}
+    return build_component_receipt(league=league,missingness_details=missingness,model_id=forecast["model_id"], stage_id=stage,
         event_id=example["event_id"], cutoff_utc=cutoff, start_utc=start,
         inputs=inputs, state=fitted, config=fitted.get("config", {}), code_files=files,
         sources=sources_for(example, history, fitted), components=components,

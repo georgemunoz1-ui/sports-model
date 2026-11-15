@@ -1,0 +1,490 @@
+{
+  "schema": "sports.staleness_errata.v1",
+  "reviewed_at_utc": "2026-11-15T13:59:52.345635+00:00",
+  "research_only": true,
+  "action_authority": false,
+  "original_writes": 0,
+  "fixtures": [
+    {
+      "league": "NFL",
+      "event_id": "2026_10_BUF_NYJ",
+      "original_file_sha256": "7c39bb0a70decc92cc16598b9c6d29a843fe1a56ad84777d8838e6526327dffc",
+      "original_cutoff_utc": "2026-11-15T12:05:54.101429+00:00",
+      "scope": "winner, margin and total",
+      "state_sha256": "27dff0d0c159eba98f3fcfb84a5a9e2407edcdf708842ab04e0ef68ae1d22ee6",
+      "schedule_sha256": "b5eb08e01b02e0cca9f046ab3a2e63a39f963b44b16dd212ecfca8f6840f689e",
+      "observed_at": "2026-11-15T11:59:21Z",
+      "league_games_unconsumed": 1,
+      "unconsumed_game_ids": [
+        "2026_10_WAS_NYG"
+      ],
+      "team_history": {
+        "BUF": {
+          "last_consumed_game_id": "2026_09_BUF_MIN",
+          "last_consumed_kickoff_utc": "2026-11-10T01:15:00+00:00",
+          "unconsumed_game_ids": []
+        },
+        "NYJ": {
+          "last_consumed_game_id": "2026_09_NYJ_KC",
+          "last_consumed_kickoff_utc": "2026-11-08T18:00:00+00:00",
+          "unconsumed_game_ids": []
+        }
+      },
+      "later_personnel_review": [],
+      "freeze_disposition": "BLOCKED",
+      "bias_direction": "UNESTABLISHED"
+    },
+    {
+      "league": "NFL",
+      "event_id": "2026_10_CAR_NO",
+      "original_file_sha256": "090486ccfb88b389fa2242d919cd6c676f71486ab8d7a7f1acf527e5b36ecf93",
+      "original_cutoff_utc": "2026-11-15T12:05:54.101429+00:00",
+      "scope": "winner, margin and total",
+      "state_sha256": "27dff0d0c159eba98f3fcfb84a5a9e2407edcdf708842ab04e0ef68ae1d22ee6",
+      "schedule_sha256": "b5eb08e01b02e0cca9f046ab3a2e63a39f963b44b16dd212ecfca8f6840f689e",
+      "observed_at": "2026-11-15T11:59:21Z",
+      "league_games_unconsumed": 1,
+      "unconsumed_game_ids": [
+        "2026_10_WAS_NYG"
+      ],
+      "team_history": {
+        "CAR": {
+          "last_consumed_game_id": "2026_09_DEN_CAR",
+          "last_consumed_kickoff_utc": "2026-11-08T18:00:00+00:00",
+          "unconsumed_game_ids": []
+        },
+        "NO": {
+          "last_consumed_game_id": "2026_09_CLE_NO",
+          "last_consumed_kickoff_utc": "2026-11-08T18:00:00+00:00",
+          "unconsumed_game_ids": []
+        }
+      },
+      "later_personnel_review": [],
+      "freeze_disposition": "BLOCKED",
+      "bias_direction": "UNESTABLISHED"
+    },
+    {
+      "league": "NFL",
+      "event_id": "2026_10_HOU_CLE",
+      "original_file_sha256": "15dc39f81c2cd8b26b7408f87b846a8ca68714f685e5bf0805beb4de4e74b07e",
+      "original_cutoff_utc": "2026-11-15T12:05:54.101429+00:00",
+      "scope": "winner, margin and total",
+      "state_sha256": "27dff0d0c159eba98f3fcfb84a5a9e2407edcdf708842ab04e0ef68ae1d22ee6",
+      "schedule_sha256": "b5eb08e01b02e0cca9f046ab3a2e63a39f963b44b16dd212ecfca8f6840f689e",
+      "observed_at": "2026-11-15T11:59:21Z",
+      "league_games_unconsumed": 1,
+      "unconsumed_game_ids": [
+        "2026_10_WAS_NYG"
+      ],
+      "team_history": {
+        "HOU": {
+          "last_consumed_game_id": "2026_09_HOU_LAC",
+          "last_consumed_kickoff_utc": "2026-11-08T21:05:00+00:00",
+          "unconsumed_game_ids": []
+        },
+        "CLE": {
+          "last_consumed_game_id": "2026_09_CLE_NO",
+          "last_consumed_kickoff_utc": "2026-11-08T18:00:00+00:00",
+          "unconsumed_game_ids": []
+        }
+      },
+      "later_personnel_review": [
+        {
+          "team_id": "CLE",
+          "player_name": "Deshaun Watson",
+          "status": "STARTING",
+          "comparison": "ASSIGNMENT_AGREES_WITH_REPORT",
+          "published_at_utc": "2026-11-11T14:22:37.739Z",
+          "retrieved_at_utc": "2026-11-15T12:57:24.329359+00:00",
+          "source_url": "https://www.clevelandbrowns.com/news/deshaun-watson-set-to-start-week-10-against-the-texans",
+          "source_sha256": "bed3af09214127c18d3e6890c674eccadc6f290c0cec76ef09110a3292bf2c07"
+        }
+      ],
+      "freeze_disposition": "BLOCKED",
+      "bias_direction": "UNESTABLISHED"
+    },
+    {
+      "league": "NFL",
+      "event_id": "2026_10_JAX_TEN",
+      "original_file_sha256": "502a56a559c868926becb5d980c18afe6e64052dacf9923d11304e4c83ca5f9e",
+      "original_cutoff_utc": "2026-11-15T12:05:54.101429+00:00",
+      "scope": "winner, margin and total",
+      "state_sha256": "27dff0d0c159eba98f3fcfb84a5a9e2407edcdf708842ab04e0ef68ae1d22ee6",
+      "schedule_sha256": "b5eb08e01b02e0cca9f046ab3a2e63a39f963b44b16dd212ecfca8f6840f689e",
+      "observed_at": "2026-11-15T11:59:21Z",
+      "league_games_unconsumed": 1,
+      "unconsumed_game_ids": [
+        "2026_10_WAS_NYG"
+      ],
+      "team_history": {
+        "JAX": {
+          "last_consumed_game_id": "2026_09_JAX_BAL",
+          "last_consumed_kickoff_utc": "2026-11-06T01:15:00+00:00",
+          "unconsumed_game_ids": []
+        },
+        "TEN": {
+          "last_consumed_game_id": "2026_08_TEN_CIN",
+          "last_consumed_kickoff_utc": "2026-11-01T18:00:00+00:00",
+          "unconsumed_game_ids": []
+        }
+      },
+      "later_personnel_review": [],
+      "freeze_disposition": "BLOCKED",
+      "bias_direction": "UNESTABLISHED"
+    },
+    {
+      "league": "NFL",
+      "event_id": "2026_10_KC_ATL",
+      "original_file_sha256": "9972a40e836a451815544c101ad1c033f16da4b1b1d404368136921cfcc5b4a2",
+      "original_cutoff_utc": "2026-11-15T12:05:54.101429+00:00",
+      "scope": "winner, margin and total",
+      "state_sha256": "27dff0d0c159eba98f3fcfb84a5a9e2407edcdf708842ab04e0ef68ae1d22ee6",
+      "schedule_sha256": "b5eb08e01b02e0cca9f046ab3a2e63a39f963b44b16dd212ecfca8f6840f689e",
+      "observed_at": "2026-11-15T11:59:21Z",
+      "league_games_unconsumed": 1,
+      "unconsumed_game_ids": [
+        "2026_10_WAS_NYG"
+      ],
+      "team_history": {
+        "KC": {
+          "last_consumed_game_id": "2026_09_NYJ_KC",
+          "last_consumed_kickoff_utc": "2026-11-08T18:00:00+00:00",
+          "unconsumed_game_ids": []
+        },
+        "ATL": {
+          "last_consumed_game_id": "2026_09_CIN_ATL",
+          "last_consumed_kickoff_utc": "2026-11-08T14:30:00+00:00",
+          "unconsumed_game_ids": []
+        }
+      },
+      "later_personnel_review": [],
+      "freeze_disposition": "BLOCKED",
+      "bias_direction": "UNESTABLISHED"
+    },
+    {
+      "league": "NFL",
+      "event_id": "2026_10_LA_ARI",
+      "original_file_sha256": "3395df9f0c60482905710c641ebf80a1126b4ca06b313f867ecf9bd998435f54",
+      "original_cutoff_utc": "2026-11-15T12:05:54.101429+00:00",
+      "scope": "winner, margin and total",
+      "state_sha256": "27dff0d0c159eba98f3fcfb84a5a9e2407edcdf708842ab04e0ef68ae1d22ee6",
+      "schedule_sha256": "b5eb08e01b02e0cca9f046ab3a2e63a39f963b44b16dd212ecfca8f6840f689e",
+      "observed_at": "2026-11-15T11:59:21Z",
+      "league_games_unconsumed": 1,
+      "unconsumed_game_ids": [
+        "2026_10_WAS_NYG"
+      ],
+      "team_history": {
+        "LA": {
+          "last_consumed_game_id": "2026_09_LA_WAS",
+          "last_consumed_kickoff_utc": "2026-11-08T18:00:00+00:00",
+          "unconsumed_game_ids": []
+        },
+        "ARI": {
+          "last_consumed_game_id": "2026_09_ARI_SEA",
+          "last_consumed_kickoff_utc": "2026-11-08T21:25:00+00:00",
+          "unconsumed_game_ids": []
+        }
+      },
+      "later_personnel_review": [
+        {
+          "team_id": "ARI",
+          "player_name": "Gardner Minshew",
+          "status": "OUT",
+          "comparison": "ASSIGNED_PLAYER_REPORTED_OUT",
+          "published_at_utc": "2026-11-10T22:14:06.244Z",
+          "retrieved_at_utc": "2026-11-15T12:57:23.857279+00:00",
+          "source_url": "https://www.azcardinals.com/news/cardinals-place-gardner-minshew-michael-wilson-on-ir",
+          "source_sha256": "d41514318fe9f10e703168ae20de82d99bbf3cfba05afe0c4366927195b5a506"
+        },
+        {
+          "team_id": "ARI",
+          "player_name": "Carson Beck",
+          "status": "STARTING",
+          "comparison": "DIFFERENT_STARTER_REPORTED",
+          "published_at_utc": "2026-11-10T22:14:06.244Z",
+          "retrieved_at_utc": "2026-11-15T12:57:23.857279+00:00",
+          "source_url": "https://www.azcardinals.com/news/cardinals-place-gardner-minshew-michael-wilson-on-ir",
+          "source_sha256": "d41514318fe9f10e703168ae20de82d99bbf3cfba05afe0c4366927195b5a506"
+        }
+      ],
+      "freeze_disposition": "BLOCKED",
+      "bias_direction": "UNESTABLISHED"
+    },
+    {
+      "league": "NFL",
+      "event_id": "2026_10_MIA_IND",
+      "original_file_sha256": "e953489cd0d49b1e4ebf1a6c57f539cc9a9c4ae93b8b6a06edc4f22dc9ad285c",
+      "original_cutoff_utc": "2026-11-15T12:05:54.101429+00:00",
+      "scope": "winner, margin and total",
+      "state_sha256": "27dff0d0c159eba98f3fcfb84a5a9e2407edcdf708842ab04e0ef68ae1d22ee6",
+      "schedule_sha256": "b5eb08e01b02e0cca9f046ab3a2e63a39f963b44b16dd212ecfca8f6840f689e",
+      "observed_at": "2026-11-15T11:59:21Z",
+      "league_games_unconsumed": 1,
+      "unconsumed_game_ids": [
+        "2026_10_WAS_NYG"
+      ],
+      "team_history": {
+        "MIA": {
+          "last_consumed_game_id": "2026_09_DET_MIA",
+          "last_consumed_kickoff_utc": "2026-11-08T18:00:00+00:00",
+          "unconsumed_game_ids": []
+        },
+        "IND": {
+          "last_consumed_game_id": "2026_09_DAL_IND",
+          "last_consumed_kickoff_utc": "2026-11-08T18:00:00+00:00",
+          "unconsumed_game_ids": []
+        }
+      },
+      "later_personnel_review": [
+        {
+          "team_id": "MIA",
+          "player_name": "Malik Willis",
+          "status": "OUT",
+          "comparison": "ASSIGNED_PLAYER_REPORTED_OUT",
+          "published_at_utc": "2026-11-14T14:30:28.253Z",
+          "retrieved_at_utc": "2026-11-15T12:57:25.119344+00:00",
+          "source_url": "https://www.miamidolphins.com/news/game-preview-miami-dolphins-at-indianapolis-colts",
+          "source_sha256": "292bdd86c0566b94f832bd6cfe6c6c501d42bed7284b5265f0cf8ab735fd35d6"
+        },
+        {
+          "team_id": "MIA",
+          "player_name": "Kyle McCord",
+          "status": "STARTING",
+          "comparison": "DIFFERENT_STARTER_REPORTED",
+          "published_at_utc": "2026-11-14T14:30:28.253Z",
+          "retrieved_at_utc": "2026-11-15T12:57:25.119344+00:00",
+          "source_url": "https://www.miamidolphins.com/news/game-preview-miami-dolphins-at-indianapolis-colts",
+          "source_sha256": "292bdd86c0566b94f832bd6cfe6c6c501d42bed7284b5265f0cf8ab735fd35d6"
+        }
+      ],
+      "freeze_disposition": "BLOCKED",
+      "bias_direction": "UNESTABLISHED"
+    },
+    {
+      "league": "NFL",
+      "event_id": "2026_10_MIN_GB",
+      "original_file_sha256": "298473770c91a6428b12630fce0406f19660924578611d610b054a7ffe993a4d",
+      "original_cutoff_utc": "2026-11-15T12:05:54.101429+00:00",
+      "scope": "winner, margin and total",
+      "state_sha256": "27dff0d0c159eba98f3fcfb84a5a9e2407edcdf708842ab04e0ef68ae1d22ee6",
+      "schedule_sha256": "b5eb08e01b02e0cca9f046ab3a2e63a39f963b44b16dd212ecfca8f6840f689e",
+      "observed_at": "2026-11-15T11:59:21Z",
+      "league_games_unconsumed": 1,
+      "unconsumed_game_ids": [
+        "2026_10_WAS_NYG"
+      ],
+      "team_history": {
+        "MIN": {
+          "last_consumed_game_id": "2026_09_BUF_MIN",
+          "last_consumed_kickoff_utc": "2026-11-10T01:15:00+00:00",
+          "unconsumed_game_ids": []
+        },
+        "GB": {
+          "last_consumed_game_id": "2026_09_GB_NE",
+          "last_consumed_kickoff_utc": "2026-11-08T21:25:00+00:00",
+          "unconsumed_game_ids": []
+        }
+      },
+      "later_personnel_review": [
+        {
+          "team_id": "MIN",
+          "player_name": "Kirk Cousins",
+          "status": "STARTING",
+          "comparison": "ASSIGNMENT_AGREES_WITH_REPORT",
+          "published_at_utc": "2026-11-13T21:11:08.308Z",
+          "retrieved_at_utc": "2026-11-15T12:57:21.199947+00:00",
+          "source_url": "https://www.vikings.com/news/kirk-cousins-starting-packers-week-10-game-2026",
+          "source_sha256": "30c806785507fff01b939ac80c18d08f487e3fffced0dc1534906906314a39bb"
+        },
+        {
+          "team_id": "MIN",
+          "player_name": "Kirk Cousins",
+          "status": "TRADED",
+          "comparison": "PERSONNEL_CHANGE_REVIEW",
+          "published_at_utc": "2026-11-10T20:20:17.899Z",
+          "retrieved_at_utc": "2026-11-15T12:57:21.238581+00:00",
+          "source_url": "https://www.vikings.com/news/signing-quarterback-kirk-cousins-trade-raiders",
+          "source_sha256": "52a382f56195ad9bcfff4a2dda70380cf16212e58cad085dae718df6be64f497"
+        }
+      ],
+      "freeze_disposition": "BLOCKED",
+      "bias_direction": "UNESTABLISHED"
+    },
+    {
+      "league": "NFL",
+      "event_id": "2026_10_NE_DET",
+      "original_file_sha256": "7783a4323fdd60b49be98c977a91e59246fc0d1ce084b2f4c7539b9a2c38e180",
+      "original_cutoff_utc": "2026-11-15T12:05:54.101429+00:00",
+      "scope": "winner, margin and total",
+      "state_sha256": "27dff0d0c159eba98f3fcfb84a5a9e2407edcdf708842ab04e0ef68ae1d22ee6",
+      "schedule_sha256": "b5eb08e01b02e0cca9f046ab3a2e63a39f963b44b16dd212ecfca8f6840f689e",
+      "observed_at": "2026-11-15T11:59:21Z",
+      "league_games_unconsumed": 1,
+      "unconsumed_game_ids": [
+        "2026_10_WAS_NYG"
+      ],
+      "team_history": {
+        "NE": {
+          "last_consumed_game_id": "2026_09_GB_NE",
+          "last_consumed_kickoff_utc": "2026-11-08T21:25:00+00:00",
+          "unconsumed_game_ids": []
+        },
+        "DET": {
+          "last_consumed_game_id": "2026_09_DET_MIA",
+          "last_consumed_kickoff_utc": "2026-11-08T18:00:00+00:00",
+          "unconsumed_game_ids": []
+        }
+      },
+      "later_personnel_review": [],
+      "freeze_disposition": "BLOCKED",
+      "bias_direction": "UNESTABLISHED"
+    },
+    {
+      "league": "NFL",
+      "event_id": "2026_10_PIT_CIN",
+      "original_file_sha256": "5c6dd5de830c94ea7bfce8171519d97c9b3ec99ced1e56318dcc2bcba49aac58",
+      "original_cutoff_utc": "2026-11-15T12:05:54.101429+00:00",
+      "scope": "winner, margin and total",
+      "state_sha256": "27dff0d0c159eba98f3fcfb84a5a9e2407edcdf708842ab04e0ef68ae1d22ee6",
+      "schedule_sha256": "b5eb08e01b02e0cca9f046ab3a2e63a39f963b44b16dd212ecfca8f6840f689e",
+      "observed_at": "2026-11-15T11:59:21Z",
+      "league_games_unconsumed": 1,
+      "unconsumed_game_ids": [
+        "2026_10_WAS_NYG"
+      ],
+      "team_history": {
+        "PIT": {
+          "last_consumed_game_id": "2026_08_CLE_PIT",
+          "last_consumed_kickoff_utc": "2026-11-01T18:00:00+00:00",
+          "unconsumed_game_ids": []
+        },
+        "CIN": {
+          "last_consumed_game_id": "2026_09_CIN_ATL",
+          "last_consumed_kickoff_utc": "2026-11-08T14:30:00+00:00",
+          "unconsumed_game_ids": []
+        }
+      },
+      "later_personnel_review": [],
+      "freeze_disposition": "BLOCKED",
+      "bias_direction": "UNESTABLISHED"
+    },
+    {
+      "league": "NFL",
+      "event_id": "2026_10_SEA_LV",
+      "original_file_sha256": "4c93d1b60f5470f041970224342c5a8b6f67f53738fb5fb5655c9814cd41a9bb",
+      "original_cutoff_utc": "2026-11-15T12:05:54.101429+00:00",
+      "scope": "winner, margin and total",
+      "state_sha256": "27dff0d0c159eba98f3fcfb84a5a9e2407edcdf708842ab04e0ef68ae1d22ee6",
+      "schedule_sha256": "b5eb08e01b02e0cca9f046ab3a2e63a39f963b44b16dd212ecfca8f6840f689e",
+      "observed_at": "2026-11-15T11:59:21Z",
+      "league_games_unconsumed": 1,
+      "unconsumed_game_ids": [
+        "2026_10_WAS_NYG"
+      ],
+      "team_history": {
+        "SEA": {
+          "last_consumed_game_id": "2026_09_ARI_SEA",
+          "last_consumed_kickoff_utc": "2026-11-08T21:25:00+00:00",
+          "unconsumed_game_ids": []
+        },
+        "LV": {
+          "last_consumed_game_id": "2026_09_LV_SF",
+          "last_consumed_kickoff_utc": "2026-11-08T21:25:00+00:00",
+          "unconsumed_game_ids": []
+        }
+      },
+      "later_personnel_review": [
+        {
+          "team_id": "LV",
+          "player_name": "Fernando Mendoza",
+          "status": "STARTING",
+          "comparison": "ASSIGNMENT_AGREES_WITH_REPORT",
+          "published_at_utc": "2026-11-10T23:07:38.272Z",
+          "retrieved_at_utc": "2026-11-15T12:57:20.516663+00:00",
+          "source_url": "https://www.raiders.com/news/fernando-mendoza-named-raiders-starting-quarterback",
+          "source_sha256": "2beb9d4b3235b938daec90f028044b8fa7c209ebecc70fd7841f0cd92b81c5f8"
+        },
+        {
+          "team_id": "SEA",
+          "player_name": "Drew Lock",
+          "status": "EXPECTED",
+          "comparison": "DIFFERENT_STARTER_EXPECTED",
+          "published_at_utc": "2026-11-13T22:56:57.826Z",
+          "retrieved_at_utc": "2026-11-15T12:57:19.425071+00:00",
+          "source_url": "https://www.seahawks.com/news/drew-lock-confident-and-optimistic-heading-into-sunday-s-game-other-seahawks-updates",
+          "source_sha256": "bb6a943fc29f0ea7a0f5a2800cf7f8c4ce73a8b8c2fa5e0d0493afaf120174a2"
+        },
+        {
+          "team_id": "SEA",
+          "player_name": "Sam Darnold",
+          "status": "OUT",
+          "comparison": "ASSIGNED_PLAYER_REPORTED_OUT",
+          "published_at_utc": "2026-11-13T22:05:00Z",
+          "retrieved_at_utc": "2026-11-15T12:57:19.564284+00:00",
+          "source_url": "https://www.seahawks.com/news/week-10-injury-report-seahawks-at-raiders",
+          "source_sha256": "db168cb6bfffdee397d79cfde2912eadfba240316bccc9fe63f81f74bc54cbeb"
+        },
+        {
+          "team_id": "LV",
+          "player_name": "Kirk Cousins",
+          "status": "TRADED",
+          "comparison": "PRIOR_TEAM_DEPARTURE",
+          "published_at_utc": "2026-11-10T20:20:17.899Z",
+          "retrieved_at_utc": "2026-11-15T12:57:21.238581+00:00",
+          "source_url": "https://www.vikings.com/news/signing-quarterback-kirk-cousins-trade-raiders",
+          "source_sha256": "52a382f56195ad9bcfff4a2dda70380cf16212e58cad085dae718df6be64f497"
+        }
+      ],
+      "freeze_disposition": "BLOCKED",
+      "bias_direction": "UNESTABLISHED"
+    },
+    {
+      "league": "NFL",
+      "event_id": "2026_10_SF_DAL",
+      "original_file_sha256": "292582891d2f612b08b7de13bccfb50c127252f44ebdf129526106ecb70002cc",
+      "original_cutoff_utc": "2026-11-15T12:05:54.101429+00:00",
+      "scope": "winner, margin and total",
+      "state_sha256": "27dff0d0c159eba98f3fcfb84a5a9e2407edcdf708842ab04e0ef68ae1d22ee6",
+      "schedule_sha256": "b5eb08e01b02e0cca9f046ab3a2e63a39f963b44b16dd212ecfca8f6840f689e",
+      "observed_at": "2026-11-15T11:59:21Z",
+      "league_games_unconsumed": 1,
+      "unconsumed_game_ids": [
+        "2026_10_WAS_NYG"
+      ],
+      "team_history": {
+        "SF": {
+          "last_consumed_game_id": "2026_09_LV_SF",
+          "last_consumed_kickoff_utc": "2026-11-08T21:25:00+00:00",
+          "unconsumed_game_ids": []
+        },
+        "DAL": {
+          "last_consumed_game_id": "2026_09_DAL_IND",
+          "last_consumed_kickoff_utc": "2026-11-08T18:00:00+00:00",
+          "unconsumed_game_ids": []
+        }
+      },
+      "later_personnel_review": [],
+      "freeze_disposition": "BLOCKED",
+      "bias_direction": "UNESTABLISHED"
+    },
+    {
+      "league": "CBB",
+      "event_id": "CBB:401911347",
+      "original_file_sha256": "c0876f7475fd308a7d445630c594e508822d5b6464be3016492db4b34e337ae4",
+      "input_snapshot_hash": "025f3f5b6a9eb88de01988f71cbe272877578d3c944ddc65364a1226c7bdfbcf",
+      "original_cutoff_utc": "2026-11-13T16:52:29.765529+00:00",
+      "intervening_game": "CBB:401917980",
+      "known_schedule_sha256": "b0a93595fec504a209992adcc26fa8ec80fbe33238471cce27c67bbc08ba5398",
+      "as_of_freeze_status": "SCHEDULED",
+      "this_game_completed_unconsumed_at_freeze": 0,
+      "saturday_observed_at": "2026-11-14T16:30:58.102567+00:00",
+      "saturday_final_sha256": "5fc623bb3280a6108a13c17e187cf62279e5f4767bbb3a87f8534b17f030016f",
+      "this_game_completed_unconsumed_on_saturday": 1,
+      "rest_feature": "ABSENT",
+      "scope": "winner, margin, and derived spread probability",
+      "bias_direction": "UNESTABLISHED",
+      "equally_fresh_diagnostic": "BLOCKED_NO_MATCHED_PRETIP_SATURDAY_ARM"
+    }
+  ]
+}

@@ -554,6 +554,11 @@ def main():
     parser.add_argument("--disclosures", type=Path, help="Source-bound availability scenarios, assumptions and dependence disclosures; presentation only")
     parser.add_argument("--identity-semantics", choices=["legacy.v1", "market_blind_numeric.v2"], default="market_blind_numeric.v2", help="Explicit independently identified execution child; legacy behavior remains available")
     parser.add_argument("--selection-config", type=Path, help="Frozen research selector configuration; absent config emits unqualified diagnostic NO_PICK")
+    parser.add_argument("--freeze-shadow", action="store_true", help="Require the consumed-state gate for a shadow freeze")
+    parser.add_argument("--channel-inventory", type=Path, help="Retained complete fixture/channel censuses")
+    parser.add_argument("--max-census-age-seconds", type=int, help="Approved lag for this run's census captures")
+    parser.add_argument("--freeze-journal", type=Path, help="Shared append-only shadow freeze directory")
+    parser.add_argument("--previous-freeze", type=Path, help="Predecessor for a marked shadow re-freeze")
     parser.add_argument("--output-dir", default="output")
     args = parser.parse_args()
     if args.initial_research_baselines:os.environ['SPORTS_INITIAL_BASELINES']='1'
@@ -566,6 +571,16 @@ def main():
         os.environ["MLB_DRAW_OUTPUT"] = str((output / "draws").resolve())
     card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides, args.roster_bundle, args.require_roster_aware, identity_semantics=args.identity_semantics)
     (output / "diagnostic_card.json").write_text(json.dumps(card, indent=2, sort_keys=True) + "\n")
+    from research.consumed_state import run as check_consumed_state
+    mode = "freeze" if args.freeze_shadow else "recheck"
+    review_path = output / ("shadow_freeze.json" if args.freeze_shadow else "consumed_state_review.json")
+    state_status = check_consumed_state(mode, output / "diagnostic_card.json", review_path,
+                                        args.channel_inventory, args.personnel_events,
+                                        args.max_census_age_seconds, args.previous_freeze, args.freeze_journal)
+    print(json.dumps({"consumed_state": "BLOCKED" if state_status else "CHECKED", "mode": mode,
+                      "diagnostic_parent_only": True}))
+    if args.freeze_shadow and state_status:
+        raise SystemExit(state_status)
     from pipelines.cards.selection_integration import write_card_selection
     selection_config = json.loads(args.selection_config.read_text()) if args.selection_config else None
     selection = write_card_selection(output / "diagnostic_card.json", output / "research_selection", config=selection_config)

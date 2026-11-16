@@ -166,7 +166,7 @@ def _pdf_status(raw, report):
     label = source.get('player_label', '')
     # Match the precise participant, including the original printed surname/given names.
     pieces = label.split(', ', 1)
-    if len(pieces) != 2 or _text(' '.join(pieces)) != _text(report['player_name']):
+    if len(pieces) != 2 or _text(' '.join(reversed(pieces))) != _text(report['player_name']):
         return False
     statuses = {'OUT': 'Out', 'LIMITED': 'Questionable', 'PROBABLE': 'Probable', 'AVAILABLE':'Available', 'DOUBTFUL':'Doubtful'}
     expected = statuses.get(report['status'])

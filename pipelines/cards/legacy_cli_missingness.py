@@ -5,10 +5,17 @@ import hashlib
 import csv
 import json
 import math
+import os
 from pathlib import Path
 
 from .missingness import seal_audit, verify_audit
 from .shared_missingness import check_source_inputs
+
+
+def _pair_state(output):
+    """Classify the forecast/sidecar pair as (forecast_exists, sidecar_exists)."""
+    output = Path(output)
+    return output.exists(), Path(str(output) + ".missingness.json").exists()
 
 
 def cfb_schedule_preflight(path, event_id):
@@ -30,8 +37,13 @@ def preflight(snapshot, state, output):
     check_source_inputs(snapshot)
     check_source_inputs(state)
     output = Path(output)
-    if output.exists() or Path(str(output) + ".missingness.json").exists():
+    forecast_exists, sidecar_exists = _pair_state(output)
+    if sidecar_exists:
+        # A complete pair is immutable; a receipt without its forecast can
+        # never become verifiable, so refuse rather than re-bind it.
         raise FileExistsError("DIAGNOSTIC_OUTPUT_ALREADY_EXISTS")
+    # A lone forecast is an interrupted earlier attempt: persist() completes it
+    # by binding the receipt to the existing bytes instead of overwriting.
 
 
 def _field(value, default):
@@ -101,19 +113,35 @@ def persist(output, forecast, *, league, snapshot, state, source_inputs=None):
                     "sensitivity_validation": "MODEL_AND_PRODUCT_SPECIFIC_REVIEW_PENDING",
                     "native_output_hash": forecast.get("output_hash"),
                     "native_math_and_seed_unchanged": True})
-    receipt = seal_audit(**binding, details=details)
+    receipt_inputs = dict(binding)
     output.parent.mkdir(parents=True, exist_ok=True)
-    raw = (json.dumps(forecast, indent=2, sort_keys=True, allow_nan=False) + "\n").encode()
+    forecast_exists, _ = _pair_state(output)
+    if forecast_exists:
+        # Recovery from an interrupted earlier attempt: keep the existing
+        # forecast bytes authoritative; never overwrite them on retry.
+        raw = output.read_bytes()
+        recovered = json.loads(raw)
+        receipt_inputs["forecast"] = recovered
+        details["native_output_hash"] = recovered.get("output_hash")
+    else:
+        raw = (json.dumps(forecast, indent=2, sort_keys=True, allow_nan=False) + "\n").encode()
+        # Exclusive write preserves earlier diagnostic editions as well as forecasts.
+        with output.open("xb") as stream:
+            stream.write(raw)
+    # Seal after the forecast bytes exist so an interruption here leaves at
+    # most an unpaired forecast that a later retry can complete, never a
+    # receipt stranded without its forecast.
+    receipt = seal_audit(**receipt_inputs, details=details)
     record = {"schema": "sports.diagnostic_cli_missingness.v1", "league": league,
               "event_id": snapshot["event_id"], "model_id": model_id, "products": products,
               "forecast_file_sha256": hashlib.sha256(raw).hexdigest(),
               "missingness_audit": receipt, "official_release_eligible": False, "action_authority": False}
-    # Exclusive writes preserve earlier diagnostic editions as well as forecasts.
-    with output.open("xb") as stream:
-        stream.write(raw)
-    with sidecar.open("x", encoding="utf-8") as stream:
+    # Atomic receipt publication: a failure mid-write leaves no partial sidecar.
+    temporary = output.parent / (sidecar.name + ".tmp")
+    with temporary.open("x", encoding="utf-8") as stream:
         json.dump(record, stream, indent=2, sort_keys=True, allow_nan=False)
         stream.write("\n")
+    os.replace(temporary, sidecar)
     verify(output)
     return sidecar
 

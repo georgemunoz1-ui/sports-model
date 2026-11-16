@@ -48,9 +48,10 @@ def test_interrupted_receipt_then_retry_recovers(tmp_path, monkeypatch):
     state_path.write_text(json.dumps(state))
     output = tmp_path / "forecast.json"
 
-    monkeypatch.setattr(sys, "argv", [native.__file__, "--snapshot", str(source),
-                                      "--config", str(state_path), "--output", str(output),
-                                      "--simulations", "50000"])
+    argv = [native.__file__, "--snapshot", str(source),
+            "--config", str(state_path), "--output", str(output),
+            "--simulations", "50000"]
+    monkeypatch.setattr(sys, "argv", argv)
 
     # First attempt: fault during receipt write.
     _monkeypatch_fault(monkeypatch, "receipt")
@@ -64,9 +65,11 @@ def test_interrupted_receipt_then_retry_recovers(tmp_path, monkeypatch):
     with pytest.raises((ValueError, OSError, json.JSONDecodeError)):
         cli_audit.verify(output)
 
-    # Remove the fault and retry the same command. The retry must complete
-    # without overwriting the existing forecast.
+    # Remove the fault and retry the same command. undo() also restores
+    # sys.argv, so re-apply the command line verbatim; no assertion changes.
+    # The retry must complete without overwriting the existing forecast.
     monkeypatch.undo()
+    monkeypatch.setattr(sys, "argv", argv)
     native.main()
 
     # Both files must exist and verify cleanly.

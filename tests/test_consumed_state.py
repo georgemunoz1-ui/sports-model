@@ -84,10 +84,11 @@ def test_journal_initial_conflict_and_successor(tmp_path, monkeypatch):
             return clock
     monkeypatch.setattr(gate, "datetime", Clock)
     parent, manifest, journal = (tmp_path / n for n in ("parent", "manifest", "journal"))
-    def write_inputs():
+    def write_inputs(inventory=None):
+        inventory = inv if inventory is None else inventory
         parent.write_text(json.dumps(card))
         refs = {}
-        for c, v in inv["CBB","g1"].items():
+        for c, v in inventory["CBB","g1"].items():
             p = tmp_path / c
             p.write_text(json.dumps(v))
             refs[c] = {"path":c, "sha256":gate.file_hash(p.read_bytes())}
@@ -98,7 +99,7 @@ def test_journal_initial_conflict_and_successor(tmp_path, monkeypatch):
     write_inputs()
     assert freeze("first") == 0
     original = (tmp_path/"first").read_bytes()
-    assert freeze("duplicate") == 2
+    stale_inv = copy.deepcopy(inv)
     feeds = inv["CBB","g1"]
     clock += timedelta(minutes=1)
     move = {"id":"qb1","teams":["A"], "kind":"STARTER_CHANGE","player_id":"new_p1","known_at":clock.isoformat()}
@@ -107,7 +108,19 @@ def test_journal_initial_conflict_and_successor(tmp_path, monkeypatch):
         feed["captured_at"] = feed["complete_through"] = clock.isoformat()
     write_inputs()
     assert gate.run("recheck", parent, tmp_path/"late", manifest, max_age=60, journal=journal) == 2
-    assert json.loads((tmp_path/"late").read_bytes())["fixtures"][0]["invalidates_freeze_sha256"] == gate.file_hash(original)
+    invalidation = json.loads((tmp_path/"late").read_bytes())
+    assert invalidation["fixtures"][0]["invalidates_freeze_sha256"] == gate.file_hash(original)
+    assert "PERSONNEL_REFREEZE_REQUIRED" in invalidation["fixtures"][0]["reasons"]
+
+    write_inputs(stale_inv)
+    assert gate.run("recheck", parent, tmp_path/"stale", manifest, max_age=60, journal=journal) == 2
+    stale = json.loads((tmp_path/"stale").read_bytes())
+    assert "PERSONNEL_REFREEZE_REQUIRED" in stale["fixtures"][0]["reasons"]
+    assert freeze("same_cutoff") == 2
+
+    inv = stale_inv
+    feeds = inv["CBB","g1"]
+    feeds["rosters"]["events"].append(move)
     clock += timedelta(seconds=1)
     for feed in feeds.values():
         feed["captured_at"] = feed["complete_through"] = clock.isoformat()

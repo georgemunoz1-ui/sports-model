@@ -1,0 +1,24 @@
+{
+  "pr": 108,
+  "result": "PASS",
+  "independent_tests": 22,
+  "scope": "Synthetic quote ambiguity, malformed input, arithmetic and frozen-byte checks. No predictive qualification or wagering authority.",
+  "original_failed_probes_resolved": 7,
+  "protected_original_files_checked": 1632,
+  "source_hashes_before": {
+    "scripts/capture_cbb_daily.py": "f9aa620709e3f958e537ff5a3c833b3373252fa19e7f731794476e5aef821901",
+    "scripts/cbb_market_and_grades.py": "03a8de14b2667792a5de557b450a2bfba5314414ffd6c1a3dc805e7e9c11c861",
+    "tests/test_cbb_quote_scope.py": "53dee13be912bafa4b96a53b2c5dd0319064a9ea14e642f48ebac540f0596242"
+  },
+  "source_hashes_after": {
+    "scripts/capture_cbb_daily.py": "f9aa620709e3f958e537ff5a3c833b3373252fa19e7f731794476e5aef821901",
+    "scripts/cbb_market_and_grades.py": "03a8de14b2667792a5de557b450a2bfba5314414ffd6c1a3dc805e7e9c11c861",
+    "tests/test_cbb_quote_scope.py": "53dee13be912bafa4b96a53b2c5dd0319064a9ea14e642f48ebac540f0596242"
+  },
+  "evidence": {
+    "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/test_cbb_independent.py": "9a93c994cbb441e4d959422936d3c5a033f8ea2722d7de0ba27177481b9cefb9",
+    "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr108-independent.xml": "b30ffc645d13dadd7cc086ea866b516cbc22f2c0a5a8028afa864fbf5222d97b",
+    "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr108-independent.log": "4f06d4d7e91675e254642c370ee29cf296412e006895a908637937b4234ad44c",
+    "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr108-preservation.json": "021e0e03fb9913a017e09a7cfec983d1184f93193875c8ff6f0a60707aca4b78"
+  }
+}

@@ -1,0 +1,853 @@
+{
+  "schema": "sports.frozen_personnel_audit.research.v1",
+  "slate_date": "2026-11-15",
+  "reviewed_at_utc": "2026-11-15T13:18:49.303981+00:00",
+  "source_revision": "4577586a9291e1d7307cd5adc83e8a443e8c7390",
+  "state_sha256": "27dff0d0c159eba98f3fcfb84a5a9e2407edcdf708842ab04e0ef68ae1d22ee6",
+  "schedule_sha256": "b5eb08e01b02e0cca9f046ab3a2e63a39f963b44b16dd212ecfca8f6840f689e",
+  "scope": {
+    "scheduled": {
+      "NFL": 12,
+      "CBB": 44,
+      "CFB": 1,
+      "NBA": 9,
+      "NHL": 5,
+      "WNBA": 0,
+      "MLB": 0,
+      "MLS": 0
+    },
+    "frozen": 12,
+    "awaiting_forecast": 59,
+    "qb_assignments": 24,
+    "conflicted": 3,
+    "confirmed_transitions": 3,
+    "secondary_only": 18
+  },
+  "timing": "Publications may predate the freeze. Public notices in this audit were retrieved after the early forecast.",
+  "sources": {
+    "ari-starter": {
+      "url": "https://www.azcardinals.com/news/cardinals-place-gardner-minshew-michael-wilson-on-ir",
+      "sha256": "d41514318fe9f10e703168ae20de82d99bbf3cfba05afe0c4366927195b5a506",
+      "acquired_at_utc": "2026-11-15T12:57:23.857279+00:00",
+      "published_at_utc": "2026-11-10T22:14:06.244Z"
+    },
+    "cle-starter": {
+      "url": "https://www.clevelandbrowns.com/news/deshaun-watson-set-to-start-week-10-against-the-texans",
+      "sha256": "bed3af09214127c18d3e6890c674eccadc6f290c0cec76ef09110a3292bf2c07",
+      "acquired_at_utc": "2026-11-15T12:57:24.329359+00:00",
+      "published_at_utc": "2026-11-11T14:22:37.739Z"
+    },
+    "cle-week9": {
+      "url": "https://www.clevelandbrowns.com/news/shedeur-sanders-to-start-week-9-against-the-saints",
+      "sha256": "3103712acc1d8895585a97b9c02f66bb5fbbc7716e5c1a51c7d48da26e77012c",
+      "acquired_at_utc": "2026-11-15T12:57:24.428458+00:00",
+      "published_at_utc": "2026-11-06T19:10:06.445Z"
+    },
+    "gb-min-injury": {
+      "url": "https://www.packers.com/news/packers-list-seven-questionable-rule-out-four-vs-vikings-week-10-injury-report",
+      "sha256": "d4c141d113cc150a19d883cecb3f9a18d83500cd11191e351e3a51c010ee4efb",
+      "acquired_at_utc": "2026-11-15T12:57:19.540517+00:00",
+      "published_at_utc": "2026-11-13T21:35:05.82Z"
+    },
+    "lv-starter": {
+      "url": "https://www.raiders.com/news/fernando-mendoza-named-raiders-starting-quarterback",
+      "sha256": "2beb9d4b3235b938daec90f028044b8fa7c209ebecc70fd7841f0cd92b81c5f8",
+      "acquired_at_utc": "2026-11-15T12:57:20.516663+00:00",
+      "published_at_utc": "2026-11-10T23:07:38.272Z"
+    },
+    "lv-trade": {
+      "url": "https://www.raiders.com/news/raiders-acquire-2027-third-round-pick-nfl-2026",
+      "sha256": "970855f69a4385b8370fbd881305630399d36a62454c8fe9f26831cffe3fa8d5",
+      "acquired_at_utc": "2026-11-15T12:57:20.500635+00:00",
+      "published_at_utc": "2026-11-10T22:30:21.153Z"
+    },
+    "mia-out": {
+      "url": "https://www.miamidolphins.com/news/dolphins-make-roster-moves-x8063",
+      "sha256": "d35b091c9dae9dd255967ad42780ccdd1f64c56765d46ee385429c3b3271406a",
+      "acquired_at_utc": "2026-11-15T12:57:25.100667+00:00",
+      "published_at_utc": "2026-11-10T20:59:24.297Z"
+    },
+    "mia-starter": {
+      "url": "https://www.miamidolphins.com/news/game-preview-miami-dolphins-at-indianapolis-colts",
+      "sha256": "292bdd86c0566b94f832bd6cfe6c6c501d42bed7284b5265f0cf8ab735fd35d6",
+      "acquired_at_utc": "2026-11-15T12:57:25.119344+00:00",
+      "published_at_utc": "2026-11-14T14:30:28.253Z"
+    },
+    "min-starter": {
+      "url": "https://www.vikings.com/news/kirk-cousins-starting-packers-week-10-game-2026",
+      "sha256": "30c806785507fff01b939ac80c18d08f487e3fffced0dc1534906906314a39bb",
+      "acquired_at_utc": "2026-11-15T12:57:21.199947+00:00",
+      "published_at_utc": "2026-11-13T21:11:08.308Z"
+    },
+    "min-trade": {
+      "url": "https://www.vikings.com/news/signing-quarterback-kirk-cousins-trade-raiders",
+      "sha256": "52a382f56195ad9bcfff4a2dda70380cf16212e58cad085dae718df6be64f497",
+      "acquired_at_utc": "2026-11-15T12:57:21.238581+00:00",
+      "published_at_utc": "2026-11-10T20:20:17.899Z"
+    },
+    "nfl-injuries": {
+      "url": "https://www.nfl.com/injuries/league/2026/REG10",
+      "sha256": "6d0ea6575343a9cb0fa2f7f32a9c27539636999ca7ec98b8f27d3206e4d24d78",
+      "acquired_at_utc": "2026-11-15T12:58:00.324582+00:00"
+    },
+    "sea-expected": {
+      "url": "https://www.seahawks.com/news/drew-lock-confident-and-optimistic-heading-into-sunday-s-game-other-seahawks-updates",
+      "sha256": "bb6a943fc29f0ea7a0f5a2800cf7f8c4ce73a8b8c2fa5e0d0493afaf120174a2",
+      "acquired_at_utc": "2026-11-15T12:57:19.425071+00:00",
+      "published_at_utc": "2026-11-13T22:56:57.826Z"
+    },
+    "sea-out": {
+      "url": "https://www.seahawks.com/news/week-10-injury-report-seahawks-at-raiders",
+      "sha256": "db168cb6bfffdee397d79cfde2912eadfba240316bccc9fe63f81f74bc54cbeb",
+      "acquired_at_utc": "2026-11-15T12:57:19.564284+00:00",
+      "published_at_utc": "2026-11-13T22:05:00Z"
+    },
+    "slate-depth": {
+      "url": "https://lineupfield.com/starting-quarterbacks/",
+      "sha256": "f514e3533cc45116f5daa79ddf93ff4a64eec609687112246508ec97c146cdd2",
+      "acquired_at_utc": "2026-11-15T12:57:25.497687+00:00"
+    }
+  },
+  "frozen_starting_qbs": [
+    {
+      "event_id": "2026_10_NE_DET",
+      "forecast_sha256": "7783a4323fdd60b49be98c977a91e59246fc0d1ce084b2f4c7539b9a2c38e180",
+      "frozen_at_utc": "2026-11-15T12:06:16.013836+00:00",
+      "team": "NE",
+      "role": "starting_qb",
+      "frozen_player": "Drake Maye",
+      "frozen_id": "00-0039851",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_NE_DET",
+      "forecast_sha256": "7783a4323fdd60b49be98c977a91e59246fc0d1ce084b2f4c7539b9a2c38e180",
+      "frozen_at_utc": "2026-11-15T12:06:16.013836+00:00",
+      "team": "DET",
+      "role": "starting_qb",
+      "frozen_player": "Jared Goff",
+      "frozen_id": "00-0033106",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_BUF_NYJ",
+      "forecast_sha256": "7c39bb0a70decc92cc16598b9c6d29a843fe1a56ad84777d8838e6526327dffc",
+      "frozen_at_utc": "2026-11-15T12:08:35.710305+00:00",
+      "team": "BUF",
+      "role": "starting_qb",
+      "frozen_player": "Josh Allen",
+      "frozen_id": "00-0034857",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_BUF_NYJ",
+      "forecast_sha256": "7c39bb0a70decc92cc16598b9c6d29a843fe1a56ad84777d8838e6526327dffc",
+      "frozen_at_utc": "2026-11-15T12:08:35.710305+00:00",
+      "team": "NYJ",
+      "role": "starting_qb",
+      "frozen_player": "Geno Smith",
+      "frozen_id": "00-0030565",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_CAR_NO",
+      "forecast_sha256": "090486ccfb88b389fa2242d919cd6c676f71486ab8d7a7f1acf527e5b36ecf93",
+      "frozen_at_utc": "2026-11-15T12:08:11.629573+00:00",
+      "team": "CAR",
+      "role": "starting_qb",
+      "frozen_player": "Bryce Young",
+      "frozen_id": "00-0039150",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_CAR_NO",
+      "forecast_sha256": "090486ccfb88b389fa2242d919cd6c676f71486ab8d7a7f1acf527e5b36ecf93",
+      "frozen_at_utc": "2026-11-15T12:08:11.629573+00:00",
+      "team": "NO",
+      "role": "starting_qb",
+      "frozen_player": "Tyler Shough",
+      "frozen_id": "00-0040743",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_HOU_CLE",
+      "forecast_sha256": "15dc39f81c2cd8b26b7408f87b846a8ca68714f685e5bf0805beb4de4e74b07e",
+      "frozen_at_utc": "2026-11-15T12:07:02.221333+00:00",
+      "team": "HOU",
+      "role": "starting_qb",
+      "frozen_player": "C.J. Stroud",
+      "frozen_id": "00-0039163",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_HOU_CLE",
+      "forecast_sha256": "15dc39f81c2cd8b26b7408f87b846a8ca68714f685e5bf0805beb4de4e74b07e",
+      "frozen_at_utc": "2026-11-15T12:07:02.221333+00:00",
+      "team": "CLE",
+      "role": "starting_qb",
+      "frozen_player": "Deshaun Watson",
+      "frozen_id": "00-0033537",
+      "comparison": "IDENTITY_MATCHES_TRANSITION",
+      "expected_player_status": "CONFIRMED_STARTER",
+      "published_starter": "Deshaun Watson",
+      "confirmed_mismatch": false,
+      "transition_reason": "Week 10 return following Week 9 inactivity and a Sanders start.",
+      "evidence_sources": [
+        "cle-starter"
+      ]
+    },
+    {
+      "event_id": "2026_10_JAX_TEN",
+      "forecast_sha256": "502a56a559c868926becb5d980c18afe6e64052dacf9923d11304e4c83ca5f9e",
+      "frozen_at_utc": "2026-11-15T12:09:00.457095+00:00",
+      "team": "JAX",
+      "role": "starting_qb",
+      "frozen_player": "Trevor Lawrence",
+      "frozen_id": "00-0036971",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_JAX_TEN",
+      "forecast_sha256": "502a56a559c868926becb5d980c18afe6e64052dacf9923d11304e4c83ca5f9e",
+      "frozen_at_utc": "2026-11-15T12:09:00.457095+00:00",
+      "team": "TEN",
+      "role": "starting_qb",
+      "frozen_player": "Cam Ward",
+      "frozen_id": "00-0040676",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_KC_ATL",
+      "forecast_sha256": "9972a40e836a451815544c101ad1c033f16da4b1b1d404368136921cfcc5b4a2",
+      "frozen_at_utc": "2026-11-15T12:06:39.204780+00:00",
+      "team": "KC",
+      "role": "starting_qb",
+      "frozen_player": "Patrick Mahomes",
+      "frozen_id": "00-0033873",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_KC_ATL",
+      "forecast_sha256": "9972a40e836a451815544c101ad1c033f16da4b1b1d404368136921cfcc5b4a2",
+      "frozen_at_utc": "2026-11-15T12:06:39.204780+00:00",
+      "team": "ATL",
+      "role": "starting_qb",
+      "frozen_player": "Michael Penix Jr.",
+      "frozen_id": "00-0039917",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_MIA_IND",
+      "forecast_sha256": "e953489cd0d49b1e4ebf1a6c57f539cc9a9c4ae93b8b6a06edc4f22dc9ad285c",
+      "frozen_at_utc": "2026-11-15T12:07:48.425714+00:00",
+      "team": "MIA",
+      "role": "starting_qb",
+      "frozen_player": "Malik Willis",
+      "frozen_id": "00-0038128",
+      "comparison": "IDENTITY_CONTRADICTED",
+      "expected_player_status": "CONFIRMED_STARTER",
+      "published_starter": "Kyle McCord",
+      "confirmed_mismatch": true,
+      "transition_reason": "Willis moved to IR; NFL starting debut announced for McCord.",
+      "evidence_sources": [
+        "mia-starter"
+      ]
+    },
+    {
+      "event_id": "2026_10_MIA_IND",
+      "forecast_sha256": "e953489cd0d49b1e4ebf1a6c57f539cc9a9c4ae93b8b6a06edc4f22dc9ad285c",
+      "frozen_at_utc": "2026-11-15T12:07:48.425714+00:00",
+      "team": "IND",
+      "role": "starting_qb",
+      "frozen_player": "Daniel Jones",
+      "frozen_id": "00-0035710",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_MIN_GB",
+      "forecast_sha256": "298473770c91a6428b12630fce0406f19660924578611d610b054a7ffe993a4d",
+      "frozen_at_utc": "2026-11-15T12:07:25.516715+00:00",
+      "team": "MIN",
+      "role": "starting_qb",
+      "frozen_player": "Kirk Cousins",
+      "frozen_id": "00-0029604",
+      "comparison": "IDENTITY_MATCHES_TRANSITION",
+      "expected_player_status": "CONFIRMED_STARTER",
+      "published_starter": "Kirk Cousins",
+      "confirmed_mismatch": false,
+      "transition_reason": "Trade from Las Vegas, first 2026 Minnesota start.",
+      "evidence_sources": [
+        "min-starter",
+        "min-trade"
+      ]
+    },
+    {
+      "event_id": "2026_10_MIN_GB",
+      "forecast_sha256": "298473770c91a6428b12630fce0406f19660924578611d610b054a7ffe993a4d",
+      "frozen_at_utc": "2026-11-15T12:07:25.516715+00:00",
+      "team": "GB",
+      "role": "starting_qb",
+      "frozen_player": "Jordan Love",
+      "frozen_id": "00-0036264",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_LA_ARI",
+      "forecast_sha256": "3395df9f0c60482905710c641ebf80a1126b4ca06b313f867ecf9bd998435f54",
+      "frozen_at_utc": "2026-11-15T12:09:23.909923+00:00",
+      "team": "LA",
+      "role": "starting_qb",
+      "frozen_player": "Matthew Stafford",
+      "frozen_id": "00-0026498",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_LA_ARI",
+      "forecast_sha256": "3395df9f0c60482905710c641ebf80a1126b4ca06b313f867ecf9bd998435f54",
+      "frozen_at_utc": "2026-11-15T12:09:23.909923+00:00",
+      "team": "ARI",
+      "role": "starting_qb",
+      "frozen_player": "Gardner Minshew",
+      "frozen_id": "00-0035289",
+      "comparison": "IDENTITY_CONTRADICTED",
+      "expected_player_status": "CONFIRMED_STARTER",
+      "published_starter": "Carson Beck",
+      "confirmed_mismatch": true,
+      "transition_reason": "Minshew moved to IR; first NFL start announced for Beck.",
+      "evidence_sources": [
+        "ari-starter"
+      ]
+    },
+    {
+      "event_id": "2026_10_SEA_LV",
+      "forecast_sha256": "4c93d1b60f5470f041970224342c5a8b6f67f53738fb5fb5655c9814cd41a9bb",
+      "frozen_at_utc": "2026-11-15T12:09:46.158780+00:00",
+      "team": "SEA",
+      "role": "starting_qb",
+      "frozen_player": "Sam Darnold",
+      "frozen_id": "00-0034869",
+      "comparison": "IDENTITY_CONTRADICTED",
+      "expected_player_status": "EXPECTED_STARTER",
+      "published_starter": "Drew Lock",
+      "confirmed_mismatch": true,
+      "transition_reason": "Darnold ruled out; Lock expected to make second consecutive start with limited practice.",
+      "evidence_sources": [
+        "sea-expected",
+        "sea-out"
+      ]
+    },
+    {
+      "event_id": "2026_10_SEA_LV",
+      "forecast_sha256": "4c93d1b60f5470f041970224342c5a8b6f67f53738fb5fb5655c9814cd41a9bb",
+      "frozen_at_utc": "2026-11-15T12:09:46.158780+00:00",
+      "team": "LV",
+      "role": "starting_qb",
+      "frozen_player": "Fernando Mendoza",
+      "frozen_id": "00-0041562",
+      "comparison": "IDENTITY_MATCHES_TRANSITION",
+      "expected_player_status": "CONFIRMED_STARTER",
+      "published_starter": "Fernando Mendoza",
+      "confirmed_mismatch": false,
+      "transition_reason": "Promoted to first NFL start after Cousins trade.",
+      "evidence_sources": [
+        "lv-starter"
+      ]
+    },
+    {
+      "event_id": "2026_10_SF_DAL",
+      "forecast_sha256": "292582891d2f612b08b7de13bccfb50c127252f44ebdf129526106ecb70002cc",
+      "frozen_at_utc": "2026-11-15T12:10:09.102800+00:00",
+      "team": "SF",
+      "role": "starting_qb",
+      "frozen_player": "Brock Purdy",
+      "frozen_id": "00-0037834",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_SF_DAL",
+      "forecast_sha256": "292582891d2f612b08b7de13bccfb50c127252f44ebdf129526106ecb70002cc",
+      "frozen_at_utc": "2026-11-15T12:10:09.102800+00:00",
+      "team": "DAL",
+      "role": "starting_qb",
+      "frozen_player": "Dak Prescott",
+      "frozen_id": "00-0033077",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_PIT_CIN",
+      "forecast_sha256": "5c6dd5de830c94ea7bfce8171519d97c9b3ec99ced1e56318dcc2bcba49aac58",
+      "frozen_at_utc": "2026-11-15T12:10:32.135843+00:00",
+      "team": "PIT",
+      "role": "starting_qb",
+      "frozen_player": "Aaron Rodgers",
+      "frozen_id": "00-0023459",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    },
+    {
+      "event_id": "2026_10_PIT_CIN",
+      "forecast_sha256": "5c6dd5de830c94ea7bfce8171519d97c9b3ec99ced1e56318dcc2bcba49aac58",
+      "frozen_at_utc": "2026-11-15T12:10:32.135843+00:00",
+      "team": "CIN",
+      "role": "starting_qb",
+      "frozen_player": "Joe Burrow",
+      "frozen_id": "00-0036442",
+      "comparison": "SECONDARY_LISTING_MATCH_ONLY",
+      "confirmed_mismatch": false,
+      "evidence_sources": []
+    }
+  ],
+  "scheduled_without_frozen_forecast": [
+    {
+      "league": "CBB",
+      "event_id": "401929458",
+      "away": "Abraham Baldwin Agricultural",
+      "home": "Florida Gulf Coast",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401924858",
+      "away": "Quinnipiac",
+      "home": "Central Connecticut",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401926063",
+      "away": "Boise State",
+      "home": "Nebraska",
+      "personnel_coverage": "DATED_SECONDARY_PLAYER_NOTES"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401920771",
+      "away": "Colgate",
+      "home": "Delaware",
+      "personnel_coverage": "DATED_SECONDARY_PLAYER_NOTES"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401920235",
+      "away": "Dartmouth",
+      "home": "Boston University",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401912210",
+      "away": "Harvard",
+      "home": "American",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401918949",
+      "away": "Louisville",
+      "home": "Memphis",
+      "personnel_coverage": "TEAM_PERSONNEL_REPORT"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401909774",
+      "away": "Niagara",
+      "home": "Iowa State",
+      "personnel_coverage": "DATED_SECONDARY_PLAYER_NOTES"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401925896",
+      "away": "Norfolk State",
+      "home": "Georgia State",
+      "personnel_coverage": "DATED_SECONDARY_PLAYER_NOTES"
+    },
+    {
+      "league": "CFB",
+      "event_id": "401856887",
+      "away": "Ole Miss",
+      "home": "Oklahoma",
+      "personnel_coverage": "TEAM_PREVIEW_AND_REPORTED_AVAILABILITY"
+    },
+    {
+      "league": "NBA",
+      "event_id": "401909985",
+      "away": "Indiana",
+      "home": "Philadelphia",
+      "personnel_coverage": "OFFICIAL_AVAILABILITY_REPORT"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401909554",
+      "away": "New Hampshire",
+      "home": "Boston College",
+      "personnel_coverage": "DATED_SECONDARY_PLAYER_NOTES"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401920136",
+      "away": "Cal State Bakersfield",
+      "home": "North Dakota State",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401928825",
+      "away": "Capital",
+      "home": "Robert Morris",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401924744",
+      "away": "Emmanuel (MA)",
+      "home": "Yale",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401920065",
+      "away": "Princeton",
+      "home": "Rhode Island",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401925926",
+      "away": "South Carolina State",
+      "home": "Charleston",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401925812",
+      "away": "Temple",
+      "home": "La Salle",
+      "personnel_coverage": "DATED_SECONDARY_PLAYER_NOTES"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401921287",
+      "away": "UAlbany",
+      "home": "Holy Cross",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401918453",
+      "away": "William & Mary",
+      "home": "Michigan",
+      "personnel_coverage": "TEAM_PERSONNEL_REPORT"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401909525",
+      "away": "Missouri",
+      "home": "Marquette",
+      "personnel_coverage": "DATED_SECONDARY_PLAYER_NOTES"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401906866",
+      "away": "Baylor",
+      "home": "Texas",
+      "personnel_coverage": "DATED_SECONDARY_PLAYER_NOTES"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401921168",
+      "away": "Cleveland State",
+      "home": "Alabama A&M",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401909493",
+      "away": "Creighton",
+      "home": "Iowa",
+      "personnel_coverage": "TEAM_PERSONNEL_REPORT"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401911251",
+      "away": "High Point",
+      "home": "Saint Louis",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401926068",
+      "away": "Purdue Fort Wayne",
+      "home": "Eastern Illinois",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401926216",
+      "away": "Wright State-Lake",
+      "home": "Tennessee Tech",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401934396",
+      "away": "Air Force",
+      "home": "Pacific",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401917531",
+      "away": "Chicago State",
+      "home": "Loyola Marymount",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401917528",
+      "away": "Idaho State",
+      "home": "Seattle U",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401919825",
+      "away": "Mercyhurst",
+      "home": "James Madison",
+      "personnel_coverage": "DATED_SECONDARY_PLAYER_NOTES"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401928789",
+      "away": "New Mexico State",
+      "home": "San Diego State",
+      "personnel_coverage": "DATED_SECONDARY_PLAYER_NOTES"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401928353",
+      "away": "UC Merced",
+      "home": "UC Santa Barbara",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "NBA",
+      "event_id": "401909986",
+      "away": "Los Angeles Lakers",
+      "home": "Phoenix",
+      "personnel_coverage": "OFFICIAL_AVAILABILITY_REPORT"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401929405",
+      "away": "Doane",
+      "home": "South Dakota",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401917175",
+      "away": "New Haven",
+      "home": "Penn State",
+      "personnel_coverage": "DATED_SECONDARY_PLAYER_NOTES"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401923393",
+      "away": "Western Michigan",
+      "home": "Southern Indiana",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "NBA",
+      "event_id": "401909987",
+      "away": "Charlotte",
+      "home": "LA Clippers",
+      "personnel_coverage": "OFFICIAL_AVAILABILITY_REPORT"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401926073",
+      "away": "Pepperdine",
+      "home": "Oregon",
+      "personnel_coverage": "DATED_SECONDARY_PLAYER_NOTES"
+    },
+    {
+      "league": "NBA",
+      "event_id": "401909988",
+      "away": "San Antonio",
+      "home": "Utah",
+      "personnel_coverage": "OFFICIAL_AVAILABILITY_REPORT"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401911017",
+      "away": "Canisius",
+      "home": "Buffalo",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401920124",
+      "away": "Cal Poly",
+      "home": "Montana State",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401926733",
+      "away": "Ecclesia",
+      "home": "UT Martin",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "NBA",
+      "event_id": "401909989",
+      "away": "Dallas",
+      "home": "Boston",
+      "personnel_coverage": "OFFICIAL_AVAILABILITY_REPORT"
+    },
+    {
+      "league": "NBA",
+      "event_id": "401909990",
+      "away": "New York",
+      "home": "Toronto",
+      "personnel_coverage": "OFFICIAL_AVAILABILITY_REPORT"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401926772",
+      "away": "Arkansas-Pine Bluff",
+      "home": "USC",
+      "personnel_coverage": "DATED_SECONDARY_PLAYER_NOTES"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401920681",
+      "away": "Syracuse",
+      "home": "St. John's",
+      "personnel_coverage": "DATED_SECONDARY_PLAYER_NOTES"
+    },
+    {
+      "league": "NBA",
+      "event_id": "401909991",
+      "away": "Houston",
+      "home": "Washington",
+      "personnel_coverage": "OFFICIAL_AVAILABILITY_REPORT"
+    },
+    {
+      "league": "NHL",
+      "event_id": "401892721",
+      "away": "Edmonton",
+      "home": "Philadelphia",
+      "personnel_coverage": "REPORTED_AVAILABILITY_AND_GOALIE_WATCH"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401920896",
+      "away": "Coastal Carolina",
+      "home": "Wisconsin",
+      "personnel_coverage": "DATED_SECONDARY_PLAYER_NOTES"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401925718",
+      "away": "Paine",
+      "home": "Bethune-Cookman",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401929200",
+      "away": "Texas State",
+      "home": "UTSA",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "NBA",
+      "event_id": "401909992",
+      "away": "Atlanta",
+      "home": "Milwaukee",
+      "personnel_coverage": "OFFICIAL_AVAILABILITY_REPORT"
+    },
+    {
+      "league": "NHL",
+      "event_id": "401892723",
+      "away": "Calgary",
+      "home": "Anaheim",
+      "personnel_coverage": "REPORTED_AVAILABILITY_AND_GOALIE_WATCH"
+    },
+    {
+      "league": "NHL",
+      "event_id": "401892722",
+      "away": "Florida",
+      "home": "Dallas",
+      "personnel_coverage": "REPORTED_AVAILABILITY_AND_GOALIE_WATCH"
+    },
+    {
+      "league": "CBB",
+      "event_id": "401911472",
+      "away": "Alabama State",
+      "home": "San Jose State",
+      "personnel_coverage": "NO_PERSONNEL_LIST_FOUND"
+    },
+    {
+      "league": "NBA",
+      "event_id": "401909993",
+      "away": "Oklahoma City",
+      "home": "Sacramento",
+      "personnel_coverage": "OFFICIAL_AVAILABILITY_REPORT"
+    },
+    {
+      "league": "NHL",
+      "event_id": "401892725",
+      "away": "Nashville",
+      "home": "San Jose",
+      "personnel_coverage": "REPORTED_AVAILABILITY_AND_GOALIE_WATCH"
+    },
+    {
+      "league": "NHL",
+      "event_id": "401892724",
+      "away": "Vancouver",
+      "home": "Vegas",
+      "personnel_coverage": "REPORTED_AVAILABILITY_AND_GOALIE_WATCH"
+    }
+  ],
+  "causal_attribution": "UNESTABLISHED",
+  "publication_allowed": false,
+  "selection": "NO_PICK",
+  "action": "OFF",
+  "official_units": 0
+}

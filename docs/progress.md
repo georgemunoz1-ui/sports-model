@@ -5021,3 +5021,26 @@ PR38 closed as already incorporated via82. PR45 strict health/evidence blockers
 remain separate and unwaived. Hosted integration CI and artifact readback are
 required before merge. All predictive limitations remain; authority OFF.
 See docs/REMAINING_PR_REPAIR_20261024.md and current execution receipts.
+
+
+## 2026-10-30 — source-bound model controls and retained execution
+
+Owner requested agent implementation of missing-input and research-only controls.
+Six workstreams implemented exact source capture, distinct NBA minutes/CFB
+personnel-v2 procedures, NHL context/settlement validation, strict payoff
+moments and ranking, numerical replay and evidence snapshots. Independent
+reviews reproduced and closed source-field binding, fresh CFB transport,
+coverage/control-label and implicit model-selection defects.
+
+Local regression: 2,465 pytest passes and separate 131 research unittest passes.
+Actual retained shared CLI replay: 16 events, 1.6M equal winner draws; retained
+distribution replay: 7 products, 6,608 event-products, 700K saved draws.
+Sixteen exact-line candidate outputs reproduced; 86 captured personnel rows
+remain NOT_USED without eligible fitted inputs. New personnel fitting/testing
+is synthetic only; authentic cohort and prospective qualification remain open.
+Global health retains 4 failures/9 warnings. Protected 1,592 tracked files,
+original numerical kernels, data/defaults/state and authorizations unchanged.
+No activation, forecast overwrite, provider authentication or promotion.
+Wagering OFF, dose 0, allocation zero. See
+docs/research/model_controls_20261030/README.md, BLOCKER_REGISTER.json and
+EXECUTION.json for commands, source hashes, separate verdicts and dependencies.

@@ -14,27 +14,8 @@ import numpy as np
 from models.common import discrete_research as D, discrete_calibration as C
 from research.evaluate_discrete_products import evaluate
 from scripts.run_distribution_history import distributions, contracts, diagnostics, sha
-
-
-def equivalent(actual, expected, path='root'):
-    """Exact identities and support; bounded floating-point platform variance.
-
-    This is a computational tolerance, not a scoring, model or fitting change.
-    Hashes and retained draws are checked separately with exact equality.
-    """
-    if isinstance(expected, dict):
-        if not isinstance(actual, dict) or actual.keys() != expected.keys():
-            raise ValueError('REPLAY_KEYS:' + path)
-        for k in expected: equivalent(actual[k], expected[k], path+'.'+k)
-    elif isinstance(expected, (list, tuple)):
-        if not isinstance(actual, (list, tuple)) or len(actual) != len(expected):
-            raise ValueError('REPLAY_LENGTH:' + path)
-        for i, (a, b) in enumerate(zip(actual, expected)): equivalent(a, b, path+':'+str(i))
-    elif isinstance(expected, float):
-        if not isinstance(actual, (float, int)) or not math.isclose(actual, expected, rel_tol=0, abs_tol=1e-11):
-            raise ValueError('REPLAY_NUMERIC:' + path+':'+str(actual)+':'+str(expected))
-    elif actual != expected:
-        raise ValueError('REPLAY_IDENTITY:' + path)
+from research.replay_controls import equivalent, write_snapshot
+from research.distribution_replay_adapter import reconstruct
 
 
 def equivalent_law(actual, expected):
@@ -61,14 +42,15 @@ def verify(root):
             raise ValueError('FROZEN_DISTRIBUTION_DRIFT')
     report = {'products': 0, 'evaluation_game_products': 0, 'draws_replayed': 0,
               'numeric_tolerance_absolute': 1e-11, 'artifact_and_draw_equality': 'EXACT',
-              'source_scope': 'RETAINED_NORMALIZED_COHORT_NOT_INDEPENDENT_SOURCE_ATTESTATION'}
+              'source_scope': 'RETAINED_NORMALIZED_COHORT_NOT_INDEPENDENT_SOURCE_ATTESTATION',
+              'adapter_receipts': [], 'pit_verdict': 'UNRESOLVED',
+              'predictive_validation': 'NOT_ASSESSED', 'wagering_authority': 'OFF'}
     for league, products in study['results'].items():
         for product, expected in products.items():
             if 'evaluation_n' not in expected:
                 continue
             folder = root / league
             rows = json.loads(gzip.decompress((folder / (product + '_cohort.json.gz')).read_bytes()))
-            frozen = json.loads(gzip.decompress((folder / (product + '_frozen_distributions.json.gz')).read_bytes()))
             predictions = []
             models = []
             for method in ('empirical', 'conditional_scale'):
@@ -81,9 +63,16 @@ def verify(root):
                     x = np.array([[r['scale_features'][k] for k in s['features']] for r in rows['residual']])
                     z = np.column_stack([np.ones(len(x)), (x-s['mean'])/s['sd']])
                     errors /= np.exp(np.clip(z @ s['beta'], -8, 16)/2)
-                if not np.allclose(errors, model['residuals'], atol=1e-12, rtol=0):
-                    raise ValueError('FITTED_RESIDUAL_MISMATCH')
-                models.append(model); predictions.append(distributions(model, rows['evaluation']))
+                equivalent(errors.tolist(), model['residuals'], abs_tol=1e-12)
+                laws, receipt = reconstruct(model, rows['evaluation'])
+                report['adapter_receipts'].append(receipt)
+                models.append(model)
+                predictions.append([{'distribution': law,
+                    **{k: r[k] for k in ('start_time_utc', 'result_available_at', 'observed', 'result_source_sha256')},
+                    'block_id': D.stamp(r['start_time_utc']).strftime('%G-%V')}
+                    for law, r in zip(laws, rows['evaluation'])])
+            # Expected numerical checkpoints are loaded only after reconstruction.
+            frozen = json.loads(gzip.decompress((folder / (product + '_frozen_distributions.json.gz')).read_bytes()))
             hashes = json.loads(gzip.decompress((folder / (product + '_prediction_hashes.json.gz')).read_bytes()))
             actual = {r['distribution']['model_id']+':'+r['distribution']['provenance']['event_id']:
                       r['distribution']['distribution_sha256'] for group in frozen[:2] for r in group}
@@ -124,6 +113,28 @@ def verify(root):
     return report
 
 
+def retain_evidence(root, output, report):
+    identity = {'study_manifest_sha256': sha(root / 'manifest.json'),
+                'verifier_sha256': sha(__file__)}
+    run_id = 'distribution-replay-' + D.digest({'identity': identity, 'report': report})[:24]
+    def evidence(kind, verdict, detail):
+        return {'kind': kind, 'run_id': run_id, 'verdict': verdict,
+                'evidence': {**identity, **detail}}
+    reports = {
+        'replay': evidence('replay', 'PASS', {'execution_report': report}),
+        'pit': evidence('pit', 'UNRESOLVED', {'reason': 'Reconstructed historical availability; not original pregame capture.'}),
+        'semantic': evidence('semantic', 'NOT_RUN', {'reason': 'Independent semantic test execution must be bound separately; checkpoint match is insufficient.'}),
+        'source': evidence('source', 'NOT_AUTHENTICATED', {'reason': report['source_scope']}),
+        'predictive': evidence('predictive', 'NOT_ASSESSED', {'reason': 'Numerical replay does not evaluate later outcomes or transfer predictive qualification.'}),
+    }
+    return write_snapshot(output, run_id=run_id, reports=reports)
+
+
 if __name__ == '__main__':
-    ap = argparse.ArgumentParser(); ap.add_argument('root', type=Path); args = ap.parse_args()
-    print(json.dumps(verify(args.root), indent=2), flush=True)
+    ap = argparse.ArgumentParser(); ap.add_argument('root', type=Path)
+    ap.add_argument('--evidence-dir', type=Path, help='Append-only local reports; no registration or eligibility grant')
+    args = ap.parse_args()
+    report = verify(args.root)
+    if args.evidence_dir:
+        report['evidence_snapshot'] = str(retain_evidence(args.root, args.evidence_dir, report))
+    print(json.dumps(report, indent=2), flush=True)

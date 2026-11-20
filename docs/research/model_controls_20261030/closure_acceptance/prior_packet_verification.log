@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/scratch/721be813e757/agent-evidence-successor/research/finding_evidence.py", line 148, in <module>
+    main()
+  File "/workspace/scratch/721be813e757/agent-evidence-successor/research/finding_evidence.py", line 144, in main
+    print(json.dumps([validate_packet(row, root=args.root) for row in rows], indent=2))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/721be813e757/agent-evidence-successor/research/finding_evidence.py", line 96, in validate_packet
+    _ref(root, source)
+  File "/workspace/scratch/721be813e757/agent-evidence-successor/research/finding_evidence.py", line 40, in _ref
+    raise ValueError("EVIDENCE_HASH_MISMATCH:" + ref["path"])
+ValueError: EVIDENCE_HASH_MISMATCH:harness/market_capture.py

@@ -1,0 +1,229 @@
+{
+  "autonomous_daily_pipeline_operational": false,
+  "failure_notification": {
+    "artifact_id": 13121333217,
+    "delivery_json_sha256": "797eabf3051fee8c8d9ad1663744bda0246daa266efe966e35f7bd4f662ea3c6",
+    "email_or_push_delivery_verified": false,
+    "human_receipt_verified": false,
+    "independent_artifact_download_verified": true,
+    "injected_failure_exercised": true,
+    "issue_number": 104,
+    "issue_readback_verified": true,
+    "issue_url": "https://github.com/georgemunoz1-ui/sports-model/issues/104",
+    "job_id": 125135384790,
+    "receipt_status": "GITHUB_ISSUE_READBACK_VERIFIED",
+    "workflow_run_id": 41401921500,
+    "zip_sha256": "a8f55f98e2d479f09ca120ded72aa65774c6187172d77e13fc216c53f44a84c0"
+  },
+  "final_runtime_execution": {
+    "archive_after_second_execution": "95c8bc3b440de69d428101ffb71a1bcd6ea5ce1b",
+    "cloudpickle_pinned_version": "3.1.2",
+    "dependency_lock_matches_actual_runtime": true,
+    "full_distribution_inventory_retained": true,
+    "hosted_jobs": [
+      125135384866,
+      125135384579
+    ],
+    "independent_report": "final-runtime-forward-verification.json",
+    "new_registered_unique_events": 0,
+    "original_registry_unchanged": true,
+    "run_id": 41401921392,
+    "software_tests_per_job": 245,
+    "source_commit": "7fcf51389fc6cca0f16f32c9ac399c6f5969ce77",
+    "successful_fresh_executions": 2
+  },
+  "first_execution": {
+    "archive_after_second_execution": "17127fbf526ea95e84ed07354e2e1a804bd4a022",
+    "hosted_jobs": [
+      125133189321,
+      125133189125
+    ],
+    "independent_report": "independent-forward-verification.json",
+    "registered_at_utc": "2026-11-02T06:40:29.729255Z",
+    "registered_unique_events": 2,
+    "run_id": 41401199915,
+    "software_tests_per_job": 245,
+    "source_commit": "ff9cd745cd4e29bf299f5fb625380de7a7e61687",
+    "successful_fresh_executions": 2
+  },
+  "future_grading_followup": {
+    "created": true,
+    "first_scheduled_time": "2026-11-04T08:00:00-08:00",
+    "future_execution_already_verified": false,
+    "maximum_daily_attempts": 3,
+    "scope": "Execute and independently verify original two receipts after authentic finals; disable after success; no retrospective registration or promotion",
+    "timezone": "America/Los_Angeles",
+    "title": "Grade first CFB registrations"
+  },
+  "health": {
+    "full_log": "main-healthcheck.txt",
+    "global_health_certified": false,
+    "known_failures": [
+      "PRODUCTION_ARCHIVE_UNAVAILABLE_OR_UNVERSIONED",
+      "OVERDUE_RECOVERY_JOBS",
+      "IMMUTABLE_2026_09_03_RELEASE_INELIGIBILITY",
+      "STANDING_HEALTH_EVIDENCE_ESCALATION_HASH_CHAIN"
+    ],
+    "main_failures": 4,
+    "main_warnings": 8,
+    "status": "REPOSITORY_HEALTH_RED"
+  },
+  "issue96": "OPEN_ACCEPTANCE_NOT_COMPLETE",
+  "main_at_inspection": "f3c9cb9a13ac253d970719b40cbc4d99a9c9c50c",
+  "market_features_used": false,
+  "model_defaults_changed": false,
+  "model_promotion": false,
+  "official_release": false,
+  "operating_status": "PREGAME_PILOT_EXECUTED_AND_REMOTELY_VERIFIED; FUTURE_SETTLEMENT_PENDING; DEFAULT_BRANCH_SCHEDULE_NOT_DEPLOYED",
+  "original_card": {
+    "cover_available": false,
+    "events": [
+      {
+        "analytic_p": 0.8986147327626355,
+        "analytic_p_home": null,
+        "away_team": "Ohio",
+        "binary_count": 100000,
+        "event_id": "CFB:401866453",
+        "home_team": "Akron",
+        "model_winner": "Ohio",
+        "start_time_utc": "2026-11-04T00:00:00+00:00",
+        "stochastic_sim_p": 0.89972
+      },
+      {
+        "analytic_p": 0.6151883196973272,
+        "analytic_p_home": null,
+        "away_team": "Buffalo",
+        "binary_count": 100000,
+        "event_id": "CFB:401866454",
+        "home_team": "Miami (OH)",
+        "model_winner": "Miami (OH)",
+        "start_time_utc": "2026-11-04T01:00:00+00:00",
+        "stochastic_sim_p": 0.61435
+      }
+    ],
+    "sha256": "d75928df9b8cb9897170069a190ebb0ad61ece995855783aabbd2e3fb4880fe0",
+    "total_available": false,
+    "unsupported_products_explicitly_reported": true,
+    "winner_draws_per_event": 100000
+  },
+  "original_registry": {
+    "branch": "research/daily-cfb-archive-v1",
+    "certified_calibration_eligible": false,
+    "cohort": "PROSPECTIVE_RESEARCH_SOURCE_UNVERIFIED",
+    "path": "registry/registry.json",
+    "receipts": [
+      {
+        "card_sha256": "d75928df9b8cb9897170069a190ebb0ad61ece995855783aabbd2e3fb4880fe0",
+        "evaluation_cohort": "PROSPECTIVE_RESEARCH_SOURCE_UNVERIFIED",
+        "event_id": "CFB:401866454",
+        "probabilities": {
+          "analytic": 0.6151883196973272,
+          "simulation": 0.61435
+        },
+        "receipt_id": "f1895940d7331e790ae14ed33e0689fcf293be0c8fbcf5aa75ac95adee81a3cd",
+        "registered_at_utc": "2026-11-02T06:40:29.729255Z",
+        "start_time_utc": "2026-11-04T01:00:00+00:00"
+      },
+      {
+        "card_sha256": "d75928df9b8cb9897170069a190ebb0ad61ece995855783aabbd2e3fb4880fe0",
+        "evaluation_cohort": "PROSPECTIVE_RESEARCH_SOURCE_UNVERIFIED",
+        "event_id": "CFB:401866453",
+        "probabilities": {
+          "analytic": 0.10138526723736452,
+          "simulation": 0.10028000000000004
+        },
+        "receipt_id": "f864b52009a49aa3aa290db157a253b15e281f574cf1bd6a96877981691007a3",
+        "registered_at_utc": "2026-11-02T06:40:29.729255Z",
+        "start_time_utc": "2026-11-04T00:00:00+00:00"
+      }
+    ],
+    "sha256": "12f0a6bb1e50d059e8864e3ecb2957a7d90cc62ff720e4bcefe75799b3fb3230",
+    "unique_events": 2
+  },
+  "postgame": {
+    "actions_readback_verified": true,
+    "authenticated_registry_restore": true,
+    "durable_remote_readback_verified": true,
+    "hosted_tests_passed": 59,
+    "independent_artifact_zip_and_every_member_verified": true,
+    "independent_reports": [
+      "independent-postgame-waiting-verification.json",
+      "independent-postgame-artifact-verification.json"
+    ],
+    "job_id": 125137452020,
+    "live_final_source_probe": {
+      "away_score": 34,
+      "away_team": "Missouri Tigers",
+      "event_id": "CFB:401856733",
+      "home_score": 10,
+      "home_team": "Arkansas Razorbacks",
+      "original_receipts_unchanged": true,
+      "pathmap": "live-final-source-probe-pathmap.json",
+      "prospective_registration_created": false,
+      "retained_directory": "live-final-source-probe",
+      "scope": "ACQUISITION_AND_NORMALIZATION_ONLY",
+      "settlement_performed": false,
+      "source_sha256": "fb7693166bce821bddf3999a15488cfdd9aa1dab6f447f771f3dc58a7b67b9d6"
+    },
+    "new_grade_count": 0,
+    "original_registry_unchanged": true,
+    "registered_count": 2,
+    "settlement_performed": false,
+    "source_commit": "2c8d4088f0eed2f239f0203c551783f5b28928e1",
+    "status": "NO_REGISTRATIONS_THROUGH_REQUESTED_DATE",
+    "through_date": "2026-10-31",
+    "workflow_run_id": 41402593838
+  },
+  "pr95": "OPEN_UNMERGED_PREFLIGHT_ONLY",
+  "protected_controls": [
+    {
+      "path": "data/model_selection/defaults_v1.json",
+      "sha256": "8bbfb63ee0f8eeb99fc728fb25db3f1d9959c863ccb4f517abde058e3424b3eb",
+      "unchanged_from_main": true
+    },
+    {
+      "path": "state.json",
+      "sha256": "b11eaae146d0ad6f01cbcf8cd2be8b6164074a013e03d1cd5977c664a728cd19",
+      "unchanged_from_main": true
+    },
+    {
+      "path": "AUTHORIZATIONS.md",
+      "sha256": "675cf53e582bd22074eef89f941c3d1aead7fc7f3556a544294116ba82a546cb",
+      "unchanged_from_main": true
+    },
+    {
+      "path": "data/cfb/model/CFB_V2_ACQUISITION_MANIFEST.json",
+      "sha256": "60d04db355011c70bf0a9911023b76a8e1745c6212257ce697f32088fc57f2e0",
+      "unchanged_from_main": true
+    }
+  ],
+  "pull_request": 102,
+  "recorded_at_utc": "2026-11-02T06:57:27.185031+00:00",
+  "remaining_dependencies": [
+    "Actual final results and completed append-only grading/readback for the two future events.",
+    "Reviewed deployment of pregame/postgame cron workflows on the default branch.",
+    "One deliberate canonical state location: pilot registry is on archive branch; legacy main registry remains separate and empty.",
+    "Source authenticity, historical parent-model provenance and predictive qualification remain unresolved; software and content hashes do not certify these.",
+    "Additional league-specific acquisition/reconciliation/model execution remains outside this narrow exercised pilot."
+  ],
+  "repository": "georgemunoz1-ui/sports-model",
+  "retention": {
+    "actions_artifact_metadata": "github-actions-artifact-metadata.json",
+    "archive_commit": "61251edf2ac6ac088be90e26042dddfb67386710",
+    "final_runtime_core_files_per_execution": 77,
+    "final_runtime_envelope_files_per_execution": 82,
+    "git_retention": "VERSIONED_GIT_NO_AUTOMATIC_EXPIRY",
+    "independent_source_snapshot_comparisons_per_execution": 15,
+    "provider_signed_attestation": false,
+    "source_authenticity_independently_established": false,
+    "source_capture_receipts_per_execution": 29,
+    "status": "REMOTE_BYTES_VERIFIED",
+    "verified_repository_files": 339,
+    "worm_storage": false
+  },
+  "schema": "daily.research.operating_pilot.execution.v1",
+  "scope": "FBS_VS_FBS_WEEK_2_PLUS_WINNER_RESEARCH",
+  "selected_model_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+  "seven_league_pipeline_operational": false,
+  "wagering_authority": false
+}

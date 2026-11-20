@@ -53,6 +53,12 @@ def identity(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
 
 
+def verify_retained_result(result, root):
+    if result.get('raw_path_base') == 'CANONICAL_REGISTRY':
+        return verify_result_source(result, base_dir=root)
+    return verify_result_source(result)
+
+
 def firewall(value):
     """Reject asserted authority/market use at every nested layer."""
     if isinstance(value, dict):
@@ -270,7 +276,7 @@ def selection_grades(root, registry, result_map):
         result = result_map.get((receipt['league'], receipt['event_id']))
         if not result or result.get('status') != 'FINAL':
             continue
-        verify_result_source(result)
+        verify_retained_result(result, root)
         if (result['home_team'], result['away_team']) != (receipt['home_team'], receipt['away_team']) or dt(result['start_time_utc']) != dt(receipt['start_time_utc']):
             raise ValueError('SELECTION_RESULT_IDENTITY_MISMATCH')
         if dt(result['fetched_at_utc']) < dt(receipt['start_time_utc']):
@@ -324,7 +330,7 @@ def grade(root, results):
                 if key not in existing:
                     pending.append(key)
                 continue
-            verify_result_source(result)
+            verify_retained_result(result, root)
             if dt(result['start_time_utc']) != dt(receipt['start_time_utc']):
                 raise ValueError('RESULT_START_TIME_RECONCILIATION_REQUIRED')
             if (result['home_team'], result['away_team']) != (receipt['home_team'], receipt['away_team']):

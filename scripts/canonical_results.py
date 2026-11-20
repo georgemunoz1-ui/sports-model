@@ -117,7 +117,7 @@ def parse_espn(payload, forecast, receipt):
     kind = status.get('type', {})
     out.update(provider='ESPN', provider_event_id=str(event['id']),
                provider_final_status=kind.get('name'), provider_period=status.get('period'))
-    if not kind.get('completed') or kind.get('state') != 'post':
+    if kind.get('completed') is not True or kind.get('state') != 'post':
         return {**out, 'reason': 'PROVIDER_NOT_FINAL'}
     # Completed cancellations/forfeits are not played final score observations.
     accepted_statuses = {'STATUS_FULL_TIME'} if league == 'MLS' else {'STATUS_FINAL', 'STATUS_FINAL_OT', 'STATUS_FINAL_SO'}
@@ -177,6 +177,7 @@ def parse_wnba(payload, forecast, receipt):
 
 
 def source_url(forecast):
+    """Legacy range URL retained for replay of already frozen source receipts."""
     f = _identity(forecast)
     if f['league'] == 'WNBA':
         return 'https://cdn.wnba.com/static/json/liveData/boxscore/boxscore_' + f['event_id'].split(':', 1)[1] + '.json'
@@ -184,6 +185,23 @@ def source_url(forecast):
     # Provider scoreboards group by their calendar, which can differ from UTC.
     day = (start - dt.timedelta(days=1)).strftime('%Y%m%d') + '-' + (start + dt.timedelta(days=1)).strftime('%Y%m%d')
     return f"https://site.api.espn.com/apis/site/v2/sports/{ROUTES[f['league']]}/scoreboard?dates={day}&limit=1000"
+
+
+def acquisition_urls(forecast):
+    """Use supported daily requests and reconcile the exact event across dates.
+
+    ESPN's exercised college-football range query returned HTTP 400, while its
+    exact daily query returned genuine finals. Adjacent UTC dates cover provider
+    calendar boundaries without guessing a changed event time or team identity.
+    Legacy range receipts stay valid for immutable historical replay.
+    """
+    f = _identity(forecast)
+    if f['league'] == 'WNBA':
+        return [source_url(f)]
+    start = stamp(f['start_time_utc'])
+    base = f"https://site.api.espn.com/apis/site/v2/sports/{ROUTES[f['league']]}/scoreboard"
+    return [base + '?dates=' + (start + dt.timedelta(days=offset)).strftime('%Y%m%d') + '&limit=1000'
+            for offset in (0, -1, 1)]
 
 
 def _fetch(url):
@@ -213,20 +231,23 @@ def acquire_results(forecasts, output_dir, fetcher=None):
             continue
         seen[key] = f
         try:
-            url = source_url(f)
-            if url not in cache:
-                raw = fetcher(url)
-                fetched = dt.datetime.now(dt.timezone.utc).isoformat()
-                sha = hashlib.sha256(raw).hexdigest()
-                path = root / 'raw' / (sha + '.json')
-                if not path.exists():
-                    with path.open('xb') as handle:
-                        handle.write(raw)
-                receipt = {'source_url': url, 'source_sha256': sha, 'raw_path': str(path), 'fetched_at_utc': fetched}
-                cache[url] = (json.loads(raw), receipt)
-            payload, receipt = cache[url]
             parser = parse_wnba if f['league'] == 'WNBA' else parse_espn
-            rows.append(parser(payload, f, receipt))
+            for url in acquisition_urls(f):
+                if url not in cache:
+                    raw = fetcher(url)
+                    fetched = dt.datetime.now(dt.timezone.utc).isoformat()
+                    sha = hashlib.sha256(raw).hexdigest()
+                    path = root / 'raw' / (sha + '.json')
+                    if not path.exists():
+                        with path.open('xb') as handle:
+                            handle.write(raw)
+                    receipt = {'source_url': url, 'source_sha256': sha, 'raw_path': str(path), 'fetched_at_utc': fetched}
+                    cache[url] = (json.loads(raw), receipt)
+                payload, receipt = cache[url]
+                normalized = parser(payload, f, receipt)
+                if normalized.get('reason') != 'EXACT_EVENT_NOT_FOUND':
+                    break
+            rows.append(normalized)
         except (ValueError, KeyError, TypeError, OSError) as exc:
             rows.append({**f, 'status': 'BLOCKED', 'reason': str(exc), 'action_authority': False})
     report = {'status': 'PARTIAL' if any(r['status'] == 'BLOCKED' for r in rows) else 'COMPLETED',
@@ -240,15 +261,30 @@ def acquire_results(forecasts, output_dir, fetcher=None):
 
 def verify_result_source(result, base_dir=None):
     """Recompute normalized outcome from retained provider bytes, not caller flags."""
-    if result['source_url'] != source_url(result):
+    if result['source_url'] not in {source_url(result), *acquisition_urls(result)}:
         raise ValueError('RESULT_SOURCE_URL_MISMATCH')
     path = Path(result['raw_path'])
-    if not path.is_absolute():
+    if 'raw_path_base' in result:
+        # New postgame captures retain raw bytes inside the canonical registry.
+        # The explicit anchor makes a fresh checkout independent of the original
+        # runner's absolute path; historical receipts remain untouched.
+        if result['raw_path_base'] != 'CANONICAL_REGISTRY' or base_dir is None:
+            raise ValueError('RESULT_SOURCE_BASE_REQUIRED')
+        expected = Path('result_sources') / (result['source_sha256'] + '.json')
+        if path != expected or path.as_posix() != result['raw_path']:
+            raise ValueError('RESULT_SOURCE_RELATIVE_PATH_INVALID')
+        root = Path(base_dir)
+        path = root / path
+        if any(p.is_symlink() for p in (path, path.parent, root, *root.parents)):
+            raise ValueError('RESULT_SOURCE_SYMLINK_REFUSED')
+    elif not path.is_absolute():
         path = Path(base_dir or '.') / path
     raw = path.read_bytes()
     if hashlib.sha256(raw).hexdigest() != result['source_sha256']:
         raise ValueError('RESULT_RAW_HASH_MISMATCH')
     receipt = {k: result[k] for k in ('source_url', 'source_sha256', 'raw_path', 'fetched_at_utc')}
+    if 'raw_path_base' in result:
+        receipt['raw_path_base'] = result['raw_path_base']
     parser = parse_wnba if result['league'] == 'WNBA' else parse_espn
     actual = parser(json.loads(raw), result, receipt)
     if actual != result:

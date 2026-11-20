@@ -1,0 +1,37 @@
+{
+  "label": "SYNTHETIC_SINGLE_LOCAL_RUN",
+  "created_at_utc": "2026-11-04T03:21:56.994631+00:00",
+  "pure": [
+    {
+      "evaluations": 1000,
+      "elapsed_seconds": 0.013796088000162854,
+      "evaluations_per_second": 72484.3158428821,
+      "latency_median_seconds": 1.2183000762888696e-05,
+      "latency_p95_seconds": 1.5031999282655306e-05
+    },
+    {
+      "evaluations": 10000,
+      "elapsed_seconds": 0.14204201999928046,
+      "evaluations_per_second": 70401.70225719584,
+      "latency_median_seconds": 1.2291000530240126e-05,
+      "latency_p95_seconds": 1.5071000234456733e-05
+    }
+  ],
+  "limits": [
+    "Single process; excludes source capture, venue qualification and production database.",
+    "Synthetic inputs differ by event ID only; no model or predictive validation.",
+    "SQLite validates the entire audit chain before each append; not a capacity claim."
+  ],
+  "sqlite_wal": {
+    "evaluations": 100,
+    "elapsed_seconds": 0.3985926599998493,
+    "evaluations_per_second": 250.88269312344542,
+    "latency_median_seconds": 0.003883549999954994,
+    "latency_p95_seconds": 0.005631086998619139
+  },
+  "audit_count": 100,
+  "order_authorized": false,
+  "action": "OFF",
+  "dose": 0,
+  "postgresql": "NOT_RUN"
+}

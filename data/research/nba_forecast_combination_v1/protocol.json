@@ -1,0 +1,64 @@
+{
+  "schema": "nba.forecast_combination.v1",
+  "experiment_id": "nba.forecast_combination.v1.EXP.001",
+  "frozen_at": "2026-10-30T11:21:36.801038+00:00",
+  "status": "LOCAL_FROZEN_DESIGN_UNVALIDATED",
+  "canonical_registration": false,
+  "league": "NBA",
+  "target": "home_minus_away_full_game_ot_points",
+  "competitors": {
+    "B0": "preserved parent forecast, exact model version",
+    "B1": "Dunks and Threes external forecast, exact documented generation",
+    "C1": "B0 + alpha + w*(B1-B0)",
+    "C2": "C1 fit on C2-complete events + gamma dot standardized factors"
+  },
+  "weight_bounds": [
+    0,
+    1
+  ],
+  "alpha_ridge": 1.0,
+  "weight_ridge": 1.0,
+  "factor_ridge": 1.0,
+  "objective": "mean squared error + alpha_ridge*alpha^2 + weight_ridge*w^2; C2 residual MSE + factor_ridge*sum(gamma^2)",
+  "features": [
+    "shooting_net_difference",
+    "turnover_net_difference",
+    "rebounding_net_difference"
+  ],
+  "feature_definitions": {
+    "shooting_net_difference": "(home.oTS+home.dTS)-(away.oTS+away.dTS)",
+    "turnover_net_difference": "(home.oTOV+home.dTOV)-(away.oTOV+away.dTOV)",
+    "rebounding_net_difference": "(home.ORB+home.DRB)-(away.ORB+away.DRB)"
+  },
+  "factor_input_units": "points_per_100_possessions, all positive-good",
+  "factor_definition_version": "databallr.nba.six_factor.boxscore.positive_good.v1",
+  "standardization": "training-event mean and population SD; zero variance scale=1; no imputation",
+  "min_training_events": 100,
+  "minimum_note": "Operational pilot floor only; not a power calculation or qualification threshold. Fixed before fitting. Any change requires a successor protocol.",
+  "hyperparameter_policy": "Fixed penalties, no tuning in this pilot. A tuned successor needs nested chronological selection.",
+  "history_policy": "One baseline version, one external model generation and live record type per fit. Unknown versions, reconstructed history and source captures after cutoff are excluded. No pooled-vintage fit.",
+  "availability_policy": "Keep every opportunity; report complete-source matched events and B0 fallback separately. Never relabel B0 fallback as challenger.",
+  "evaluation_policy": {
+    "primary": "paired absolute margin error on identical eligible events",
+    "confirmation": "Future writer-registered cohort only; no confirmation cohort registered by this implementation",
+    "uncertainty": "date-block paired intervals required before any improvement claim; not executed with current ineligible data",
+    "probabilities": "separately fit from chronological OOS challenger residuals; NOT_IMPLEMENTED in this mean-only pilot",
+    "economic_evaluation": "separate frozen-price audit; not part of fitting or confidence",
+    "oos_schedule": "expanding prior events; train labels available strictly before each target feature cutoff; no same-event training reuse"
+  },
+  "exclusions": [
+    "circadian",
+    "WNBA coefficients",
+    "markets",
+    "total products",
+    "implicit baseline SD",
+    "galaxy coordinates or cluster colors"
+  ],
+  "authority": {
+    "default_change": false,
+    "automatic_registration": false,
+    "publication_eligible": false,
+    "wagering": "OFF",
+    "allocation": 0
+  }
+}

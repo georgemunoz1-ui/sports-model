@@ -549,6 +549,7 @@ def main():
     parser.add_argument("--roster-bundle", type=Path, help="Retained all-sports roster bundle.json; adds validated personnel coverage")
     parser.add_argument("--require-roster-aware", action="store_true", help="Fail closed unless full roster impacts are fitted and consumed; current parents do not meet this gate")
     parser.add_argument("--distribution-research-config", help="Opt-in hash-bound cross-sport distribution challengers; emits a separate report")
+    parser.add_argument("--volatility-research-config", type=Path, help="Explicit hash-bound joint volatility research child and observed execution receipt; no automatic fallback")
     parser.add_argument("--efficiency-research-config", type=Path, help="Opt-in fitted CFB/NBA efficiency experiments; separate source-bound local SHADOW receipts, no default change")
     parser.add_argument("--disclosures", type=Path, help="Source-bound availability scenarios, assumptions and dependence disclosures; presentation only")
     parser.add_argument("--identity-semantics", choices=["legacy.v1", "market_blind_numeric.v2"], default="market_blind_numeric.v2", help="Explicit independently identified execution child; legacy behavior remains available")
@@ -628,6 +629,16 @@ def main():
             with (output / "distribution_research_failure.json").open("x") as handle:
                 json.dump(failure, handle, indent=2)
             print(json.dumps({"distribution_research": failure}))
+    if args.volatility_research_config:
+        from pipelines.cards.volatility_routing import run_joint_route, render_route
+        receipt = run_joint_route(output / "diagnostic_card.json", args.volatility_research_config,
+                                  output / "volatility_research", simulations=args.simulations,
+                                  repo_root=REPO_ROOT)
+        research_incomplete |= receipt["status"] != "COMPLETED"
+        route_text = render_route(receipt)
+        with (output / "diagnostic_card.md").open("a") as handle:
+            handle.write(route_text)
+        print(route_text)
     raise SystemExit(2 if card["coverage_breach_event_ids"] or research_incomplete else 0)
 
 

@@ -1,0 +1,80 @@
+{
+  "action_authority": false,
+  "affected_commit": "335820332d884a3d9e66b5aeaa0f15fa933e2607",
+  "files_sha256": {
+    "acceptance.json": "dc0005683a9a9b24b00c24094fd1d78396a90ea038ed8ad2786cedf4b5c22c21",
+    "acceptance.log": "64731f921e4ece41cb0c563a532c41a6c32d3b2aee36136a343ac5e80914906a",
+    "delivery.json": "b03b381e7787fdbb8986d2cbf1944f39b558a864bf428fdd899f5620f96f62fc",
+    "failed_full_acceptance_readback.json": "7a23e37f1c44dd12c2f81612faf0e5b744f4e956dc9bbcd96446673cd9c05edf",
+    "finding-evidence.json": "a37aeabf0052544793917cf56767ca2ee4916fce59281afd4a95e37a7ef995df",
+    "logging_delivery_readonly_review.json": "74976b37eb4531f27061afcbe70d1a1a9bdab8c964ee4318ae3f1763e2156777",
+    "pytest-tests.json": "1a5fdde2a80e85c1f11c3b4a46970d33afd35150b4f376df2e94f991f5ad79e2",
+    "research-tests.json": "aec7c94592884dc5954054916d8f85058bfa9b50f25f6c2157c27639181a2d5b",
+    "sources-after.json": "709b41afec1d2dfa8ce02f1c29cc266f08b2e01820c6ea8e0e76977004388913",
+    "sources-before.json": "709b41afec1d2dfa8ce02f1c29cc266f08b2e01820c6ea8e0e76977004388913",
+    "tests.xml": "afde06ce58e2d9c84b9ed0dd35a52e3d0159e3f3d9a96168b84a8e4a9e163ff8",
+    "verified_revision.json": "bea8dde8d2001cca7bac64bb059a2933b0e083c66f9ae2f005d9287c51eed381",
+    "verify_revision.py": "ca66431dd1deaf95ba3bcc477daeb9f513669b9d99ea1fa5ba8b3ac19a766247"
+  },
+  "historical_failure_retained": "docs/releases/2026-11-04-pr106-repair-acceptance-v1/delivery-status.json",
+  "incident_id": "PR106_STALE_FINDING_EXECUTION_EVIDENCE_20261104",
+  "independent_review": {
+    "core_adversarial_cases": 16,
+    "core_revision_hash": "9371f44cad79444c899496ec308d79ac09153bc14aa507ccb6f36105c54e88e4",
+    "final_logging_revision_read_only_review": "logging_delivery_readonly_review.json",
+    "final_readback_reports": [
+      {
+        "path": "full_acceptance_readback.json",
+        "sha256": "b70255e2eef790332e4dc8ba533dfd8134520af5d6669739d522e84d41dce4e8"
+      },
+      {
+        "path": "full_acceptance_preservation.json",
+        "sha256": "c6f2dc95e792136abf286ba2c2e975c7f472a00f62d3181c430d599f8e4228e7"
+      }
+    ],
+    "final_receipt_readback": "PASS",
+    "historical_packet_generations_checked": 3,
+    "original_git_blob_files_checked": 3114,
+    "reference_paths_checked": 3145,
+    "source_files_checked": 3138
+  },
+  "local_full_acceptance": {
+    "complete_log_sha256": "64731f921e4ece41cb0c563a532c41a6c32d3b2aee36136a343ac5e80914906a",
+    "pytest": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 2374
+    },
+    "research_unittest": {
+      "errors": 0,
+      "expected_failures": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 131,
+      "unexpected_successes": 0
+    },
+    "source_manifests_equal": true
+  },
+  "minimal_reproduction": "Research integrity run41758700788 fails EVIDENCE_HASH_MISMATCH:scripts/generate_card_force.py against old version-bound evidence.",
+  "pr": "https://github.com/georgemunoz1-ui/sports-model/pull/106",
+  "predictive_validation_granted": false,
+  "publication_allowed": false,
+  "recorded_at_utc": "2026-11-04T17:52:58.987374+00:00",
+  "remaining_blockers": [
+    "Owner confirmation for any GitHub update",
+    "Current published head hosted tests and independent artifact readback",
+    "Required-check configuration unverified HTTP403",
+    "Local NumPy2.3.5 differs from pinned2.4.6; hosted pin conformance pending"
+  ],
+  "remote_changes_performed": false,
+  "repair": "Fresh complete full-suite execution produces separate parent-bound successor; old packets and receipt bytes retained. Pipe-buffered process output is sealed before packet validation; test execution and evidence delivery statuses are separate.",
+  "repair_commits": [
+    "9f9a5f032a5aa9e41ce95b3a6b287427a75d3bdc",
+    "4cac730745872f5ad9300c111234d5bf1c853e2a"
+  ],
+  "schema": "sports.repair_incident_closure.local.v1",
+  "status": "LOCAL_VERIFIED_HOSTED_PENDING",
+  "tested_source_commit": "4cac730745872f5ad9300c111234d5bf1c853e2a",
+  "wagering_authority": "OFF"
+}

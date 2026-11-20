@@ -1,0 +1,156 @@
+{
+  "base_head_sha": "335820332d884a3d9e66b5aeaa0f15fa933e2607",
+  "config_schema": "sports.volatility_route_config.research.v2",
+  "current_source_sha256": {
+    "docs/VOLATILITY_ROUTE_BINDING_V2.md": "f66ac971d47c801a6ddc62fa3e7d7d2527c0563ddc9fb5ca8a468c70d4614f89",
+    "models/common/volatility_scoring_v2.py": "987ea17114b4e9a17f70481202d24151c837b0ed8d6830aa3247d3cb05d60215",
+    "pipelines/cards/volatility_routing.py": "fb556d47efbf9246afaf91de814455557c0995050d6cb20d82613f2d4ff38c4c",
+    "scripts/cross_sport_volatility_research.py": "5c8a8f5349000fe980273cfd3c57a96646dbe62ec0623970b44a217fc6dd9e33",
+    "tests/test_volatility_routing.py": "64216e02fc64061ef430617fccb75311184d763be995d1b1e6d7d0b7daa32261",
+    "tests/test_volatility_scoring_v2.py": "5309c281f282ade8df058941305555d74e8211a5ce66a8d0b74cb50fe44ca8bd"
+  },
+  "evidence_sha256": {
+    "focused.log": "0c9ff2ba0373596a970b48f573c9d446c1d690f967ec302eac36d7eed0288976",
+    "focused.xml": "2579190d26ebdc099e9b1132834a82554692b5af17c0309cbc26d2dbbaee74cf",
+    "independent-initial.xml": "bb4d6ddc4cac9d713c19f085c3c2c68df6f3bcf519c35747ae624e8a85111e53",
+    "pr106-independent-report.json": "f0cc37cb03d73be29e9e5d3f1eb75e51ab2edd1f9fc5cbe525d1907787dd199c",
+    "pr106-independent.log": "37bd9845de3ede040c66f03c3be9d04f6a6df98c0152508e660b32380bd7c808",
+    "pr106-independent.xml": "4bb1014b6aad04e32ee6568690c113222bc016c8c8a12bf9a31f73ae4c95624e",
+    "pr106-preservation.json": "73a061c455953677907c259487fb00db17312a58e026cae9d57225d237a01c11",
+    "test_route_independent.py": "1a24e0c6ff82dc5cdf7630c5010eedd4462931e77a067782edea345b3ad53215"
+  },
+  "incident_id": "PR106_PARENT_ROUTE_IDENTITY_20261104",
+  "independent_review_history": [
+    {
+      "disposition": "Findings preserved; displayed scope validation and safe diagnostic receipt handling subsequently repaired.",
+      "evidence": "independent-initial.xml",
+      "stage": "initial_displayed_scope_and_malformed_input_probes",
+      "test_counts": {
+        "errors": 0,
+        "failures": 11,
+        "skipped": 0,
+        "tests": 12
+      }
+    },
+    {
+      "disposition": "Strict JSON decoding subsequently rejects NaN, Infinity, float overflow and duplicate object keys in card, parent, config and fit.",
+      "evidence": "Reviewer execution reported in task; the initial failing expanded XML was not retained here.",
+      "reported_failures": 2,
+      "reported_passed": 12,
+      "reported_tests": 14,
+      "stage": "expanded_nonfinite_json_probes"
+    },
+    {
+      "disposition": "Independent local signoff; all 21 adversarial/positive probes pass; 1,644 protected originals unchanged. Hosted checks and readback remain pending.",
+      "junit": "pr106-independent.xml",
+      "log": "pr106-independent.log",
+      "observed_at_utc": "2026-11-04T17:38:17.309877+00:00",
+      "preservation": "pr106-preservation.json",
+      "report": "pr106-independent-report.json",
+      "stage": "final_independent_verification",
+      "test_counts": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 21
+      },
+      "tests_snapshot": "test_route_independent.py"
+    }
+  ],
+  "observed_at_utc": "2026-11-04T17:37:16.111279+00:00",
+  "preservation": {
+    "journal_unchanged": true,
+    "old_cards_fits_grades_defaults_unchanged": true,
+    "protected_files": {
+      "AUTHORIZATIONS.md": {
+        "base_sha256": "675cf53e582bd22074eef89f941c3d1aead7fc7f3556a544294116ba82a546cb",
+        "current_sha256": "675cf53e582bd22074eef89f941c3d1aead7fc7f3556a544294116ba82a546cb",
+        "unchanged": true
+      },
+      "data/model_selection/defaults_v1.json": {
+        "base_sha256": "8bbfb63ee0f8eeb99fc728fb25db3f1d9959c863ccb4f517abde058e3424b3eb",
+        "current_sha256": "8bbfb63ee0f8eeb99fc728fb25db3f1d9959c863ccb4f517abde058e3424b3eb",
+        "unchanged": true
+      },
+      "docs/progress.md": {
+        "base_sha256": "059476fc3745b98c8243351941b033be3c3a744f9691b8cefd27157f62a2315e",
+        "current_sha256": "059476fc3745b98c8243351941b033be3c3a744f9691b8cefd27157f62a2315e",
+        "unchanged": true
+      },
+      "models/common/discrete_research.py": {
+        "base_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+        "current_sha256": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+        "unchanged": true
+      },
+      "models/common/volatility_matrix_v1.py": {
+        "base_sha256": "86efa96c72b282ff80008f638a5df8cfb7e195a8d80ce54182ad566ae655aaeb",
+        "current_sha256": "86efa96c72b282ff80008f638a5df8cfb7e195a8d80ce54182ad566ae655aaeb",
+        "unchanged": true
+      },
+      "pipelines/cards/volatility_research.py": {
+        "base_sha256": "47f8afab73bed9173109f82623d021fbb6bf2a9add323368a60ac11b86f9ee94",
+        "current_sha256": "47f8afab73bed9173109f82623d021fbb6bf2a9add323368a60ac11b86f9ee94",
+        "unchanged": true
+      },
+      "state.json": {
+        "base_sha256": "b11eaae146d0ad6f01cbcf8cd2be8b6164074a013e03d1cd5977c664a728cd19",
+        "current_sha256": "b11eaae146d0ad6f01cbcf8cd2be8b6164074a013e03d1cd5977c664a728cd19",
+        "unchanged": true
+      }
+    },
+    "tracked_data_changes": []
+  },
+  "pull_request": "https://github.com/georgemunoz1-ui/sports-model/pull/106",
+  "receipt_schema": "sports.volatility_route_receipt.research.v2",
+  "remaining_blockers": [
+    "Local successor evidence repair/full acceptance remains separate",
+    "Owner confirmation before publishing and hosted verification",
+    "Exact candidate-head hosted checks and artifact retrieval",
+    "Required-check configuration is unverified HTTP403"
+  ],
+  "repair_commit": "872c6317461f3afa8696b610c36794f8cdd54063",
+  "required_check_configuration": "UNVERIFIED_HTTP_403",
+  "route_identity": "JOINT_VOLATILITY_RESEARCH_BOUND_V2",
+  "schema": "sports.repair_incident_closure.local.v1",
+  "scope": "Versioned parent identity and scope binding before receipted joint-research execution. Synthetic software verification only.",
+  "scope_limits": {
+    "action_authority": false,
+    "hosted_artifact_readback_verified": false,
+    "hosted_ci_verified": false,
+    "merge_performed": false,
+    "other_closure_evidence_incident": "Separate repair; this record does not certify the EVIDENCE_HASH_MISMATCH:scripts/generate_card_force.py closure.",
+    "predictive_validation": "NOT_ESTABLISHED",
+    "prospective_registration_performed": false,
+    "remote_update_performed": false
+  },
+  "status": "LOCAL_VERIFIED_HOSTED_PENDING",
+  "verification": {
+    "command": [
+      "/tmp/nhl-shadow-root/venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "tests/test_volatility_routing.py",
+      "tests/test_volatility_matrix_v1.py",
+      "tests/test_volatility_scoring_v2.py",
+      "--junitxml=/workspace/scratch/4d9e36f4eb71/repair-106/docs/research/pr106_route_binding_20261104/focused.xml"
+    ],
+    "exit_code": 0,
+    "includes_100000_pair_replay": true,
+    "junit": "focused.xml",
+    "junit_counts": {
+      "errors": "0",
+      "failures": "0",
+      "hostname": "35e412643710",
+      "name": "pytest",
+      "skipped": "0",
+      "tests": "116",
+      "time": "5.445",
+      "timestamp": "2026-11-04T12:37:10.549980-05:00"
+    },
+    "log": "focused.log",
+    "started_at_utc": "2026-11-04T17:37:10.320956+00:00"
+  }
+}

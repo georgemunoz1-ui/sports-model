@@ -1,0 +1,172 @@
+{
+  "acceptance": {
+    "command": "/tmp/nhl-shadow-root/venv/bin/python -m pytest tests/test_volatility_scoring_v2.py tests/test_volatility_matrix_v1.py tests/test_volatility_replay_inputs.py -q --junitxml=docs/releases/2026-11-04-volatility-score-v2/targeted-tests.xml",
+    "counts": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 51
+    },
+    "executed_at_local_runner": "2026-11-04T12:29:25.351962-05:00",
+    "exit_code": 0,
+    "junit": {
+      "bytes": 7342,
+      "path": "docs/releases/2026-11-04-volatility-score-v2/targeted-tests.xml",
+      "sha256": "5ea8894e3e1fb69f7c6c7b2b93f192b48cff1216bfd3c3a348ca1780cce36e5f"
+    },
+    "log": {
+      "bytes": 230,
+      "path": "docs/releases/2026-11-04-volatility-score-v2/targeted-tests.log",
+      "sha256": "58cf1ffbbc52c1c6fb75b5adf2e1ff11ae9024f674263c9d0573c57be8018e66"
+    }
+  },
+  "artifact_delivery_status": "NOT_RUN",
+  "authority": {
+    "forecast_rewrite": false,
+    "grade_rewrite": false,
+    "model_default_promotion": false,
+    "wagering": false
+  },
+  "base_commit": "629ed150612a56f2dabaecdecaab7019af3e7630",
+  "defect": "Forecast-owned SD normalization improperly rewards an overdispersed forecast.",
+  "hosted_checks_status": "NOT_RUN",
+  "incident_id": "PR105-PR106-FORECAST_DEPENDENT_ENERGY_SCALE",
+  "independent_verification": {
+    "evidence": [
+      {
+        "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr105-independent-report.json",
+        "path": "docs/releases/2026-11-04-volatility-score-v2/independent/pr105-independent-report.json",
+        "sha256": "4cf32c1cfc46b7de9a2bdf975d8e0df87252cc571fc17a103f72edfc316af9ea"
+      },
+      {
+        "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/test_scoring_independent.py",
+        "path": "docs/releases/2026-11-04-volatility-score-v2/independent/test_scoring_independent.py",
+        "sha256": "0b176580713ebc809cc4df89b9d21a2eda5006a0c4e823cfb610b433985e826d"
+      },
+      {
+        "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/preservation.py",
+        "path": "docs/releases/2026-11-04-volatility-score-v2/independent/preservation.py",
+        "sha256": "b51123409c6eee7fbaa06b059d221b86158a7ff5e6ccfa30a6798107f65ee2f7"
+      },
+      {
+        "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr105-independent.xml",
+        "path": "docs/releases/2026-11-04-volatility-score-v2/independent/pr105-independent.xml",
+        "sha256": "57a6194226a853f9bd5289901558f6932ed2556e865a6bba363cd44439425d50"
+      },
+      {
+        "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr105-independent.log",
+        "path": "docs/releases/2026-11-04-volatility-score-v2/independent/pr105-independent.log",
+        "sha256": "b1cf01c0590bd0527fc2f0878dd8dcd302a2121f8f8621c5296c43bb1f0bb27d"
+      },
+      {
+        "original_path": "/workspace/scratch/4d9e36f4eb71/independent-repair-verifier/pr105-preservation.json",
+        "path": "docs/releases/2026-11-04-volatility-score-v2/independent/pr105-preservation.json",
+        "sha256": "97d14b8afd71c03c2cf05868e5934bdae849c3d1dcae460ac01d1314d35fd31a"
+      }
+    ],
+    "protected_original_files_checked": 1643,
+    "tests_passed": 19
+  },
+  "independent_verifier_status": "PASS",
+  "local_environment_limitation": "Local NumPy 2.3.5 differs from repository pin 2.4.6; hosted pinned-environment verification remains required.",
+  "observed_checkout_commit": "629ed150612a56f2dabaecdecaab7019af3e7630",
+  "old_source_path": "models/common/volatility_matrix_v1.py",
+  "old_source_sha256": "86efa96c72b282ff80008f638a5df8cfb7e195a8d80ce54182ad566ae655aaeb",
+  "preservation_verified": true,
+  "preserved_files": {
+    "data/model_selection/defaults_v1.json": "8bbfb63ee0f8eeb99fc728fb25db3f1d9959c863ccb4f517abde058e3424b3eb",
+    "data/research/volatility_matrix_replay_20261103/mls/empirical.json": "5755966de6bbb7bc5015a948a63b2683849a96ff7b9c2a5172e260190b38b8a0",
+    "data/research/volatility_matrix_replay_20261103/mls/ledoit_wolf.json": "d8f2f1089a476da235fcc48100d982aef63fea221bc7282e4eca99a4c381590c",
+    "data/research/volatility_matrix_replay_20261103/mls/summary.json": "81c14f9727efd0c5fd8110ee47433194494fe2596a4361ec7a038ef9f8d0ac91",
+    "data/research/volatility_matrix_replay_20261103/nba/empirical.json": "74f8a6ef36ba35c0ce8dd1d1420e696c9fc0a34d333850a2c237b5af4ddedae2",
+    "data/research/volatility_matrix_replay_20261103/nba/ledoit_wolf.json": "666dcb017377b35ee0ae0f4c9f7aeab3a54b1c8cd7d7a0447f0f7f6bd6529326",
+    "data/research/volatility_matrix_replay_20261103/nba/summary.json": "eb1d35ed7727a1f80f45dffb0f65c3980c79abec295c1bdf272ce2e00ac349a2",
+    "data/research/volatility_matrix_replay_20261103/nhl/empirical.json": "7cc668259d61681028e7c215168da609f210928afe61eb270873f73d1db85c26",
+    "data/research/volatility_matrix_replay_20261103/nhl/ledoit_wolf.json": "403f56fadd525c94f76aa713a4ccac443330f94841f60bf57ddf534b413e4cb7",
+    "data/research/volatility_matrix_replay_20261103/nhl/summary.json": "92801560ff3356e49e09ce5319474720903dd95402a329a234415cf908f4253f",
+    "data/research/volatility_matrix_replay_20261103/readiness.json": "ce107a2f9c91866a53375fcf11a4f0f1d172bf69678a8b1b4b2ff880c8f9f15b",
+    "data/research/volatility_matrix_replay_20261103/verification.json": "d67a9c29a92d499c7e0a408890f485bd2a2a778d151c9c62dfda2ace9adfda28",
+    "models/common/discrete_research.py": "4a68440a8a7d8bcc9b7ed7b617f9f5ff778fe62d4274840e52a37e48ba8f08eb",
+    "models/common/volatility_matrix_v1.py": "86efa96c72b282ff80008f638a5df8cfb7e195a8d80ce54182ad566ae655aaeb",
+    "state.json": "b11eaae146d0ad6f01cbcf8cd2be8b6164074a013e03d1cd5977c664a728cd19"
+  },
+  "recorded_at_utc": "2026-11-04T17:30:12.367993+00:00",
+  "remaining_blockers": [
+    "Owner confirmation before any remote write, workflow or merge.",
+    "Exact repair-commit hosted tests and independently retrieved evidence.",
+    "PR106 parent-orientation and stale closure-evidence incidents remain separately tracked.",
+    "Predictive qualification and global release/archival debt are unchanged."
+  ],
+  "repair": "Additive raw-coordinate Euclidean energy scorer and explicit v2 records/evaluation/rescoring; preserve v1 bytes and fits.",
+  "repair_commit": "5e7f13552190a5f78181afa864ed69d4c1fd96ba",
+  "required_check_configuration": "UNVERIFIED_HTTP_403",
+  "schema": "local-incident-closure-v1",
+  "source_refs": [
+    {
+      "bytes": 8284,
+      "path": "models/common/volatility_scoring_v2.py",
+      "sha256": "987ea17114b4e9a17f70481202d24151c837b0ed8d6830aa3247d3cb05d60215"
+    },
+    {
+      "bytes": 4117,
+      "path": "scripts/cross_sport_volatility_research.py",
+      "sha256": "5c8a8f5349000fe980273cfd3c57a96646dbe62ec0623970b44a217fc6dd9e33"
+    },
+    {
+      "bytes": 8832,
+      "path": "tests/test_volatility_scoring_v2.py",
+      "sha256": "5309c281f282ade8df058941305555d74e8211a5ce66a8d0b74cb50fe44ca8bd"
+    },
+    {
+      "bytes": 4947,
+      "path": "docs/VOLATILITY_SCORING_V2.md",
+      "sha256": "44fc5929c71c6a4d4b8ae32d61e7ca7edf1d996d68c7ec81b21b8ff5d2392c24"
+    }
+  ],
+  "status": "LOCAL_VERIFIED_HOSTED_PENDING",
+  "synthetic_reproduction": {
+    "alternative_mass": [
+      0.5,
+      0.5
+    ],
+    "alternative_support": [
+      [
+        8,
+        3
+      ],
+      [
+        12,
+        7
+      ]
+    ],
+    "corrected_expected_scores": {
+      "overdispersed": 1.4142135623730951,
+      "truth": 0.5303300858899107
+    },
+    "legacy_expected_scores": {
+      "overdispersed": 0.7071067811865476,
+      "truth": 0.75
+    },
+    "regression": "tests/test_volatility_scoring_v2.py::test_proper_score_counterexample_prefers_truth_and_preserves_legacy_result",
+    "truth_mass": [
+      0.25,
+      0.5,
+      0.25
+    ],
+    "truth_support": [
+      [
+        9,
+        4
+      ],
+      [
+        10,
+        5
+      ],
+      [
+        11,
+        6
+      ]
+    ]
+  },
+  "uncommitted_local_patch": false
+}

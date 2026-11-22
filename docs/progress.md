@@ -5045,3 +5045,21 @@ scope limitations remain. Health failures were retained and no release-health
 pass is claimed. Code is a candidate branch, not a deployed scheduler. Canonical
 registrations created: 0. NO_PICK, ACTION_OFF, official units 0; no automatic merge
 or model promotion.
+
+
+## 2026-11-22 — Procedure version and immutable state policy amendment
+
+Recorded the owner's rule 3 addition and exact rule 5 replacement in
+`docs/research/MODEL_VERSION_STATE_CONTRACT.md`. Routine documented state
+refreshes retain model version and existing validation scope only with unchanged
+parameters, residual bank, feature definitions, history/cutoff rules and
+settlement logic. Distinct states require retained immutable snapshots and
+separate full state digests; state refresh grants no new validation credit.
+
+Two read-only source reviews mapped shared/NFL freeze paths, field propagation,
+canonical grouping and separate CBB/external HTML integration. Nine acceptance
+cases are planned, not run. Preserve pinned numerical/RNG source and old cards.
+This amendment changes documentation only; no inference, fitting, forecast
+registration, settlement, deployment, promotion or wagering change. Startup
+health remains RED (9 failures, 6 warnings in this environment); its full output
+and checkout identity were retained. No automatic merge.

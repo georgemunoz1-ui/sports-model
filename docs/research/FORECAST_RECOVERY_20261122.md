@@ -127,3 +127,20 @@ acquisition service. The existing diagnostic workflow still requires an explicit
 current package artifact. Future slates require actual reacquisition, compatible
 package preparation and pre-start execution. MLS playoff support remains a
 separate population/model dependency. No automatic merge or promotion.
+
+## November 22 amendment — model version and immutable state
+
+The owner-requested [model version and state contract](MODEL_VERSION_STATE_CONTRACT.md)
+records the rule 3 identity requirements and the exact replacement text for
+rule 5. A routine refresh retains the procedure version only when the recorded
+parameters, residual bank, feature definitions, history/cutoff rules and
+settlement logic match the recorded version. Actual state advances receive immutable
+state hashes separately from model configuration, fitted parameters and event
+input snapshots. A refresh provides no promotion or new validation credit.
+
+The contract requires registry resolution and verification of retained state at
+freeze time, the model version and short state prefix in HTML, and full digests
+in JSON receipts. Its integration map and nine acceptance cases are planned.
+This addition is documentation only: it does not claim that the shared, NFL,
+CBB or external full-card paths already implement the new contract. Previously
+executed recovery and its original frozen artifacts remain as recorded above.

@@ -1,0 +1,10 @@
+# Divergence scanner and CBB possession archive gate
+
+Research only. Scanner consumes immutable native CBB card and market attachment, replays exact quotes from pinned capture and optionally replays native schedule reconciliation. Missing context remains a blocking diagnostic, not a refusal to retain research forecasts. Generic NFL context dictionaries are untrusted and cannot prove receipt authentication or feature consumption; NFL native adapter remains open. No provider tick verification, no wagering authority, no automatic release. Six-hour age is a conservative CBB diagnostic policy, not proof of market freshness. Total gap and probability gap are monitoring thresholds only.
+
+Run: python -m scripts.scan_divergence_and_context --card card.json --card-sha PIN --market market.json --market-sha PIN --inputs CAPTURE --manifest-sha PIN --reconciliation-inputs RECONCILIATION --output new-scan.json
+
+Independent archive pins required. Never modify old cards or backdate a receipt. The optional reconciliation bundle must match the frozen card and current native replay; legacy cards without it remain explicitly unverified. The CLI writes only a new sidecar.
+
+## Possession challenger archive gate
+Six aligned tables, versioned by event and cutoff: (1) game index and separately timed regulation/OT result labels; (2) tempo and possessions with prior-game counts; (3) pregame PPP and shot profile (3PA/FTA/TOV); (4) source-bound venue, MTE and rest; (5) frozen incumbent point total, total distribution and exact contract probabilities; (6) retained pre-cutoff two-sided market quotes with raw byte receipts. All feature observations must be available by forecast cutoff; labels must be separately published/observed after event. Distinguish archived point-in-time evidence from later reconstructed diagnostics. Full CDF/PMF required for incumbent CRPS. Never substitute an externally published rating from after the game. Preserve missingness and exclusions, not just matched games. No fit until chronological training/evaluation inventory and provenance pass. Market reference stays downstream and no incumbent parameters change.

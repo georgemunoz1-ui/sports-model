@@ -29,7 +29,11 @@
     "reason_code",
     "incumbent_reference_id",
     "expanding_prior_reference_id",
-    "action_authority"
+    "action_authority",
+    "grade_record_hash",
+    "registration_receipt_sha256",
+    "actuals",
+    "point_predictions"
   ],
   "properties": {
     "schema_version": {
@@ -307,6 +311,41 @@
     },
     "action_authority": {
       "const": false
+    },
+    "grade_record_hash": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "registration_receipt_sha256": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "actuals": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "point_predictions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number"
+      }
     }
-  }
+  },
+  "description": "Initial structural and semantic research contract. A label or digest is not canonical attestation. Standalone validator refuses remote-prospective claims until canonical integration is implemented."
 }

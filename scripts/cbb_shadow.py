@@ -19,6 +19,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from models.common.discrete_research import digest
+from scripts.cbb_reconciliation_gate import load_evidence, target_gate
 
 PACIFIC = ZoneInfo("America/Los_Angeles")
 HISTORY_REPO = "sportsdataverse/hoopR-mbb-data"
@@ -391,9 +392,12 @@ def pmf(vals):
     return {"support": s.tolist(), "masses": (n / n.sum()).tolist()}
 
 
-def issue(path, day, dest):
+def issue(path, day, dest, *, reconciliation_inputs=None, reconciliation_manifest_sha256=None):
     cutoff = now()
+    if reconciliation_inputs is None or reconciliation_manifest_sha256 is None:
+        raise ValueError("RECONCILIATION_EVIDENCE_REQUIRED")
     games, targets, manifest, hfiles = load(path, day, cutoff)
+    reconciliation = load_evidence(reconciliation_inputs, reconciliation_manifest_sha256, day, cutoff)
     state, prior, errors, test, last_season = fit(games)
     if manifest["season"] != last_season:
         for team in state.values():
@@ -430,6 +434,13 @@ def issue(path, day, dest):
             continue
         if not g["d1"] or g["type"] not in (2, 3):
             row["reason"] = "OUTSIDE_VERIFIED_D1_PAIR"
+            continue
+        hold, proof = target_gate(g, reconciliation, now())
+        if proof is not None:
+            row["pregame_cutoff_utc"] = proof["pregame_cutoff_utc"]
+            row["schedule_reconciliation"] = proof
+        if hold is not None:
+            row["reason"] = hold
             continue
         if min(state[g["h"]][2], state[g["a"]][2]) < PARAMS["min_prior_games"]:
             row["reason"] = "INSUFFICIENT_TEAM_HISTORY"
@@ -495,11 +506,12 @@ def issue(path, day, dest):
         w.writeheader()
         w.writerows(test)
     generated = now()
-    assert all(
-        ts(r["start_time_utc"]) > generated
-        for r in rows
-        if r["forecast_status"] == "FORECAST_GENERATED"
-    )
+    targets_by_id = {"CBB:" + g["id"]: g for g in targets}
+    for r in rows:
+        if r["forecast_status"] == "FORECAST_GENERATED":
+            hold, proof = target_gate(targets_by_id[r["event_id"]], reconciliation, generated)
+            if hold is not None or proof != r.get("schedule_reconciliation"):
+                raise ValueError("FORECAST_WRITER_RECONCILIATION_FAILED:" + str(hold))
     result = {
         "schema": "sports.cbb.shadow_card.v1",
         "date": day.isoformat(),
@@ -523,6 +535,8 @@ def issue(path, day, dest):
         "latest_consumed_start_utc": max(g["utc"] for g in games),
         "history_games_sha256": digest(games),
         "input_manifest_sha256": sha((path / "manifest.json").read_bytes()),
+        "reconciliation_manifest_sha256": reconciliation["manifest_sha256"],
+        "reconciliation_coverage_sha256": reconciliation["coverage_sha256"],
         "market_input": False,
         "action_authority": False,
         "canonical_registration": False,
@@ -561,10 +575,13 @@ if __name__ == "__main__":
     ap.add_argument("--date", type=date.fromisoformat, required=True)
     ap.add_argument("--inputs", type=Path, required=True)
     ap.add_argument("--output", type=Path)
+    ap.add_argument("--reconciliation-inputs", type=Path)
+    ap.add_argument("--reconciliation-manifest-sha256")
     args = ap.parse_args()
     if args.command == "capture":
         capture(args.date, args.inputs)
     elif args.output:
-        issue(args.inputs, args.date, args.output)
+        issue(args.inputs, args.date, args.output, reconciliation_inputs=args.reconciliation_inputs,
+              reconciliation_manifest_sha256=args.reconciliation_manifest_sha256)
     else:
         ap.error("--output required for card")

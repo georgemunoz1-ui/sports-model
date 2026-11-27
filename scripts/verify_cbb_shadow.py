@@ -12,6 +12,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from scripts import cbb_shadow as model
 from models.common.discrete_research import digest
+from scripts.cbb_reconciliation_gate import load_evidence, target_gate, forecast_deadline
 
 
 def require(test, description):
@@ -19,7 +20,7 @@ def require(test, description):
         raise ValueError(description)
 
 
-def verify(inputs, run, expected_card_sha):
+def verify(inputs, run, expected_card_sha, *, reconciliation_inputs=None):
     data = (run / "card.json").read_bytes()
     require(model.sha(data) == expected_card_sha, "PARENT_BYTES_CHANGED")
     card = json.loads(data)
@@ -38,6 +39,10 @@ def verify(inputs, run, expected_card_sha):
     history, targets, manifest, sources = model.load(
         inputs, model.date.fromisoformat(card["date"]), cutoff
     )
+    require(reconciliation_inputs is not None and card.get("reconciliation_manifest_sha256"), "RECONCILIATION_EVIDENCE_REQUIRED")
+    reconciliation = load_evidence(reconciliation_inputs, card["reconciliation_manifest_sha256"],
+                                   model.date.fromisoformat(card["date"]), cutoff)
+    require(reconciliation["coverage_sha256"] == card["reconciliation_coverage_sha256"], "COVERAGE_EVIDENCE_CHANGED")
     state, prior, bank, records, season = model.fit(history)
     if manifest["season"] != season:
         for team in state.values():
@@ -101,6 +106,7 @@ def verify(inputs, run, expected_card_sha):
         require(
             row["home_team"] == g["hn"] and row["away_team"] == g["an"], "ORIENTATION"
         )
+        hold, proof = target_gate(g, reconciliation, passed)
         if row["forecast_status"] != "FORECAST_GENERATED":
             reason = row["reason"]
             supported = (
@@ -115,6 +121,7 @@ def verify(inputs, run, expected_card_sha):
                         or model.ts(g["utc"]) <= passed
                     )
                 )
+                or (hold is not None and reason == hold)
                 or (
                     reason == "INSUFFICIENT_TEAM_HISTORY"
                     and min(state[g["h"]][2], state[g["a"]][2])
@@ -126,7 +133,9 @@ def verify(inputs, run, expected_card_sha):
         require(
             g["status"] == "STATUS_SCHEDULED"
             and g["d1"]
-            and passed < model.ts(g["utc"]),
+            and hold is None
+            and proof == row.get("schedule_reconciliation")
+            and passed < forecast_deadline(card, row),
             "LATE_OR_WRONG_SCOPE",
         )
         require(
@@ -237,7 +246,8 @@ if __name__ == "__main__":
     for f in ("inputs", "run", "out"):
         p.add_argument("--" + f, type=Path, required=True)
     p.add_argument("--card-sha256", required=True)
+    p.add_argument("--reconciliation-inputs", type=Path, required=True)
     a = p.parse_args()
-    receipt = verify(a.inputs, a.run, a.card_sha256)
+    receipt = verify(a.inputs, a.run, a.card_sha256, reconciliation_inputs=a.reconciliation_inputs)
     model.write(a.out, receipt)
     print(json.dumps(receipt))

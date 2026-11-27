@@ -23,6 +23,7 @@ from scripts.capture_cbb_daily import (
 from scripts.capture_cbb_daily import (
     sides as competition_sides,
 )
+from scripts.cbb_reconciliation_gate import forecast_deadline
 
 
 def digest(path):
@@ -176,7 +177,7 @@ def attach(card, inputs, parent_sha):
         }
         try:
             raw, c, _, receipt = capture(inputs, fc)
-            start = stamp(fc["start_time_utc"])
+            start = forecast_deadline(card, fc)
             now = datetime.now(timezone.utc)
             retrieved = stamp(receipt["retrieved_at_utc"])
             if (
@@ -367,7 +368,7 @@ def grade(card, market, inputs, parent_sha, manifest_sha, *, market_sha):
                 <= stamp(card["as_of_utc"])
                 <= stamp(card["generated_at_utc"])
                 <= stamp(market["created_at_utc"])
-                < stamp(fc["start_time_utc"])
+                < forecast_deadline(card, fc)
             ):
                 raise ValueError("Contract not attached pregame")
             for product in ("margin", "total"):

@@ -80,6 +80,23 @@ NCAA_ALIASES = {
 }
 
 
+# Reviewed ESPN team ID -> exact NCAA (short name, SEO identity).
+# Do not extend this table from fuzzy matches or results.
+REVIEWED_NCAA_ALIASES = {
+    "2458": ("Northern Colo.", "northern-colo"),
+    "2198": ("Eastern Ky.", "eastern-ky"),
+    "2016": ("Alcorn", "alcorn"),
+    "2582": ("Southern U.", "southern-u"),
+    "2900": ("St. Thomas (MN)", "st-thomas-mn"),
+    "2908": ("USC Upstate", "usc-upstate"),
+    "2199": ("Eastern Mich.", "eastern-mich"),
+    "331": ("Eastern Wash.", "eastern-wash"),
+    "2400": ("Mississippi Val.", "mississippi-val"),
+    "2599": ("St. John's (NY)", "st-johns-ny"),
+}
+TIP_TOLERANCE_SECONDS = 60
+
+
 def fetch(output, url):
     request = urllib.request.Request(
         url, headers={"User-Agent": "sports-model-evidence-capture/1.0"}
@@ -172,6 +189,10 @@ def label(x):
 
 
 def same_team(team, official):
+    if REVIEWED_NCAA_ALIASES.get(team["id"]) == (
+        official.get("nameShort"), official.get("seoname")
+    ):
+        return True
     names = [
         team.get(k, "")
         for k in ("location", "shortDisplayName", "abbreviation", "displayName")
@@ -184,16 +205,70 @@ def same_team(team, official):
     return bool(({label(v) for v in names} & {label(v) for v in candidates}) - {""})
 
 
-def match_ncaa(e, contest):
+def candidate_orientation(e, contest):
+    """Identify a unique team bijection, independently of venue permission."""
     t = sides(e["competitions"][0])
     if (
         contest.get("sportUrl", "basketball-men") != "basketball-men"
         or len(contest["teams"]) != 2
         or any(type(x["isHome"]) is not bool for x in contest["teams"])
     ):
-        return False
+        return None
     n = {("home" if x["isHome"] else "away"): x for x in contest["teams"]}
-    return set(n) == set(t) and all(same_team(t[s]["team"], n[s]) for s in t)
+    if set(n) != set(t):
+        return None
+    direct = all(same_team(t[x]["team"], n[x]) for x in t)
+    reverse = all(same_team(t[x]["team"], n["away" if x == "home" else "home"]) for x in t)
+    if direct and reverse:
+        return "AMBIGUOUS"
+    return "DIRECT" if direct else "REVERSED" if reverse else None
+
+
+def neutral_venue_verified(e, contest):
+    """Strict independent NCAA venue schema; current scoreboard lacks these fields.
+
+    No inferred neutral flag, no name-only match, no caller-supplied override.
+    Only enable this path when the independent source actually supplies both
+    an explicit neutral designation and a matching venue identity. The live
+    acquisition schema has not yet been validated for these optional fields.
+    """
+    comp = e["competitions"][0]
+    if comp.get("neutralSite") is not True or contest.get("neutralSite") is not True:
+        return False
+    def venue_key(v):
+        if not isinstance(v, dict) or not isinstance(v.get("address"), dict):
+            return None
+        parts = (v.get("fullName"), v["address"].get("city"), v["address"].get("state"))
+        if not all(isinstance(x, str) and x.strip() for x in parts):
+            return None
+        return tuple(" ".join(x.casefold().split()) for x in parts)
+    key = venue_key(comp.get("venue"))
+    return key is not None and key == venue_key(contest.get("venue"))
+
+
+def match_ncaa(e, contest):
+    orientation = candidate_orientation(e, contest)
+    return orientation == "DIRECT" or (
+        orientation == "REVERSED" and neutral_venue_verified(e, contest)
+    )
+
+
+def tip_evidence(row, contest):
+    espn = dt.datetime.fromisoformat(row["start_time_utc"])
+    if type(contest.get("startTimeEpoch")) is not int:
+        raise ValueError("INVALID_NCAA_TIP")
+    ncaa = dt.datetime.fromtimestamp(contest["startTimeEpoch"], dt.timezone.utc)
+    delta = (ncaa - espn).total_seconds()
+    # An unknown/TBD time cannot be used to resolve a nonzero discrepancy.
+    # Preserve legacy equal-time matches; do not extend tolerance to unknown times.
+    accepted = delta == 0 or (
+        abs(delta) <= TIP_TOLERANCE_SECONDS and contest.get("hasStartTime") is True
+        and contest.get("tba") is False
+    )
+    return {"ncaa_start_time_utc": ncaa.isoformat(), "tip_delta_seconds": delta,
+            "tip_policy": "EXACT" if delta == 0 else "TOLERANCE_60S" if accepted else "UNRESOLVED",
+            "ncaa_has_start_time": contest.get("hasStartTime"),
+            "pregame_cutoff_utc": min(espn, ncaa).isoformat(), "tip_accepted": accepted}
 
 
 def ncaa_identity(contest):
@@ -216,6 +291,10 @@ def reconcile_event(event, espn_receipt, contest, ncaa_receipt):
     matched = contest is not None and match_ncaa(event, contest)
     ncaa_state = contest["gameState"] if matched else None
     ncaa_scores = ncaa_final_scores(contest) if matched else {}
+    orientation = candidate_orientation(event, contest) if matched else None
+    raw_ncaa_scores = dict(ncaa_scores)
+    if orientation == "REVERSED" and ncaa_scores:
+        ncaa_scores = {"home": raw_ncaa_scores.get("away"), "away": raw_ncaa_scores.get("home")}
     evidence = {
         k: row[k]
         for k in ("event_id", "start_time_utc", "home_id", "away_id", "neutral_site")
@@ -235,6 +314,11 @@ def reconcile_event(event, espn_receipt, contest, ncaa_receipt):
         home_score=None,
         away_score=None,
     )
+    evidence["ncaa_orientation"] = orientation
+    evidence["ncaa_raw_home_score"] = raw_ncaa_scores.get("home")
+    evidence["ncaa_raw_away_score"] = raw_ncaa_scores.get("away")
+    if matched:
+        evidence.update(tip_evidence(row, contest))
     issues = []
     if not matched:
         issues.append("IDENTITY_NOT_CROSS_CHECKED")
@@ -248,9 +332,7 @@ def reconcile_event(event, espn_receipt, contest, ncaa_receipt):
             )
         ):
             issues.append("FINAL_RECONCILIATION_REQUIRED")
-        if dt.datetime.fromtimestamp(
-            contest["startTimeEpoch"], dt.timezone.utc
-        ) != dt.datetime.fromisoformat(row["start_time_utc"]):
+        if not evidence["tip_accepted"]:
             issues.append("TIP_RECONCILIATION_REQUIRED")
     if issues:
         status = issues[0]
@@ -296,7 +378,13 @@ def paired_market_quotes(data):
         name = provider.get("name") if isinstance(provider, dict) else None
         if not isinstance(name, str) or not name.strip():
             raise ValueError("QUOTE_SCOPE_MISSING:provider.name")
-        if name == "DraftKings":
+        canonical_name = "".join(name.casefold().split())
+        provider_id = provider.get("id")
+        is_dk_id = type(provider_id) in (int, str) and str(provider_id) == "100"
+        is_dk_name = canonical_name == "draftkings"
+        if is_dk_id != is_dk_name:
+            raise ValueError("PROVIDER_IDENTITY_CONFLICT")
+        if is_dk_id and is_dk_name:
             books.append(offer)
     if len(books) > 1:
         raise ValueError("AMBIGUOUS_BOOK")
@@ -412,7 +500,8 @@ def quote(row, data, receipt):
     st = comp["status"]["type"]
     pre = st["state"] == "pre" and dt.datetime.fromisoformat(
         receipt["retrieved_at_utc"]
-    ) < dt.datetime.fromisoformat(row["start_time_utc"])
+    ) < min(dt.datetime.fromisoformat(row["start_time_utc"]),
+            dt.datetime.fromisoformat(row.get("pregame_cutoff_utc", row["start_time_utc"])))
     r = empty_quote(row, receipt, st["name"], "UNQUOTED")
     r["book"] = book
     if not pre and not (st["completed"] and st["name"] == "STATUS_FINAL"):
@@ -435,6 +524,15 @@ def quote(row, data, receipt):
     return r
 
 
+def candidate_claims(events, official):
+    """Count every possible claim, including blocked reverse candidates."""
+    matches = {
+        eid: [i for i, (c, _) in official.items() if candidate_orientation(e, c) is not None]
+        for eid, (_, e, _) in events.items()
+    }
+    return matches, Counter(i for ids in matches.values() for i in ids)
+
+
 def daily(day, output, get=fetch):
     output.mkdir(parents=True, exist_ok=False)
     receipts = []
@@ -449,6 +547,8 @@ def daily(day, output, get=fetch):
     def acquire(url):
         try:
             data, rec = get(output, url)
+            if digest(data) != rec.get("sha256") or rec.get("url") != url:
+                raise ValueError("SOURCE_RECEIPT_MISMATCH")
             receipts.append(rec)
             return data, rec
         except Exception as ex:
@@ -505,7 +605,9 @@ def daily(day, output, get=fetch):
                     if key_id in official:
                         previous = official[key_id][0]
 
-                        if ncaa_identity(c) != ncaa_identity(previous):
+                        if (ncaa_identity(c) != ncaa_identity(previous)
+                            or any(c.get(k) != previous.get(k) for k in
+                                   ("neutralSite", "venue", "hasStartTime", "tba"))):
                             raise ValueError("CONFLICTING_NCAA_IDENTITY")
                         if c["gameState"] != previous["gameState"] or ncaa_final_scores(
                             c
@@ -515,15 +617,12 @@ def daily(day, output, get=fetch):
         unmatched = set(official)
         issues = []
         reconciliations = []
-        matches = {
-            eid: [i for i, (c, _) in official.items() if match_ncaa(e, c)]
-            for eid, (_, e, _) in events.items()
-        }
-        claims = Counter(i for ids in matches.values() for i in ids)
+        matches, claims = candidate_claims(events, official)
         for eid, (row, e, rec) in events.items():
             ids = matches[eid]
             n = ncaa_rec = None
-            if len(ids) == 1 and claims[ids[0]] == 1:
+            if (len(ids) == 1 and claims[ids[0]] == 1
+                    and match_ncaa(e, official[ids[0]][0])):
                 i = ids[0]
                 n, ncaa_rec = official[i]
                 unmatched.remove(i)
@@ -532,6 +631,11 @@ def daily(day, output, get=fetch):
                     n["startTimeEpoch"], dt.timezone.utc
                 ).isoformat()
             result = reconcile_event(e, rec, n, ncaa_rec)
+            # Candidate matches that fail venue admission still reserve the
+            # contest in uniqueness accounting; never promote them silently.
+            result["candidate_contest_ids"] = ids
+            if n is not None:
+                row["pregame_cutoff_utc"] = result["pregame_cutoff_utc"]
             if (
                 eid in conflicting_events
                 or result["ncaa_contest_id"] in conflicting_contests

@@ -1,0 +1,312 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "evaluation_row.v2.json",
+  "title": "Research evaluation row v2: initial population and probability contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "league",
+    "season",
+    "event_id",
+    "model_id",
+    "arm_id",
+    "procedure_id",
+    "fitted_state_hash",
+    "forecast_output_hash",
+    "forecast_cutoff_utc",
+    "training_cutoff_utc",
+    "scheduled_start_utc",
+    "graded_at_utc",
+    "target",
+    "forecast_status",
+    "outcome_status",
+    "outcome_value",
+    "probability_basis",
+    "probabilities",
+    "distribution",
+    "evidence_scope",
+    "reason_code",
+    "incumbent_reference_id",
+    "expanding_prior_reference_id",
+    "action_authority"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "evaluation_row.v2"
+    },
+    "league": {
+      "enum": [
+        "NFL",
+        "CFB",
+        "NBA",
+        "CBB",
+        "WNBA",
+        "MLB",
+        "NHL",
+        "MLS"
+      ]
+    },
+    "season": {
+      "type": "string",
+      "minLength": 1
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "arm_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "procedure_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fitted_state_hash": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "forecast_output_hash": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "forecast_cutoff_utc": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "training_cutoff_utc": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "scheduled_start_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "graded_at_utc": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "family",
+        "period",
+        "side",
+        "line",
+        "settlement_rule"
+      ],
+      "properties": {
+        "family": {
+          "enum": [
+            "WINNER",
+            "MARGIN",
+            "SPREAD",
+            "TOTAL",
+            "REGULATION_1X2",
+            "JOINT_SCORE"
+          ]
+        },
+        "period": {
+          "type": "string",
+          "minLength": 1
+        },
+        "side": {
+          "enum": [
+            "HOME",
+            "AWAY",
+            "DRAW",
+            "OVER",
+            "UNDER",
+            "NONE"
+          ]
+        },
+        "line": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "settlement_rule": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "forecast_status": {
+      "enum": [
+        "GENERATED",
+        "BLOCKED",
+        "UNSUPPORTED"
+      ]
+    },
+    "outcome_status": {
+      "enum": [
+        "DECISIVE",
+        "PUSH",
+        "HALF_WIN",
+        "HALF_LOSS",
+        "VOID",
+        "UNRESOLVED"
+      ]
+    },
+    "outcome_value": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "probability_basis": {
+      "enum": [
+        null,
+        "BINARY_HA",
+        "REGULATION_HDA",
+        "SETTLEMENT_3",
+        "SETTLEMENT_5"
+      ]
+    },
+    "probabilities": {
+      "anyOf": [
+        {
+          "type": "object",
+          "minProperties": 2,
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "distribution": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "path",
+            "sha256"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "JOINT_SCORE_PMF",
+                "PAIRED_SCORE_DRAWS",
+                "MARGIN_PMF",
+                "TOTAL_PMF",
+                "WINNER_DRAWS"
+              ]
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "evidence_scope": {
+      "enum": [
+        "LOCAL_DIAGNOSTIC",
+        "RETROSPECTIVE_OOF",
+        "REMOTE_DURABLE_PROSPECTIVE"
+      ]
+    },
+    "reason_code": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "incumbent_reference_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "expanding_prior_reference_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "action_authority": {
+      "const": false
+    }
+  }
+}

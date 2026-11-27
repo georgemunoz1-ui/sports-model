@@ -1,0 +1,196 @@
+{
+  "schema": "feature_validation_matrix.v1",
+  "base_commit": "4f499e5af44222632bc7256e10532d14bea191c0",
+  "scope": "No new feature ablation or OOF evaluation executed. Existing model-level evaluations are not feature-level validation.",
+  "arms": [
+    {
+      "league": "NFL",
+      "arm_id": "nfl.integrated_context.base.v1.research",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "NFL",
+      "arm_id": "nfl.integrated_context.qb.v1.research",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "NFL",
+      "arm_id": "nfl.integrated_context.availability.v1.research",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "NFL",
+      "arm_id": "nfl.integrated_context.travel.v1.research",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "NFL",
+      "arm_id": "nfl.integrated_context.combined.v1.research",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "CFB",
+      "arm_id": "cfb.fbs.elo_form_logit_ridge.v1_0.shadow",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "CFB",
+      "arm_id": "cfb_efficiency:efficiency",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "CFB",
+      "arm_id": "cfb_efficiency:personnel",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "NBA",
+      "arm_id": "nba.initial_causal_score.research.v1",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "NHL",
+      "arm_id": "nhl.initial_causal_score.research.v1",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "MLS",
+      "arm_id": "mls.initial_causal_score.research.v1",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "NBA",
+      "arm_id": "nba_efficiency:efficiency",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "NBA",
+      "arm_id": "nba_efficiency:joint",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "NBA",
+      "arm_id": "nba_efficiency:personnel",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "NBA",
+      "arm_id": "nba.efficiency_monte_carlo.v1",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "NBA",
+      "arm_id": "nba.efficiency_monte_carlo.v1_1.defense_direction_fix.shadow",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "WNBA",
+      "arm_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow:winner_margin",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "WNBA",
+      "arm_id": "wnba.rs.ff7_logit_ridge.v1_0.shadow:total",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "WNBA",
+      "arm_id": "wnba.efficiency_monte_carlo.v1",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "WNBA",
+      "arm_id": "wnba.efficiency_monte_carlo.v1_1.defense_direction_fix.shadow",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "MLB",
+      "arm_id": "mlb.v13.current_input.research.v1",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "MLB",
+      "arm_id": "mlb.postseason.context.workload.v2",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "MLB",
+      "arm_id": "mlb.postseason.context.lineup.v3",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "MLB",
+      "arm_id": "mlb.postseason.context.bullpen.v4",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "MLB",
+      "arm_id": "mlb.postseason.context.temperature.v5",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "NHL",
+      "arm_id": "sportsim.NHLSimulator",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    },
+    {
+      "league": "CBB",
+      "arm_id": "cbb.men.d1.opponent_adjusted_score_residual.v1.research",
+      "incremental_feature_validation": "UNVERIFIED",
+      "new_oof_runs": 0,
+      "promotion_eligible": false
+    }
+  ]
+}

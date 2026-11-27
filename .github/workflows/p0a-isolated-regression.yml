@@ -33,6 +33,23 @@ jobs:
           printf '%s\n' "$rc" > "$RUNNER_TEMP/p0a/pytest-exit.txt"
           cat "$RUNNER_TEMP/p0a/pytest.log"
           exit "$rc"
+      - name: Replay pinned native NFL feature access and retain runtime receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          data=data/nfl/contextual_v1
+          ref=91ab1262dd646dbbc1568c21baf5b6ef26fab43c
+          # Independent repository commit pin for the original retained replay inputs.
+          pin() { git show "$ref:$1" | sha256sum | cut -d' ' -f1; }
+          python -m research.native_feature_access nfl \
+            --package "$data/event_package_v2.json" --package-sha "$(pin "$data/event_package_v2.json")" \
+            --model "$data/model_packed.json" --model-sha "$(pin "$data/model_packed.json")" \
+            --recovered "$data/recovered_parameters.json" --recovered-sha "$(pin "$data/recovered_parameters.json")" \
+            --event-id 2026_01_DEN_KC --cutoff 2026-09-14T12:00:00Z \
+            --output "$RUNNER_TEMP/p0a/native-feature-access-nfl.json" | tee "$RUNNER_TEMP/p0a/native-feature-access.log"
+          actual=$(sha256sum "$RUNNER_TEMP/p0a/native-feature-access-nfl.json" | cut -d' ' -f1)
+          grep -Fx "NATIVE_FEATURE_ACCESS_RECEIPT_SHA256=$actual" "$RUNNER_TEMP/p0a/native-feature-access.log"
+          test "$(git rev-parse HEAD:data/model_selection/defaults_v1.json)" = 4838f3daf447ada3525d41daae1375b769130296
       - name: Retain evidence
         if: always()
         run: |

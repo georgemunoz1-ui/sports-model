@@ -268,3 +268,58 @@ def verified_pit_values(snapshot):
     """No current native replay adapter has field-level PIT admission."""
     diagnostic_values(snapshot)  # verify integrity first
     raise ValueError("FIELD_LEVEL_PIT_ADMISSION_NOT_IMPLEMENTED")
+
+
+def main(argv=None):
+    """Write an exclusive, hashed diagnostic sidecar; never an inference freeze."""
+    import argparse
+    import json
+    import os
+    from datetime import datetime, timezone
+
+    ap = argparse.ArgumentParser(description=__doc__)
+    sub = ap.add_subparsers(dest="league", required=True)
+    nfl = sub.add_parser("nfl")
+    for name in ("package", "model", "recovered"):
+        nfl.add_argument("--" + name, type=Path, required=True)
+        nfl.add_argument("--" + name + "-sha", required=True)
+    nfl.add_argument("--cutoff", required=True)
+    nfl.add_argument("--source-root", type=Path, action="append", default=[])
+    for league in ("nba", "cfb"):
+        p = sub.add_parser(league)
+        p.add_argument("--history", type=Path, required=True)
+        p.add_argument("--history-sha", required=True)
+    for p in sub.choices.values():
+        p.add_argument("--event-id", required=True)
+        p.add_argument("--output", type=Path, required=True)
+    a = ap.parse_args(argv)
+    if a.league == "nfl":
+        snapshot = replay_nfl_access(a.package, a.package_sha, a.model, a.model_sha,
+                                     a.recovered, a.recovered_sha, a.event_id, a.cutoff,
+                                     source_roots=a.source_root)
+    else:
+        snapshot = replay_efficiency_access(a.league, a.history, a.history_sha, a.event_id)
+    receipt = {"schema": "sports.native_feature_access_execution.v1",
+               "executed_at_utc": datetime.now(timezone.utc).isoformat(),
+               "snapshot": snapshot,
+               "native_feature_access_code_sha256": sha256(Path(__file__).read_bytes()),
+               "diagnostic_feature_count": len(diagnostic_values(snapshot)),
+               "verified_pit_feature_count": 0, "training_ready": False,
+               "prospective_registration_verified": False, "market_input": False,
+               "action_authority": False, "official_units": 0.0}
+    raw = (json.dumps(receipt, sort_keys=True, indent=2, allow_nan=False) + "\n").encode()
+    with a.output.open("xb") as f:
+        f.write(raw)
+        f.flush()
+        os.fsync(f.fileno())
+    if a.output.read_bytes() != raw:
+        raise ValueError("FEATURE_ACCESS_RECEIPT_READBACK_MISMATCH")
+    print("NATIVE_FEATURE_ACCESS_RECEIPT_SHA256=" + sha256(raw))
+    print("NATIVE_FEATURE_SNAPSHOT_SHA256=" + snapshot["snapshot_sha256"])
+    print("DIAGNOSTIC_FEATURE_COUNT=" + str(receipt["diagnostic_feature_count"]))
+    print("VERIFIED_PIT_FEATURE_COUNT=0")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

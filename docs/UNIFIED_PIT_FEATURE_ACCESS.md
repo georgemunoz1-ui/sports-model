@@ -109,3 +109,12 @@ delta +0.00383308 (95% interval [+0.00145619,+0.00636617]); CFB efficiency
 Brier delta +0.00045262 ([-0.00189355,+0.00270544]). Neither earns promotion.
 Selection is independent of release and wagering authorization. No changes
 to defaults, frozen forecast code, parameters or registry in phase 1.
+
+The common adapter has a CLI (`python -m research.native_feature_access`).
+The isolated branch CI runs the actual retained NFL event replay with the
+three input-byte SHA-256 pins derived from the earlier immutable Git commit,
+persists a new diagnostic receipt, independently checks the written receipt's
+SHA-256 and retains it in the existing test-evidence artifact. This is not
+a new pregame forecast or proof of raw field-level availability. NBA/CFB
+tests exercise synthetic histories through native builders; real archive
+replay remains open pending independently pinned retained inputs.

@@ -109,3 +109,22 @@ def test_rehash_cannot_certify_pit(tmp_path):
     r["snapshot_sha256"] = runner.digest({k:v for k,v in r.items() if k != "snapshot_sha256"})
     with pytest.raises(ValueError, match="PIT_ADMISSION_NOT_IMPLEMENTED"):
         access.verified_pit_values(r)
+
+
+def test_exclusive_runtime_receipt(tmp_path, capsys):
+    doc = {"history": games(12)}
+    path = tmp_path / "archive.json"
+    path.write_text(json.dumps(doc))
+    out = tmp_path / "receipt.json"
+    args = ["nba", "--history", str(path), "--history-sha", sha256(path.read_bytes()),
+            "--event-id", doc["history"][-1]["event_id"], "--output", str(out)]
+    assert access.main(args) == 0
+    raw = out.read_bytes()
+    receipt = json.loads(raw)
+    assert "NATIVE_FEATURE_ACCESS_RECEIPT_SHA256=" + sha256(raw) in capsys.readouterr().out
+    assert receipt["diagnostic_feature_count"] == 27
+    assert receipt["verified_pit_feature_count"] == 0
+    assert not receipt["training_ready"] and not receipt["prospective_registration_verified"]
+    with pytest.raises(FileExistsError):
+        access.main(args)
+    assert out.read_bytes() == raw

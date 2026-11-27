@@ -315,6 +315,9 @@ def reconcile_event(event, espn_receipt, contest, ncaa_receipt):
         away_score=None,
     )
     evidence["ncaa_orientation"] = orientation
+    # Single-event replay reproduces the admitted candidate; daily overwrites
+    # this with its full-slate claim ledger for held/ambiguous events.
+    evidence["candidate_contest_ids"] = [contest["contestId"]] if matched else []
     evidence["ncaa_raw_home_score"] = raw_ncaa_scores.get("home")
     evidence["ncaa_raw_away_score"] = raw_ncaa_scores.get("away")
     if matched:

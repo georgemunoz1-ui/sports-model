@@ -32,7 +32,7 @@ def test_quote_types_and_two_sided_price_requirement():
         "distributions": {"total": {"support": [150, 152], "masses": [0.4, 0.6]}},
     }
     odds = {
-        "provider": {"name": "DraftKings"},
+        "provider": {"name": "DraftKings", "id": 100},
         "total": {
             "over": {"close": {"line": "o150", "odds": "-110"}},
             "under": {"close": {"line": "u150", "odds": "-110"}},

@@ -60,7 +60,7 @@ def test_market_identity_times_and_nonstandard_prices():
         "retrieved_at_utc": "2026-11-04T12:00Z",
     }
     book = {
-        "provider": {"name": "DraftKings"},
+        "provider": {"name": "DraftKings", "id": 100},
         "pointSpread": {
             "home": {"close": {"line": "-6.5", "odds": "-110"}},
             "away": {"close": {"line": "+6.5", "odds": "-110"}},
@@ -135,10 +135,11 @@ def test_conflicting_ncaa_final_requires_reconciliation(tmp_path):
             raise OSError("offline")
         else:
             data = {"data": {"contests": [official]}}
-        return json.dumps(data).encode(), {
+        body = json.dumps(data).encode()
+        return body, {
             "url": url,
             "file": "fixture",
-            "sha256": "a" * 64,
+            "sha256": hashlib.sha256(body).hexdigest(),
             "retrieved_at_utc": "2026-11-05T12:00Z",
         }
 
@@ -192,10 +193,11 @@ def test_pacific_date_overlapping_boards_and_failed_price(tmp_path, conflicting_
             if conflicting_ncaa and url == ncaa_url(day + dt.timedelta(days=1)):
                 contest["gameState"] = "F"
             data = {"data": {"contests": [contest]}}
-        return json.dumps(data).encode(), {
+        body = json.dumps(data).encode()
+        return body, {
             "url": url,
             "file": "fixture",
-            "sha256": "a" * 64,
+            "sha256": hashlib.sha256(body).hexdigest(),
             "retrieved_at_utc": "2026-11-04T10:00Z",
         }
 

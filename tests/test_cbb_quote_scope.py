@@ -16,7 +16,7 @@ from scripts.cbb_market_and_grades import attach, market_rows
 
 def offer(line=-2, price="-110"):
     return {
-        "provider": {"name": "DraftKings"},
+        "provider": {"name": "DraftKings", "id": 100},
         "moneyline": {
             "home": {"close": {"odds": "-150"}},
             "away": {"close": {"odds": "+130"}},
@@ -231,3 +231,10 @@ def test_cli_freezes_no_partial_contracts_and_preserves_originals(tmp_path):
     retry = subprocess.run(command, capture_output=True, text=True, check=False)
     assert retry.returncode != 0 and output.read_bytes() == frozen
     assert all(path.read_bytes() == before for path, before in originals.items())
+
+
+@pytest.mark.parametrize("provider", [{"name": "DraftKings"}, {"name": "Other", "id": 100}, {"name": "Draft Kings", "id": 999}])
+def test_p0a_provider_identity_conflict(provider):
+    from scripts.capture_cbb_daily import paired_market_quotes
+    with pytest.raises(ValueError, match="PROVIDER_IDENTITY_CONFLICT"):
+        paired_market_quotes({"pickcenter": [{"provider": provider}]})

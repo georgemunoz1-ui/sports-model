@@ -1,0 +1,48 @@
+name: P0-A isolated mapper regression
+on:
+  push:
+    branches: [research/p0a-cbb-mapper-20261126]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  full-pytest:
+    if: github.ref == 'refs/heads/research/p0a-cbb-mapper-20261126'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pin source and install dependencies
+        run: |
+          mkdir -p "$RUNNER_TEMP/p0a"
+          git rev-parse HEAD | tee "$RUNNER_TEMP/p0a/checkout.txt"
+          test "$(git rev-parse HEAD:pipelines/cards/semantic_identity.py)" = 0ba86fac8341b99b82728ad51e165d8135328afa
+          python -m pip install -r requirements-consolidated.txt
+      - name: Run full repository pytest
+        shell: bash
+        run: |
+          set +e
+          python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q --junitxml="$RUNNER_TEMP/p0a/pytest.xml" > "$RUNNER_TEMP/p0a/pytest.log" 2>&1
+          rc=$?
+          printf '%s\n' "$rc" > "$RUNNER_TEMP/p0a/pytest-exit.txt"
+          cat "$RUNNER_TEMP/p0a/pytest.log"
+          exit "$rc"
+      - name: Retain evidence
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/p0a"
+          cd "$RUNNER_TEMP/p0a"
+          find . -maxdepth 1 -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 -r sha256sum > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: p0a-regression-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/p0a/
+          if-no-files-found: error
+          retention-days: 7

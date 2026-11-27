@@ -1,0 +1,170 @@
+{
+  "schema": "cfb.margin_center_comparison.design.v1",
+  "status": "EXPLORATORY_DESIGN_NOT_REGISTERED",
+  "base_commit": "4f499e5af44222632bc7256e10532d14bea191c0",
+  "action_authority": false,
+  "market_input": false,
+  "promotion_authority": false,
+  "objective": "Determine whether the native KNN joint final-score procedure has incremental margin distribution skill beyond chronological calibration of the fixed-parent Ridge margin procedure, and isolate training population effects.",
+  "evidence": {
+    "hypothesis_1": "DESCRIPTIVE_MODEL_DISAGREEMENT_NO_VALIDATED_OUTCOME_EVIDENCE",
+    "nov27": "13 retained fixtures (12 primary and 1 identity/start hold) are discovery examples; permanently exclude these event identities from untouched confirmation. Retained audit is not predictive validation.",
+    "historical_comparator": "cfb.fbs.matchup_efficiency.joint.v1.research is a distinct model from cfb.joint_final_score.knn256.v1.research; its Brier result is not transferable.",
+    "training_counts": "Reported fit counts are not event-identity manifests: 15,074 fixed Ridge fit, 698 empirical residual calibration, 13,262 KNN fit. Selected point model is a different fitted parent.",
+    "source_pins": {
+      "models/cfb/joint_empirical_v1.py": "65a7d2a649132be78421e650c53789fa989d6320",
+      "models/cfb/fit_margin_distribution_v1.py": "480c24f2485ebd916b5e9d0d291b9ca022736bc4",
+      "data/research/distribution_replay_20261007/cfb/margin_scale_evaluation.json": "c7f1ff5245619e052aecfc4e1fa8abbc74346341"
+    },
+    "caution": "The 714-game historical conditional-scale evaluation compares different procedures and cannot supply B-C paired losses."
+  },
+  "hypotheses": [
+    {
+      "id": "H1",
+      "claim": "Ridge margin center may be excessively extreme",
+      "evidence": "DESCRIPTIVE_MODEL_DISAGREEMENT_NO_VALIDATED_OUTCOME_EVIDENCE"
+    },
+    {
+      "id": "H2",
+      "claim": "Different training populations contribute to center discrepancy",
+      "evidence": "POPULATION_DIFFERENCE_REPORTED_EFFECT_UNQUANTIFIED"
+    },
+    {
+      "id": "H3",
+      "claim": "KNN improves margin distribution beyond simple chronological calibration",
+      "evidence": "UNTESTED"
+    },
+    {
+      "id": "H4",
+      "claim": "Shared features omit important matchup context",
+      "evidence": "PLAUSIBLE_UNTESTED"
+    },
+    {
+      "id": "H5",
+      "claim": "Residual shape may be conditionally misspecified",
+      "evidence": "SECONDARY_HYPOTHESIS"
+    }
+  ],
+  "target": {
+    "league": "CFB",
+    "scope": "FBS versus FBS; week 2+ only where both native procedures admit; reconcile regulation/full-game OT and exact venue/teams/kickoff rules before admission",
+    "quantity": "integer full-game home-minus-away final margin including overtime",
+    "unit": "one unique event",
+    "market": "quotes only after frozen native distributions; exact-line W/P/L descriptive where settlement supported; no invented lines or probability substitution"
+  },
+  "arms": {
+    "A": {
+      "procedure": "Retained fixed-parent empirical margin distribution, not the separate selected point head",
+      "freeze": "Pin exact parent model, residual bank, transformation, support/conditioning and training cutoffs; original artifacts only on later eligible events; earlier chronological reconstructions distinct"
+    },
+    "B": {
+      "procedure": "cfb.joint_final_score.knn256.v1.research; marginalize retained paired final-score PMF to margin",
+      "freeze": "Pin fit, KNN feature order, preprocessing, neighbour count=256, tie/settlement semantics; no earlier historical scoring of later fitted instance"
+    },
+    "C": {
+      "procedure": "Chronological linear calibration of A point center: alpha + beta*M_A; independent residual calibration of corrected prediction",
+      "fit": "Fit alpha/beta only on earlier chronological OOF point forecasts from a same-procedure reconstruction of A, each with source/final availability receipts; no in-sample A prediction or future label; verify residual calibration disjoint from calibration-coefficient fitting and outer evaluation; retain actual predicted distribution mean separately; do not use market; no forced beta<1",
+      "fallback": "If comparable OOF A forecasts cannot be recovered, C is unavailable; do not estimate from November 27 or in-sample fit"
+    },
+    "D1": {
+      "procedure": "Same-feature Ridge on matched fit events; independently calibrated empirical margin distribution",
+      "freeze": "Ridge hyperparameters, residual support/conditioning and calibration policy locked before confirmation"
+    },
+    "D2": {
+      "procedure": "Same-feature KNN256 on exactly D1 fit events; native joint final-score distribution",
+      "freeze": "Use the same event eligibility and training chronology, not the 698-game residual sample as the common fit universe"
+    }
+  },
+  "matched_population": {
+    "outer_universe": "Every scheduled in-scope fixture in a prospectively locked confirmation window, including held/refused/missing/unresolved events. Retain denominator, reason codes and comparison eligibility. Compare A/B/C on common scoreable events; D1/D2 on common scoreable events; compare A/B versus D1/D2 convergence only on four-way intersection. No post-outcome exclusions.",
+    "fit_intersection": "Per outer fold, unique stable canonical event IDs in the intersection of Ridge point-fit admissible FBS/FBS events and KNN point-fit admissible FBS/FBS events, with exact identical teams, orientation, kickoff, target, ten raw feature definitions/values and eligible source/final availability <= fitting cutoff. Conflicts fail closed. Fit preprocessing only on this intersection and pin ordered IDs and data hash. Residual/calibration is a separate role and chronological window; 698 is not a candidate fit-population denominator. Reserve the same earlier-only calibration/validation partitions for both arms, with no outer test events used in fit, tuning or calibration; record when a model does not require a separate calibration bank.",
+    "chronology": "Whole season-week blocks; expanding earlier folds, strict source availability and outcome availability, training/calibration before outer forecast cutoff, whole-week embargo where required by native source policy. No overlapping test event IDs or model selection on outer outcomes. A and B frozen-instance and reconstructed-procedure evaluation distinct. C uses nested chronological inner OOF, earlier correction fit, separate later earlier-than-test residual calibration; exact fold receipts required."
+  },
+  "registration": {
+    "status": "DRAFT_VALUES_NOT_REGISTERED",
+    "primary_metric": "event-weighted margin CRPS in points, exact admitted integer margin distribution and authenticated final margin; one score per event",
+    "formula": "CRPS(F,y)=E|X-y|-0.5*E|X-X'|",
+    "primary_contrast": "B minus C on paired common events",
+    "sign": "negative favors first named arm",
+    "proposed_minimum_useful_improvement_crps_points": 0.25,
+    "proposed_planning_alternative_crps_delta": -0.5,
+    "alpha_one_sided": 0.025,
+    "power_target": 0.8,
+    "superiority_rule": "One-sided 97.5% upper confidence bound for mean paired delta < -0.25; equivalently upper endpoint of two-sided 95% interval under consistent interval construction. No success merely because p<0.05 versus zero.",
+    "multiplicity": {
+      "confirmatory_family": [
+        "B-C",
+        "B-A"
+      ],
+      "method": "Fixed-sequence gatekeeping: primary B-C first at one-sided .025; only if it passes, test B-A at same alpha and MUE on same common A/B/C event population. Stop confirmatory claims if primary fails. D2-D1, C-A, convergence, all other metrics and subgroup results are prespecified secondary descriptive; unadjusted intervals labeled exploratory, no claims based on selected bins."
+    },
+    "confirmation_population": null,
+    "confirmation_start_rule": "After protocol, exact code/policy and cohort/power registration are independently time-anchored and no later test results are accessed; new prospective FBS events not part of discovery/tuning. First and last date/season-week, schedule-scope and stopping rule locked before execution. November 27 and all development/previously inspected outcomes excluded.",
+    "power": {
+      "status": "BLOCKED_ON_MATCHED_OUT_OF_SAMPLE_PILOT_LOSSES",
+      "required_pilot": "Earlier-only chronological per-event B-C paired CRPS losses, stable event IDs, season-week identities, fit/calibration/evaluation receipts, missingness accounting; pilot distinct from confirmation. No proxy from conditional-scale study or count of simulations.",
+      "method": "Plan sample sizes using resampling whole contiguous four-week blocks within seasons from paired pilot differences, preserving within-week event counts; center pilot loss differences and shift to delta=-0.50. Simulate the predeclared one-sided upper-bound test against -0.25 for candidate numbers of weeks. Use event-weighted mean and the same block-bootstrap inference procedure, at least 10,000 replicates for final inference, fixed seed recorded in registration. Select minimum planned week and corresponding event count reaching >=80% simulated power, check sensitivity to 2- and 6-week block lengths and pilot variance; lock a fixed confirmation window with adequate planned coverage. Report realized sample and incomplete follow-up; no outcome-driven optional stopping.",
+      "required_events": null,
+      "required_week_blocks": null,
+      "notes": "Thresholds are proposed planning choices in CRPS point units; justify utility before registration. No power number can be certified without relevant paired pilot loss variance/dependence."
+    },
+    "coverage_rule": "All scheduled events retained; report per-arm forecast availability, paired coverage and exclusions. Proposed minimum 95% paired coverage of prospectively eligible events; fail to meet -> inconclusive confirmatory gate, still report descriptive common-event scores. Distinguish unknown outcome from forecast refusal. No imputation of unsupported forecasts."
+  },
+  "diagnostics": {
+    "bias": "actual minus prediction; orient all arms to A's frozen favorite side for common bins; positive actual-minus-predicted means predicted favorite margin too small; negative means overprojection",
+    "calibration": "Margin intercept/slope from actual margin on predicted margin; logistic calibration intercept/slope on binary decisive winner or explicit exact-line decisive settlement only, pushes retained separately. Slope <1 overly extreme; >1 too conservative after intercept. Do not silently clip endpoints; report boundary failures separately, use prespecified finite diagnostics only.",
+    "bins": {
+      "edges": [
+        0,
+        3,
+        7,
+        14,
+        21,
+        28,
+        null
+      ],
+      "convention": "first [0,3], later (lower,upper], final >28; A absolute frozen point margin, not market or challenger bins; exact zero tie side defined by home orientation and flagged",
+      "minimum_n": 30,
+      "minimum_distinct_weeks": 5,
+      "small_cells": "Show counts and status INSUFFICIENT_SAMPLE only; no comparative subgroup conclusion. Even eligible bins descriptive."
+    },
+    "secondary": [
+      "margin calibration intercept and slope",
+      "signed favorite-margin bias",
+      "MAE/RMSE",
+      "winner Brier and log loss on compatible binary target",
+      "exact-line W/P/L multiclass Brier and log loss only with verified contract and population",
+      "central 90% predictive interval coverage and width",
+      "interval/tail diagnostics by bin",
+      "forecast coverage",
+      "market distance as descriptive"
+    ],
+    "uncertainty": "Paired contiguous four-week block bootstrap stratified by season; 10,000 final resamples; sensitivity 2/6 weeks; record fixed seed and effective week count. All metrics event-weighted primary, slate/week-weighted sensitivity."
+  },
+  "decision_rules": {
+    "status": "PROPOSED_NOT_REGISTERED",
+    "superiority": "Require both fixed-sequence contrasts above MUE before evidence of incremental skill beyond C and A; calibration/coverage/width and availability guardrails separately reviewed; no automatic promotion.",
+    "equivalence": "Only claim practically equivalent CRPS if prespecified paired CI lies wholly within +/-0.25 points, not just fails superiority.",
+    "matched_center_convergence": "On four-way common events, require upper 95% descriptive CI for mean absolute D1-D2 point/expected margin gap <=1.0 point AND lower 95% descriptive CI for reduction in mean absolute gap versus A-B >=50% (if original gap >0); otherwise unresolved. Convergence is consistent with population effect but does not prove causal attribution if other procedures differ.",
+    "distribution_guardrails": "Flag degradation if absolute deviation from nominal 90% interval coverage increases >3 pp or mean interval width grows >10% vs C or A (same matched events); these are proposed descriptive tolerances, not formal noninferiority tests. Better center with degraded intervals => MIXED_NO_PROMOTION; review CRPS, subgroup calibration, sharpness. Narrower width with poor coverage is not clearance.",
+    "cases": [
+      "B-C and B-A pass, guardrails acceptable -> evidence of incremental skill, independent review only",
+      "B-A descriptively improves but B-C inconclusive -> no demonstrated value beyond simple calibration",
+      "B-C passes but B-A not -> no superiority to incumbent",
+      "B-C or B-A clearly worse -> negative result, preserve",
+      "equivalence CI contained in MUE band -> practically equivalent on that contrast",
+      "insufficient power/coverage/unresolved -> inconclusive",
+      "market proximity alone -> descriptive only",
+      "center better, coverage or width materially worsens -> mixed, no promotion"
+    ]
+  },
+  "registration_blockers": [
+    "exact A/B source and training/OOF cohort identities; C earlier-only loss/fit and residual calibration data",
+    "matched-fold manifest and actual executable runners/tests",
+    "untouched prospective confirmation population and stopping rule",
+    "relevant paired-loss pilot, dependence-aware power and sample size",
+    "review and freeze proposed MUE, guardrails and multiplicity, verified external time anchor"
+  ],
+  "cbb": "P0-B remains BLOCKED_ON_COHORT_RECOVERY for confirmatory registration. Recover historical matched total rows; retain bias and interval coverage as reported-not-reproduced; define MUE, primary signed-bias estimand, prospective cohort and power separately. Exploratory work remains enabled.",
+  "conformance": "User-reported 0dff6ece seven real-source no-fit conformance runs and WNBA refusal/MLB supersession not retrievable at time of review; GitHub commit API returned 422. Do not mark independently verified or block this exploratory design on it."
+}

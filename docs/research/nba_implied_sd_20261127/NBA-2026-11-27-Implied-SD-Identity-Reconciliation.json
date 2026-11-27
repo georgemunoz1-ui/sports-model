@@ -1,0 +1,79 @@
+{
+  "schema": "independent.implied_sd_identity_reconciliation.v1",
+  "scope": "Independent post-assembly readback diagnostic of retained pregame point and winner heads; not execution of unrecovered monitor, not official observation ledger or prospective registration; independent archive identity and numerical head replay; not a baseline admission, monitor integration, or prospective receipt",
+  "slate": "2026-11-27",
+  "reconciled_at_utc": "2026-11-27T11:19:20.001102+00:00",
+  "repo_source_inspection_ref": "4f499e5af44222632bc7256e10532d14bea191c0",
+  "original_diagnostic_sha256": "98a4522551349a21c5ecf44d8b9e14c9ba32f4f1f55835ea1452e6e8598afd17",
+  "original_rows_sha256": "26ef47129ee500ea063c9defe7acee7cf77b71e9b1f907a3f25b058baaf72b9a",
+  "source_card_sha256": "ba5bcba1bd6fe71d7dddafe29989b3d47a770dcd65331b258178ca3bc3abcdd2",
+  "outer_archive_sha256": "979a3cd56be69bdba9022204fbe4cf09a1b6bf06d317cc4a35adae51e05e9b2b",
+  "nested_archive_sha256": "3a4eae851a4845da1c4f45f5558431b279e38246c0e054382c3a8b37f2309d0f",
+  "package_path": "pro27/packages/nba/package.json",
+  "package_sha256": "520fea1d5932ebc35426aa0e49ee17a3f4de18d93875a32588d6975a3ec9c77d",
+  "native_card_path": "pro27/cards/nba/diagnostic_card.json",
+  "native_card_sha256": "6c30cfd06660e52f7d10e77c644dfba09af7874131edaf488e496ebe0c3452c6",
+  "model_id": "nba.initial_causal_score.research.v1",
+  "model_state_config_hash": "bc2ad318ce3e165a9ac512847198897644681230a5d090284f3eacf81bf4549e",
+  "fitted_parameter_hash": "b0987bdef35e83c8391f9d5447d37586c44662c97c3a782f9d9fb241a5a4f4d6",
+  "winner_margin_parameter_hash": "c9f6072dc65ef1c472a7d0f107067672c634ceab8fd2ad756d31bc2dbdccd679",
+  "input_state_hash": "e9710f4e6ec34f1169e6a216c2cf90e81fef2def84c46f468168a9f222566ad5",
+  "prior_configuration_hash": "5708e8dce42592f5b6364f3fc77f33539403613e34171c44b3521e5d346e0b34",
+  "feature_names_sha256": "988f7bdd4941c8f15922be1ca82b9841cd045ca2d22ed7bcf24aa6ea4f4096db",
+  "forecast_procedure_id": "nba.initial_causal_score.research.v1:market_blind_numeric.v2",
+  "feature_procedure_id": "fcdb85721a18ca4a8e681b4a396629b4bd1ee83e6f8884530d25b8ef952ddaf1",
+  "calibration_procedure_id": "c94c89441852b24fc9cbd7a52be17b6419f573cc76667a8d7b2c142782b2f167",
+  "semantic_runtime_sha256": "a7f6541d1415523092e9e6364407100ceb9165de1493e833c93d21f88e65f756",
+  "native_numeric_fitted_state_sha256": "c64f4dae6e92298406970d13c27c1a6b58bcb0e116915b5f5ed4431b835ce58a",
+  "training_cutoff_utc": "2026-11-27T09:51:59.541099+00:00",
+  "identity_bound_rows_file": "NBA-2026-11-27-Implied-SD-Identity-Bound-Rows.jsonl",
+  "identity_bound_rows_sha256": "a70d4a7534a4250abcc64f06ddbdea88dda584f5325110fe1265069a32129b24",
+  "rows_verified": 11,
+  "status": "PARAMETER_AND_INPUT_STATE_IDENTITIES_RECOVERED",
+  "drift_status": "NOT_EVALUATED",
+  "baseline_admission": "NOT_ESTABLISHED",
+  "reason": "One retained slate only; original monitor and tests not recovered; comparable prior series not verified; fixed-fit vs refit-procedure policy unresolved",
+  "action_authority": false,
+  "official_units": 0.0,
+  "binomial_reference_only": {
+    "assumption": "Independent Bernoulli flags (illustrative, overlapping rolling windows violate independence)",
+    "n": 14,
+    "nominal_rate": 0.05,
+    "p_zero_flags": 0.48767497911552987,
+    "p_at_least_three_flags": 0.030053642645566633,
+    "exact_95_intervals": [
+      {
+        "flags": 0,
+        "rate": 0.0,
+        "interval": [
+          0.0,
+          0.23163576165011449
+        ]
+      },
+      {
+        "flags": 1,
+        "rate": 0.07142857142857142,
+        "interval": [
+          0.001806780659127629,
+          0.3386844899318212
+        ]
+      },
+      {
+        "flags": 2,
+        "rate": 0.14285714285714285,
+        "interval": [
+          0.01779451548319153,
+          0.428129160909699
+        ]
+      },
+      {
+        "flags": 3,
+        "rate": 0.21428571428571427,
+        "interval": [
+          0.046579287889786686,
+          0.5079756770484717
+        ]
+      }
+    ]
+  }
+}

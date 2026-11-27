@@ -1,0 +1,108 @@
+{
+  "schema": "nba.implied_sd.series_policy.v1",
+  "status": "PROPOSED_VERSIONED_POLICY_NOT_DEPLOYED",
+  "base_commit": "4f499e5af44222632bc7256e10532d14bea191c0",
+  "scope": "Pregame cross-head diagnostic only; not outcome calibration, registration or selection. No dependency from canonical registration to this monitor.",
+  "identity_alias": {
+    "model_fitted_state_sha256": "native_numeric_fitted_state_sha256"
+  },
+  "monitor_parameters": {
+    "min_abs_probit": 0,
+    "min_abs_probit_for_ratio": 0.25,
+    "min_rows": 10,
+    "n_boot": 2000,
+    "seed": 20261127,
+    "max_ci_width": 10,
+    "min_rows_for_bootstrap": 5,
+    "window_days": 7,
+    "min_prior_days": 3,
+    "min_rows_per_day": 5
+  },
+  "series": {
+    "fixed_fit": {
+      "key_fields": [
+        "league",
+        "model_id",
+        "forecast_procedure_id",
+        "feature_procedure_id",
+        "calibration_procedure_id",
+        "semantic_runtime_sha256",
+        "fitted_parameter_hash",
+        "model_fitted_state_sha256",
+        "prior_configuration_hash",
+        "monitor_config_sha256"
+      ],
+      "not_key_fields": [
+        "input_state_hash",
+        "input_snapshot_hash",
+        "numerical_identity_sha256",
+        "forecast_cutoff_utc",
+        "training_cutoff_utc"
+      ],
+      "rule": "Exact equality of all key fields; use full fitted identity conservatively in v1. Changes only to team state do not reset. A changed total-only head can reset this conservative full-fit series; the winner_margin_parameter_hash is retained for a future narrower policy."
+    },
+    "refit_procedure": {
+      "key_fields": [
+        "league",
+        "model_id",
+        "training_inference_policy_sha256",
+        "monitor_config_sha256"
+      ],
+      "required_policy_material": [
+        "training and inference code identities",
+        "feature definitions and order",
+        "preprocessing and estimator families",
+        "hyperparameters and tuning policy",
+        "training population/eligibility/embargo and cutoff rules",
+        "refit cadence and training window rules",
+        "prior estimation and state refresh rules",
+        "probability target, calibration and settlement semantics"
+      ],
+      "not_key_fields": [
+        "fitted_parameter_hash",
+        "model_fitted_state_sha256",
+        "input_state_hash",
+        "input_snapshot_hash",
+        "training_cutoff_utc",
+        "realized_prior_configuration_hash"
+      ],
+      "rule": "Admit separately only if verified policy manifest and execution receipt establish unchanged policy and conforming actual refit, with training information known before forecast cutoff. Changes to realized fit or prior within the fixed policy do not reset; changes to rules do. Do not infer policy identity from model_id or one slate. Retain all realized hashes and refit status."
+    }
+  },
+  "population": {
+    "slate_timezone": "America/Los_Angeles",
+    "unit": "one first eligible immutable complete-as-of-slate capture per series and slate date, before earliest event in declared slate; later refreshes diagnostic-only",
+    "same_date_policy": "retain all editions; never overwrite; exact duplicate idempotent, conflicting duplicates fail explicitly; no backfill into prospective series",
+    "window": "seven preceding Pacific calendar dates, excluding current; require >=3 distinct earlier comparable eligible regression slates",
+    "eligibility": "finite home-margin and open-interval p_home, exact event/model/procedure identity, pregame clocks, verified row/manifest bytes, unique events, >=5 valid rows and identifiable regression; 5-9 SMALL_SAMPLE; wide CI >10 points or unidentifiable CI NOT_EVALUATED for drift",
+    "counter_policy": "Separate eligible regression slates, drift-evaluated slates, flags, consecutive flags and unevaluated days; prior eligible slates do not need prior drift verdicts; no current data in baseline",
+    "streak": "one out-of-band evaluated slate WARNING, two consecutive comparable evaluated slates ALARM; skipped slates not counted; reset on identity change, in-band evaluation or gap beyond seven dates",
+    "scope": "Retrospective readbacks excluded from prospective observation series; separately labeled replay-only diagnostic cohorts permitted"
+  },
+  "admission": {
+    "november_27": {
+      "scope": "RETAINED_READBACK_ONLY",
+      "fixed_fit_candidate_identity_recovered": true,
+      "refit_policy_manifest_verified": false,
+      "official_baseline_admission": false,
+      "drift_status": "NOT_EVALUATED"
+    },
+    "required_before_drift": "Recover or independently rebuild versioned module; verify original or clearly new tests; hash exact estimator, band/uncertainty method and configuration before using on new data. This policy does not specify or claim an implemented drift statistic.",
+    "storage": "Immutable versioned raw rows plus hash-bound summaries, independent readback, race-safe create or identical retry; no template observations; verify prior raw bytes; separate per-series reports; omit unimplemented overlap field."
+  },
+  "response": {
+    "action_authority": false,
+    "warning_only": true,
+    "baseline_reversion": false,
+    "automatic_retune": false,
+    "automatic_selection_change": false
+  },
+  "observation": {
+    "initial_evaluated_slates": 14,
+    "interpretation": "operational smoke test, not nominal rate certification; dependence from rolling baselines",
+    "later_assessment": "60-100 and 250+ planning milestones, not formal power; dependence-aware analysis; version and restart untouched confirmation after any retune"
+  },
+  "limitations": [
+    "Original implied_sd_monitor.py and 17 tests not recovered; November 23 fixture not recovered; no drift band implementation or live card hook; no canonical baseline admission; no new forecast, registration or promotion."
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "schema": "independent.implied_sd_diagnostic.v1",
+  "slate": "2026-11-27",
+  "scope": "Independent post-assembly readback diagnostic of retained pregame point and winner heads; not execution of unrecovered monitor, not official observation ledger or prospective registration",
+  "source_card": "November-27-Early-Pregame-Card.json",
+  "source_card_sha256": "ba5bcba1bd6fe71d7dddafe29989b3d47a770dcd65331b258178ca3bc3abcdd2",
+  "rows_file": "NBA-2026-11-27-Implied-SD-Diagnostic-Rows.jsonl",
+  "rows_sha256": "26ef47129ee500ea063c9defe7acee7cf77b71e9b1f907a3f25b058baaf72b9a",
+  "state_config_hashes": [
+    "bc2ad318ce3e165a9ac512847198897644681230a5d090284f3eacf81bf4549e"
+  ],
+  "fitted_state_hash_status": "NOT_SEPARATELY_VERIFIED",
+  "n_rows": 11,
+  "n_filtered": 0,
+  "slope": 12.562655753654674,
+  "slope_se": 0.2979238713605605,
+  "slope_ci_analytic": [
+    11.888705134087811,
+    13.236606373221537
+  ],
+  "slope_ci_bootstrap": [
+    11.936506722164072,
+    13.214461295696312
+  ],
+  "intercept": 0.24329973476502023,
+  "intercept_ci_analytic": [
+    -0.1224363937872158,
+    0.6090358633172562
+  ],
+  "r_squared": 0.9949638633681904,
+  "through_origin_slope": 12.88166270193204,
+  "bootstrap": {
+    "n_requested": 2000,
+    "n_valid": 2000,
+    "seed": 20261127,
+    "method": "event-pair percentile resampling; descriptive within slate"
+  },
+  "ratio_eligible_n": 9,
+  "proposed_sign_conflict_n": 0,
+  "drift_status": "NOT_EVALUATED",
+  "drift_reason": "No authenticated comparable prior-slate rows and original drift module unavailable",
+  "action_authority": false,
+  "official_units": 0.0
+}

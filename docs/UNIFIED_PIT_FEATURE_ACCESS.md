@@ -67,3 +67,45 @@ arm's residuals. Compare Brier, log loss, MAE, CRPS, calibration and interval
 coverage by product; use clustered uncertainty and LODO, matched coverage,
 and a preregistered untouched prospective evaluation before selection review.
 No automatic promotion, release, or action authority. RED/HOLD, NO_PICK, 0 units.
+
+
+## Native common view, phase 1
+
+`research/native_feature_access.py` adapts the retained NFL replay and the
+existing NBA/CFB efficiency constructors into a common per-event field view.
+It records native transform, code digest, native input artifact hash, event
+orientation, exact cutoff, declared dependency group and source timing claims.
+NBA base possession/efficiency values remain visible even when the optional
+personnel stage refuses. CFB optional personnel fields remain missing until
+a separately bound native personnel packet exists. No native features are
+refitted, no labels enter the exported numerical view and no market data is
+used. The verified PIT training accessor deliberately refuses all current
+replays: the available dependency groups are not authenticated field-level
+proof, and rehashing a document cannot change this.
+
+The remaining five sports require native adapters. An available or finite
+feature is not automatically observed, consumed, or suitable for fitting.
+The next phase must independently resolve raw dependency locators, clock
+and revision receipts, source completeness and transform equivalence before
+introducing any verified-PIT admission path.
+
+## Selection policy
+
+Use the existing target-scoped selection catalog and registered promotion
+controls; do not create an automatic defaults writer. Require matched
+chronological and untouched prospective evidence of a material improvement
+in the prespecified proper score: Brier and log loss for winner/contract
+probabilities, CRPS for the corresponding predictive distribution. Compare
+point MAE and calibration/coverage as additional constraints. Use paired
+block intervals, declared multiplicity correction, full-population coverage
+and subgroup stability. A supported point-only head cannot claim distribution
+CRPS or contract probabilities. Evidence that fails or is inconclusive is
+HOLD, even with better point estimates or greater feature coverage. The
+existing MLB promotion thresholds remain binding; other target-specific
+thresholds must be preregistered, not inherited from MLB or tuned on results.
+
+Examples from the October 23 retained efficiency study: NBA joint Brier
+delta +0.00383308 (95% interval [+0.00145619,+0.00636617]); CFB efficiency
+Brier delta +0.00045262 ([-0.00189355,+0.00270544]). Neither earns promotion.
+Selection is independent of release and wagering authorization. No changes
+to defaults, frozen forecast code, parameters or registry in phase 1.

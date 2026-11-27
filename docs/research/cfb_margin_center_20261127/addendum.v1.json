@@ -1,0 +1,63 @@
+{
+  "schema": "cfb.margin_center_comparison.pilot_decision_addendum.v1",
+  "status": "DRAFT_TO_BE_FROZEN",
+  "protocol_status": "EXPLORATORY_DESIGN_NOT_REGISTERED",
+  "base_protocol": "docs/research/cfb_margin_center_20261127/protocol.v1.json at cfc05ff23631d2e10db96d93ff94cea7cc3ecd4d",
+  "frozen_at_utc": null,
+  "anchor_method": null,
+  "anchor_verified_at_utc": null,
+  "freeze_blocker": "Numerical values below have no written justifications. A draft commit is not a freeze and not an independent time anchor. Push availability is unverified until a write succeeds or fails.",
+  "arm_c_unavailability_clause": "Arm C requires earlier-only out-of-fold forecasts from Arm A. If comparable OOF A forecasts cannot be recovered, Arm C is unavailable. Because B-C is the primary contrast in the fixed-sequence family, the entire confirmatory family is blocked; B-A is then a descriptive comparison only. Any confirmatory use of B-A requires a new registration with a new primary contrast. The pilot's paired B-C losses require the same OOF A forecasts, so the pilot fails for the same reason.",
+  "sequencing": [
+    "1. Recoverability check of earlier-only OOF A forecasts; if it fails, record the blocker and stop.",
+    "2. Write justifications for every value below.",
+    "3. Freeze final values and push; anchor via GitHub push/PR time, a tag created at push, or an independently posted commit hash. Author date is not an anchor.",
+    "4. Only after the anchor exists: build pilot runner, run pilot, compute dependence diagnostics.",
+    "5. Apply the frozen rule; plan sample size.",
+    "6. At registration: re-query main head, record SHA and UTC time, write registration block as a successor commit."
+  ],
+  "pilot_decision_rule": {
+    "no_estimator_or_season_count_chosen_here": true,
+    "inputs_required_from_pilot": [
+      "event_id",
+      "week_id",
+      "season_id",
+      "paired_b_minus_c_crps_points",
+      "paired_b_minus_a_crps_points",
+      "complete_coverage_and_refusal_accounting"
+    ],
+    "pilot_data_requirement": "Earlier-only chronological data, disjoint from confirmation data and from the 13 Nov 27 discovery fixtures.",
+    "diagnostics": {
+      "lag1_autocorrelation": "Lag-1 autocorrelation of the weekly mean paired B-C CRPS difference, computed within season and pooled across pilot seasons, reported with an uncertainty interval.",
+      "design_effect": "variance of weekly means divided by (within-week variance divided by games in that week)",
+      "minimum_pooled_weekly_means": {
+        "proposed_value": null,
+        "justification": "pending_justification",
+        "note": "Derive from a target standard error for the lag-1 estimate. A single 14-week season gives a standard error near 0.27, so pooling many pilot seasons is required."
+      }
+    },
+    "thresholds": {
+      "proposed_lag1_cutoff": {"proposed_value": 0.20, "justification": "pending_justification"},
+      "proposed_design_effect_cutoff": {"proposed_value": 1.5, "justification": "pending_justification"},
+      "low_dependence": "lag1 < lag1 cutoff AND design effect < design-effect cutoff",
+      "high_dependence": "lag1 >= lag1 cutoff OR design effect >= design-effect cutoff"
+    },
+    "estimator_rule": {
+      "if_low_dependence": "week-level clustering or wild cluster bootstrap; four-week block bootstrap not required",
+      "if_high_dependence": "four-week block bootstrap required",
+      "if_diagnostics_insufficient": "blocked; extend pilot; do not choose an estimator"
+    },
+    "season_count_rule": {
+      "method": "Coverage simulation using pilot-derived paired differences at each candidate block count.",
+      "criterion": "Smallest block count at which the one-sided bound attains at least the minimum simulated coverage.",
+      "proposed_minimum_simulated_coverage": {"proposed_value": 0.93, "justification": "pending_justification"},
+      "if_not_achieved": "blocked; extend pilot or register a longer confirmation window"
+    },
+    "effect_size_parameters": {
+      "freeze_timing": "frozen together with this addendum, before the pilot",
+      "proposed_minimum_useful_improvement_crps_points": {"proposed_value": 0.25, "justification": "pending_justification: state why this is the smallest improvement that matters"},
+      "proposed_planning_alternative_crps_delta": {"proposed_value": -0.5, "justification": "pending_justification"}
+    },
+    "change_after_confirmation_data_observed": "New registration required."
+  }
+}

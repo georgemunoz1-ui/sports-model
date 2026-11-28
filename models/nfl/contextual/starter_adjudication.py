@@ -7,17 +7,22 @@ from .recovered_inference import utc
 
 
 def reviewed_team(team, resolution):
-    """Only a source-ID/name-bound WSH/WAS equivalence explicitly reviewed per event."""
+    """Resolve only an explicit, source-ID/name-bound provider equivalence."""
     abbreviation = team['abbreviation']
-    if abbreviation != 'WSH':
+    reviewed_aliases = {
+        'WSH': {'provider_code': 'WSH', 'canonical_code': 'WAS',
+                'provider_team_id': '28', 'provider_display_name': 'Washington Commanders'},
+        'LAR': {'provider_code': 'LAR', 'canonical_code': 'LA',
+                'provider_team_id': '14', 'provider_display_name': 'Los Angeles Rams'},
+    }
+    expected = reviewed_aliases.get(abbreviation)
+    if expected is None:
         return abbreviation
-    expected = {'provider_code': 'WSH', 'canonical_code': 'WAS',
-                'provider_team_id': '28', 'provider_display_name': 'Washington Commanders'}
     if resolution.get('provider_team_binding_review') != expected:
         raise ValueError('EXPLICIT_TEAM_ALIAS_REVIEW_REQUIRED')
     if str(team.get('id')) != expected['provider_team_id'] or team.get('displayName') != expected['provider_display_name']:
         raise ValueError('TEAM_ALIAS_IDENTITY_CONFLICT')
-    return 'WAS'
+    return expected['canonical_code']
 
 
 def apply(games, pbp, resolutions, cutoff):

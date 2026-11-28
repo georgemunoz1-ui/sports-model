@@ -1,0 +1,131 @@
+{
+  "archive_commit": "17127fbf526ea95e84ed07354e2e1a804bd4a022",
+  "registry": {
+    "count": 2,
+    "every_receipt_verified": true,
+    "first_registry_unchanged_by_second_execution": true,
+    "receipts": [
+      {
+        "card_sha256": "d75928df9b8cb9897170069a190ebb0ad61ece995855783aabbd2e3fb4880fe0",
+        "evaluation_cohort": "PROSPECTIVE_RESEARCH_SOURCE_UNVERIFIED",
+        "event_id": "CFB:401866454",
+        "probabilities": {
+          "analytic": 0.6151883196973272,
+          "simulation": 0.61435
+        },
+        "receipt_id": "f1895940d7331e790ae14ed33e0689fcf293be0c8fbcf5aa75ac95adee81a3cd",
+        "registered_at_utc": "2026-11-02T06:40:29.729255Z",
+        "start_time_utc": "2026-11-04T01:00:00+00:00"
+      },
+      {
+        "card_sha256": "d75928df9b8cb9897170069a190ebb0ad61ece995855783aabbd2e3fb4880fe0",
+        "evaluation_cohort": "PROSPECTIVE_RESEARCH_SOURCE_UNVERIFIED",
+        "event_id": "CFB:401866453",
+        "probabilities": {
+          "analytic": 0.10138526723736452,
+          "simulation": 0.10028000000000004
+        },
+        "receipt_id": "f864b52009a49aa3aa290db157a253b15e281f574cf1bd6a96877981691007a3",
+        "registered_at_utc": "2026-11-02T06:40:29.729255Z",
+        "start_time_utc": "2026-11-04T00:00:00+00:00"
+      }
+    ],
+    "sha256": "12f0a6bb1e50d059e8864e3ecb2957a7d90cc62ff720e4bcefe75799b3fb3230"
+  },
+  "runs": [
+    {
+      "card_forecasts": 2,
+      "card_sha256": "d75928df9b8cb9897170069a190ebb0ad61ece995855783aabbd2e3fb4880fe0",
+      "code_files_match_remote_commit": 15,
+      "cutoff_utc": "2026-11-02T06:40:24.833157+00:00",
+      "envelope_files": 81,
+      "events": [
+        {
+          "analytic_p": 0.8986147327626355,
+          "analytic_p_home": null,
+          "away_team": "Ohio",
+          "binary_count": 100000,
+          "event_id": "CFB:401866453",
+          "home_team": "Akron",
+          "model_winner": "Ohio",
+          "start_time_utc": "2026-11-04T00:00:00+00:00",
+          "stochastic_sim_p": 0.89972
+        },
+        {
+          "analytic_p": 0.6151883196973272,
+          "analytic_p_home": null,
+          "away_team": "Buffalo",
+          "binary_count": 100000,
+          "event_id": "CFB:401866454",
+          "home_team": "Miami (OH)",
+          "model_winner": "Miami (OH)",
+          "start_time_utc": "2026-11-04T01:00:00+00:00",
+          "stochastic_sim_p": 0.61435
+        }
+      ],
+      "raw_capture_statuses": [
+        "CAPTURED"
+      ],
+      "registration": {
+        "action_authority": false,
+        "added": [
+          "f864b52009a49aa3aa290db157a253b15e281f574cf1bd6a96877981691007a3",
+          "f1895940d7331e790ae14ed33e0689fcf293be0c8fbcf5aa75ac95adee81a3cd"
+        ],
+        "existing": [],
+        "status": "REGISTERED"
+      },
+      "run_files": 76,
+      "run_key": "pregame-41401199915-1-1",
+      "run_manifest_sha256": "6508f0209648b332354385b75fff26f5a2480a402a330ccc1c5599810f9e63af",
+      "source_count": 29
+    },
+    {
+      "card_forecasts": 2,
+      "card_sha256": "77f7ee2dfe88df26839964812ed5814d887141df8b885d9f467da4b78ad575de",
+      "code_files_match_remote_commit": 15,
+      "cutoff_utc": "2026-11-02T06:41:41.188655+00:00",
+      "envelope_files": 81,
+      "events": [
+        {
+          "analytic_p": 0.8986147327626354,
+          "analytic_p_home": null,
+          "away_team": "Ohio",
+          "binary_count": 100000,
+          "event_id": "CFB:401866453",
+          "home_team": "Akron",
+          "model_winner": "Ohio",
+          "start_time_utc": "2026-11-04T00:00:00+00:00",
+          "stochastic_sim_p": 0.9000900000000001
+        },
+        {
+          "analytic_p": 0.6151883196973272,
+          "analytic_p_home": null,
+          "away_team": "Buffalo",
+          "binary_count": 100000,
+          "event_id": "CFB:401866454",
+          "home_team": "Miami (OH)",
+          "model_winner": "Miami (OH)",
+          "start_time_utc": "2026-11-04T01:00:00+00:00",
+          "stochastic_sim_p": 0.61499
+        }
+      ],
+      "raw_capture_statuses": [
+        "CAPTURED"
+      ],
+      "registration": {
+        "action_authority": false,
+        "added": [],
+        "existing": [
+          "f864b52009a49aa3aa290db157a253b15e281f574cf1bd6a96877981691007a3",
+          "f1895940d7331e790ae14ed33e0689fcf293be0c8fbcf5aa75ac95adee81a3cd"
+        ],
+        "status": "ALREADY_REGISTERED"
+      },
+      "run_files": 76,
+      "run_key": "pregame-41401199915-1-2",
+      "run_manifest_sha256": "da5755786e1e81db5b5aaf124f3d7a1c46d91f620e0ddba57b6bcc412a810eca",
+      "source_count": 29
+    }
+  ]
+}

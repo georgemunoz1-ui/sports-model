@@ -37,7 +37,8 @@ def test_final_and_market_free():
     assert 'odds' not in json.dumps(r) and not r['action_authority']
 
 
-@pytest.mark.parametrize('field,value', [('completed', False), ('state', 'in'), ('name', 'STATUS_CANCELED')])
+@pytest.mark.parametrize('field,value', [('completed', False), ('completed', 'true'), ('completed', 1),
+                                        ('state', 'in'), ('name', 'STATUS_CANCELED')])
 def test_no_inferred_final(field, value):
     f = forecast(); p = espn(f)
     p['events'][0]['competitions'][0]['status']['type'][field] = value
@@ -119,6 +120,39 @@ def test_date_range_crosses_utc_calendar():
     assert 'dates=20251231-20260102' in R.source_url(forecast())
 
 
+def test_daily_acquisition_reconciles_previous_provider_date(tmp_path):
+    f = forecast('CFB')
+    seen = []
+    def fetch(url):
+        seen.append(url)
+        if 'dates=20251231&' in url:
+            return json.dumps(espn(f)).encode()
+        return b'{"events": []}'
+    rows = R.acquire_results([f], tmp_path / 'capture', fetch)
+    assert len(seen) == 2 and all('-' not in url.split('dates=')[1].split('&')[0] for url in seen)
+    assert rows[0]['status'] == 'FINAL' and 'dates=20251231&' in rows[0]['source_url']
+    assert R.verify_result_source(rows[0])
+    assert len(json.loads((tmp_path / 'capture/capture_receipts.json').read_text())) == 2
+
+
+def test_daily_acquisition_does_not_hide_identity_conflict_or_transport_denial(tmp_path):
+    f = forecast('CFB')
+    wrong = espn(f)
+    wrong['events'][0]['competitions'][0]['competitors'][0]['team']['displayName'] = 'Other'
+    seen = []
+    def fetch(url):
+        seen.append(url)
+        return json.dumps(wrong).encode()
+    row = R.acquire_results([f], tmp_path / 'identity', fetch)[0]
+    assert len(seen) == 1 and row['reason'] == 'RESULT_TEAM_MISMATCH'
+    seen.clear()
+    def denied(url):
+        seen.append(url)
+        raise OSError('HTTP 403 denied')
+    row = R.acquire_results([f], tmp_path / 'denied', denied)[0]
+    assert len(seen) == 1 and row['status'] == 'BLOCKED' and row['reason'] == 'HTTP 403 denied'
+
+
 def test_cfb_requires_id_and_names():
     f = forecast('CFB'); p = espn(f)
     assert R.parse_espn(p, f, receipt(f))['status'] == 'FINAL'
@@ -155,3 +189,30 @@ def test_error_payload_is_not_empty_schedule():
     f = forecast()
     with pytest.raises(ValueError, match='PROVIDER_SCOREBOARD_SCHEMA'):
         R.parse_espn({'error': 'unavailable'}, f, receipt(f))
+
+
+def test_registry_relative_retention_requires_explicit_base_and_replays(tmp_path):
+    f = forecast()
+    body = json.dumps(espn(f)).encode()
+    sha = hashlib.sha256(body).hexdigest()
+    root = tmp_path / 'registry'
+    path = root / 'result_sources' / (sha + '.json')
+    path.parent.mkdir(parents=True)
+    path.write_bytes(body)
+    r = receipt(f) | {'source_sha256': sha, 'raw_path': 'result_sources/' + sha + '.json',
+                      'raw_path_base': 'CANONICAL_REGISTRY'}
+    result = R.parse_espn(espn(f), f, r)
+    assert R.verify_result_source(result, base_dir=root)
+    with pytest.raises(ValueError, match='RESULT_SOURCE_BASE_REQUIRED'):
+        R.verify_result_source(result)
+    for invalid in ('../escape.json', str(path), 'result_sources/other.json'):
+        with pytest.raises(ValueError, match='RESULT_SOURCE_RELATIVE_PATH_INVALID'):
+            R.verify_result_source(result | {'raw_path': invalid}, base_dir=root)
+    with pytest.raises(ValueError, match='RESULT_SOURCE_BASE_REQUIRED'):
+        R.verify_result_source(result | {'raw_path_base': 'ARBITRARY'}, base_dir=root)
+    path.unlink()
+    external = tmp_path / 'external.json'
+    external.write_bytes(body)
+    path.symlink_to(external)
+    with pytest.raises(ValueError, match='RESULT_SOURCE_SYMLINK_REFUSED'):
+        R.verify_result_source(result, base_dir=root)

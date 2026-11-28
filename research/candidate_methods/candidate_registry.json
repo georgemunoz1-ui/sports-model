@@ -361,6 +361,23 @@
       "production_enabled": false,
       "priority": "implemented",
       "next_evidence": "New data/targets require their own preregistered folds and as-of availability; serial dependence and multiplicity remain caveats"
+    },
+    {
+      "id": "nba_forecast_combination_v1",
+      "features": [
+        "Dunks & Threes minus preserved NBA margin forecast",
+        "Databallr shooting net difference",
+        "Databallr turnover net difference",
+        "Databallr rebounding net difference"
+      ],
+      "source": "data/research/nba_forecast_combination_v1/protocol.json",
+      "stage": "IMPLEMENTED_ENGINEERING_TESTED_REAL_FIT_BLOCKED",
+      "forecast_used": false,
+      "production_enabled": false,
+      "priority": "point_in_time_capture",
+      "next_evidence": "Paired source-versioned pre-cutoff captures; zero eligible rows in first three-event diagnostic capture. No uncertainty fit or canonical registration.",
+      "experiment_id": "nba.forecast_combination.v1.EXP.001",
+      "canonical_registration": false
     }
   ]
 }

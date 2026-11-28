@@ -1,0 +1,36 @@
+name: NBA pregame source capture contracts
+on:
+  pull_request:
+    paths:
+      - 'research/nba_forecast_combination.py'
+      - 'research/nba_pregame_capture.py'
+      - 'scripts/capture_nba_combination_sources.py'
+      - 'tests/test_nba*'
+      - '.github/workflows/nba-pregame-capture.yml'
+  push:
+    branches: [research/nba-forecast-combination-20261030]
+    paths:
+      - 'research/nba_forecast_combination.py'
+      - 'research/nba_pregame_capture.py'
+      - 'scripts/capture_nba_combination_sources.py'
+      - 'tests/test_nba*'
+      - '.github/workflows/nba-pregame-capture.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pytest
+      - name: Synthetic capture, chronology and extraction-replay contracts
+        run: python -m pytest -q tests/test_nba_pregame_capture.py tests/test_nba_forecast_combination.py tests/test_nhl_atomic_capture.py
+      - name: Inspect the opt-in acquisition command
+        run: python scripts/capture_nba_combination_sources.py --help
+      - name: Report scope
+        if: always()
+        run: echo 'Synthetic software tests only. No provider subscription, scheduled collection, canonical registration, fit, promotion or wagering.' >> "$GITHUB_STEP_SUMMARY"

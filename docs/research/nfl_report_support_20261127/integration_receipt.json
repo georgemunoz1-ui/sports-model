@@ -1,0 +1,138 @@
+{
+  "schema": "nfl.reporting_support_successor.integration.v1",
+  "created_at_utc": "2026-11-28T04:35:50.758619+00:00",
+  "parent_pr_head": "be62642618be4fcf947611a96e85d68ad6b9b585",
+  "frozen_base_commit": "3ef40f59f44179a077ae6f2ef6248cf1380fd7e7",
+  "runtime_procedure_id": "nfl.integrated_context.reporting_support.v1",
+  "implementation_scope": "ADDITIVE_OPT_IN_INDEPENDENT_RESEARCH_PREGAME_PATH",
+  "original_daily_dispatch_migrated": false,
+  "enhanced_or_live_coverage": false,
+  "source_hashes": {
+    "models/nfl/contextual/runtime.py": "8951577d6edd2e2e37b370cafe9f90c205b9de8b6b59d9c1aba961f15760c15d",
+    "models/nfl/contextual/report_support.py": "6cc00545436276ca8535f907d627c013c1e51c5df3760f6bd66c12e6c801a65e",
+    "models/nfl/contextual/runtime_reporting_support_v1.py": "018c12217ebe7582bcbb49df635e8cf436ba545543421f9e0a92cfa6b09c16ac",
+    "scripts/run_nfl_reporting_supported.py": "c54af71a5ed1ec99d3a624cd3db3bebf78a6110042c46d573342600f4e8f444e",
+    "tests/test_nfl_reporting_support.py": "e2c4c2a70d08c842ab33f9de1d2f2fa36d68afd5b71ca6e6a9d6eaaf218dcf80",
+    "pipelines/cards/semantic_identity.py": "a7f6541d1415523092e9e6364407100ceb9165de1493e833c93d21f88e65f756"
+  },
+  "verification": {
+    "historical_acceptance_source_hashes_matched": 671,
+    "protected_paths_modifications_deletions_renames": 0,
+    "state_keys_and_journal_prefix_preserved": true,
+    "finding_evidence_validator_exit_code": 0,
+    "full_pytest": {
+      "command": "python -m pytest tests research/tests research/cfb_binary_isotonic_proposal/test_binary_isotonic_repair.py -q",
+      "passed": 2253,
+      "failed": 0,
+      "elapsed_seconds": 123.84,
+      "reporting_support_tests_included": 29
+    },
+    "research_unittest": {
+      "command": "python -m unittest discover -s research -p 'test_*.py' -v",
+      "passed": 131,
+      "failed": 0,
+      "overlaps_other_suites": true
+    },
+    "global_health": {
+      "status": "REPOSITORY_HEALTH_RED",
+      "failures": 4,
+      "warnings": 9,
+      "readiness": "STALE_SNAPSHOT",
+      "scope": "Unchanged independent archive/recovery/historical-release/standing-health issues; not cleared by this change."
+    },
+    "hosted_successor_ci_at_commit": "PENDING_NEW_HEAD_EXECUTION"
+  },
+  "retained_input_execution": {
+    "execution_mode": "RETROSPECTIVE_DIAGNOSTIC",
+    "event_id": "2026_01_DEN_KC",
+    "information_cutoff_utc": "2026-09-15T00:12:00Z",
+    "actual_created_at_utc": "2026-11-28T04:30:36.481633+00:00",
+    "source_package_sha256": "cb0f85a81352045f96dc2bb6edc9497d12dcafd6f3a433e82206b9222ec4d385",
+    "selected_model_id": "nfl.integrated_context.qb.v1.research",
+    "model_artifact_sha256": "c1cdf49dbb1a98bbf2b3d4286042a316c132dc7d472f3138c3bbbb1e0cb1c3cd",
+    "forecast_identity": "0108a1d893d10b7986b70a45e3d41145bc21a40dc7a86a6c9cd233e077b29e1e",
+    "execution_identity": "0ff5cc3613286c7ca1ffb005138fd166f972cb04a0fd3222420a59192b664363",
+    "winner_draws": 100000,
+    "winner_raw_sha256": "2c745be045fed2cad4f3dae29bbd8404dc9b351a750aeacb2b3c1346d256c1c0",
+    "exact_draw_replay": true,
+    "saved_event_manifest_verified": true,
+    "current_runtime_gate_cli_source_bytes_match": true,
+    "coverage_counts": {
+      "COMPLETED": 1,
+      "FAILED": 0,
+      "POST_START": 0,
+      "REFUSED": 0
+    },
+    "prospective_registration_verified": false,
+    "forecasts": [
+      {
+        "2026_01_DEN_KC/execution_receipt.json": {
+          "sha256": "1b78b399930c292f29b9517fe9f5bb686166d36f9cc8be0b22e84be059525216",
+          "bytes": 920
+        }
+      },
+      {
+        "2026_01_DEN_KC/forecast.json": {
+          "sha256": "274ea811a1369f2456724deb25ccf38b31bdada1381787b42fb2dae37fd2af46",
+          "bytes": 181669
+        }
+      },
+      {
+        "2026_01_DEN_KC/manifest.json": {
+          "sha256": "242dfc152314e51a8c05e8da33f569fbbcb0e2453716773c0a968a206cd36cbd",
+          "bytes": 276
+        }
+      },
+      {
+        "2026_01_DEN_KC/winner_draws.npy": {
+          "sha256": "7ef801d4cadf1542164579be3d943003f451b83a842cd53fe0c82405531c5b2f",
+          "bytes": 100128
+        }
+      },
+      {
+        "coverage.json": {
+          "sha256": "df54fc684646ad72ee1dc1cf8dd7edace4bc35b61c6a26461657a04f732f2159",
+          "bytes": 882
+        }
+      }
+    ]
+  },
+  "logs": {
+    "gate-full-tests.log": {
+      "sha256": "de848f58dbb77b947f4ac4e8ffe021f2e5d5f7a715b2363393da88d345b5c89c",
+      "bytes": 2674
+    },
+    "gate-full-tests.xml": {
+      "sha256": "a703d1f4f571dca63cfc8371d158d07847aa20f1a9cbd905cabd02b468940b37",
+      "bytes": 305792
+    },
+    "gate-research-tests.log": {
+      "sha256": "2168a112fe51ae0a667860f54e0ee237e38bda73f762200251e09abe374dc415",
+      "bytes": 19991
+    },
+    "gate-final-health-v2.log": {
+      "sha256": "20c9552cd6d9d9888ad992e20ea7169cb8f2245dbf4fea074dfeb548b20dd35d",
+      "bytes": 27009
+    },
+    "gate-finding-evidence.log": {
+      "sha256": "f4c6b0856cc013a579b4f3942779a6f32edc61c3c2910e5cfd8ea86dff6830da",
+      "bytes": 4059
+    },
+    "gate-native-replay-v2.log": {
+      "sha256": "62874c7aff7f6e138e0932da21cbebb160ce66dae3d56f833969f8d2a558cc64",
+      "bytes": 882
+    }
+  },
+  "retained_personnel_finding_scope": "REUSED_RETROSPECTIVE_NOT_PIT_OR_CONFIRMATORY",
+  "claims_not_granted": [
+    "historical_PIT_attestation",
+    "current_event_source_readiness",
+    "predictive_improvement",
+    "daily_dispatch_deployment",
+    "canonical_registration",
+    "production_promotion",
+    "wagering_authority"
+  ],
+  "action_authority": false,
+  "official_units": 0.0
+}

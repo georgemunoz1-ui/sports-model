@@ -76,22 +76,13 @@ def run(artifact,recovered,base,context,event,cutoff,n=100000,*,model_id=None,mo
     selected=select(artifact,model_id,mode)
     if utc(cutoff)>=utc(event['start_time_utc']):raise ValueError('NOT_PREGAME')
     x,audit=live_features(artifact,recovered,base,context,event,cutoff)
-    from .report_support import report_support, require_selected_support
-    reporting=report_support(artifact,x)
-    require_selected_support(reporting,selected,event['event_id'],cutoff)
     arms={}
     for arm,params in artifact['arms'].items():
-        if not reporting['arms'][arm]['admitted']:
-            # Retain the refusal, not an unsupported numerical forecast. Offline
-            # diagnostics of the frozen artifact remain possible independently.
-            arms[arm]={'model_id':params['model_id'],'prediction':None,'contribution_trace':None,
-                       'status':reporting['arms'][arm]['status'],'action_authority':False}
-            continue
         feature={name:x[name] for name in params['feature_names']}
         arms[arm]=predict(params,feature)
     from .capabilities import describe_run_capabilities
     capability_report=describe_run_capabilities(artifact['arms'][selected],x,context,base,cutoff,event,digest(artifact),arms[selected]['contribution_trace'])
-    code_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ('runtime.py','personnel.py','model.py','features.py','recovered_inference.py','operating.py','capabilities.py','settlement.py','forecast_stream.py','week2.py','joint_distribution.py','qb_assimilation.py','weekly_state.py','assimilation.py','report_support.py')}
+    code_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ('runtime.py','personnel.py','model.py','features.py','recovered_inference.py','operating.py','capabilities.py','settlement.py','forecast_stream.py','week2.py','joint_distribution.py','qb_assimilation.py','weekly_state.py','assimilation.py')}
     identity=digest({'event':event,'features':x,'artifact':artifact,'context':context,'runtime':'nfl.integrated_context.v1','model_id':model_id,'mode':mode,'code_hashes':code_hashes})
     p=arms[selected]['prediction'];winner,win_info=bernoulli_simulation(p['home_win'],identity,n)
     scores=None;score_info={'status':'UNAVAILABLE_FOR_SELECTED_ARM','reason':'FROZEN_JOINT_RESIDUAL_POOL_IS_COMBINED_SPECIFIC'}
@@ -107,9 +98,6 @@ def run(artifact,recovered,base,context,event,cutoff,n=100000,*,model_id=None,mo
     if audit['final_inactives']=='VERIFIED':
         result['warnings'].remove('FINAL_INACTIVES_PENDING')
         result['warnings'].append('FINAL_INACTIVES_VERIFIED; NON_INJURY_SCRATCH_IMPACT_UNFITTED')
-    result['reporting_support']=reporting
-    refused=[name for name,row in reporting['arms'].items() if not row['admitted']]
-    if refused:result['warnings'].append('REPORTING_SUPPORT_REFUSED_SIBLING_ARMS:'+','.join(refused))
     result['selection_policy']=selection(model_id)
     result['coherence']=coherence(p,exact)
     result['joint_distribution']=exact

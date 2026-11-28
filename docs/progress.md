@@ -5021,3 +5021,8 @@ PR38 closed as already incorporated via82. PR45 strict health/evidence blockers
 remain separate and unwaived. Hosted integration CI and artifact readback are
 required before merge. All predictive limitations remain; authority OFF.
 See docs/REMAINING_PR_REPAIR_20261024.md and current execution receipts.
+
+
+## 2026-11-04T03:25:11.523417+00:00 — fee-aware contract decision research
+
+Owner requested agent implementation from supplied specifications. Added isolated binary-contract decision/fee/dominance core, joint-scenario parlay arithmetic, real SQLite audit repository, explicit hash-bound evidence sidecar and undeployed PostgreSQL migration candidate. 297 new focused engineering tests independently passed, including 55 adversarial checks and 34 real SQLite cases; four PostgreSQL checks are static only. 184 existing selection/settlement regression tests passed. Exact external 51/28-test ZIPs were not recovered; these counts are new implementation tests. CLI synthetic evidence exercised a correctly persisted BLOCKED decision with actual writer and checkpoint. No trusted venue/fee/execution/qualification adapters are configured; no production/database/card activation, model/default/forecast change, EV ranking or wagering authority. Global health remains RED. See docs/CONTRACT_DECISION_RESEARCH.md and docs/research/decision_engine_20261104/.

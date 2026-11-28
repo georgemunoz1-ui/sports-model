@@ -5021,3 +5021,28 @@ PR38 closed as already incorporated via82. PR45 strict health/evidence blockers
 remain separate and unwaived. Hosted integration CI and artifact readback are
 required before merge. All predictive limitations remain; authority OFF.
 See docs/REMAINING_PR_REPAIR_20261024.md and current execution receipts.
+
+
+## 2026-11-27 — reporting support successor and preservation repair
+
+The initial PR130 gate passed behavioral tests but changed the protected NFL
+runtime and invalidated historical evidence. Restored the original runtime
+exactly; added an opt-in successor runtime and CLI instead. All 671 historical
+acceptance source hashes match, protected source/state/journal checks pass, and
+the unchanged finding-evidence validator passes. Contextual-arm admission
+precedes prediction; unsupported siblings remain explicit refusals. Selected QB
+parameters/defaults and frozen daily dispatch remain unchanged. New execution
+and numeric procedure identities bind successor/gate bytes. Whole-run staging
+retains partial failures and permits retry without rewriting existing artifacts.
+
+Local suite: 2,253 tests passed, including 29 reporting-support tests; separate
+research discovery: 131 passed (overlapping coverage, not additive evidence).
+Actual retained September fixture: 100,000 winner draws independently replayed
+exactly, no prospective registration. Global health remains RED: 4 failures and
+9 warnings; current-data readiness STALE_SNAPSHOT. Exact-head hosted CI remains
+required. New opt-in path is not deployment or enhanced/live-mode acceptance.
+Personnel comparison retains REUSED_RETROSPECTIVE_NOT_PIT_OR_CONFIRMATORY;
+general player-level redesign remains blocked on data capabilities. Current
+source acquisition and identity audit are separate from historical PIT proof.
+No fit, promotion or action change. See
+docs/research/nfl_report_support_20261127/integration_receipt.json and README.

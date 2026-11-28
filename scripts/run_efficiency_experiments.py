@@ -14,7 +14,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--league", choices=["cfb", "nba"], required=True)
     p.add_argument("--history", type=Path, help="Normalized source-bound history; historical archives are reconstructed diagnostics.")
-    p.add_argument("--stages", nargs="+", choices=["efficiency", "personnel", "joint"], default=["efficiency", "personnel", "joint"])
+    p.add_argument("--stages", nargs="+", choices=["efficiency", "personnel", "personnel_v2", "joint"], default=["efficiency", "personnel", "joint"])
     p.add_argument("--output-dir", type=Path, required=True)
     p.add_argument("--bootstrap-count", type=int, default=2000)
     p.add_argument("--source-card", type=Path)

@@ -1,0 +1,20 @@
+{
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "scripts/run_nhl_context.py",
+    "--card",
+    "/workspace/scratch/8c429768f845/early/October-30-2026-Updated-Card/nhl-parent/diagnostic_card.json",
+    "--config",
+    "/workspace/scratch/721be813e757/implementation-evidence/nhl/config.json",
+    "--output",
+    "/workspace/scratch/721be813e757/implementation-evidence/nhl/oct30-context-validated"
+  ],
+  "returncode": 0,
+  "stdout": "{\"run_id\": \"nhl.context_controls.research.v1:33b389e9bd55f799558f\", \"EXECUTION_STATUS\": \"COMPLETED\", \"coverage\": [{\"event_id\": \"NHL:401892611\", \"status\": \"COMPLETED\", \"input_eligibility\": \"BLOCKED\", \"blocking_reasons\": [\"GOALIE_TRANSFORM_FIT_AND_EVALUATION_REQUIRED\", \"REST_SUCCESSOR_REFIT_AND_EVALUATION_REQUIRED\", \"REST_HISTORY_CAPTURE_REQUIRED\", \"GOALIE_UNKNOWN_OR_CONFLICTED\"]}, {\"event_id\": \"NHL:401892612\", \"status\": \"COMPLETED\", \"input_eligibility\": \"BLOCKED\", \"blocking_reasons\": [\"GOALIE_TRANSFORM_FIT_AND_EVALUATION_REQUIRED\", \"REST_SUCCESSOR_REFIT_AND_EVALUATION_REQUIRED\", \"REST_HISTORY_CAPTURE_REQUIRED\", \"GOALIE_UNKNOWN_OR_CONFLICTED\"]}, {\"event_id\": \"NHL:401892613\", \"status\": \"COMPLETED\", \"input_eligibility\": \"BLOCKED\", \"blocking_reasons\": [\"GOALIE_TRANSFORM_FIT_AND_EVALUATION_REQUIRED\", \"REST_SUCCESSOR_REFIT_AND_EVALUATION_REQUIRED\", \"REST_HISTORY_CAPTURE_REQUIRED\", \"GOALIE_UNKNOWN_OR_CONFLICTED\"]}], \"forecast_generated\": false}\n",
+  "stderr": "",
+  "input_sha256": {
+    "card": "bf6783c6d1ef64489f7a84966d6193a34d615a864d4219cbb81cd9a9abaf655b",
+    "package": "9ef00269ba9c169d73ed9e3313484778c554f508c1d71fd12c94aae1fb8b41fb"
+  },
+  "evidence_class": "RETAINED_OCT30_CARD_CONTEXT_CHECK_NOT_NEW_FORECAST"
+}

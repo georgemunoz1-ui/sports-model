@@ -1,0 +1,305 @@
+{
+  "action_authority": false,
+  "canonical_registration": false,
+  "created_at_utc": "2026-10-30T18:44:07.442209+00:00",
+  "entrypoint_sha256": "8f5e50786066d81ad88c42402b5bad6ea24b9f7b95bf8bdecb0dc2b0699fadc9",
+  "information_class": "RETAINED_INPUT_DIAGNOSTIC_REPLAY",
+  "leagues": {
+    "cfb": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/workspace/scratch/721be813e757/sports-model/scripts/generate_card_force.py",
+        "--league",
+        "cfb",
+        "--date",
+        "2026-10-30",
+        "--as-of-utc",
+        "2026-10-30T11:47:12.014431Z",
+        "--simulations",
+        "100000",
+        "--output-dir",
+        "/workspace/scratch/721be813e757/implementation-evidence/shared-card-final/cfb"
+      ],
+      "draw_arrays_equal": 3,
+      "events": 3,
+      "extension": null,
+      "numerical_replay": "PASS",
+      "original_card_sha256": "61c75c14c5a3002eff545a57dd003ff5bb8898f0dfa9d41f7e0249c686778533",
+      "replayed_card_sha256": "a25e371dcebb7ad5a17e26462edea04482d1816cadf0926c8419c5aa3362dd23",
+      "returncode": 0
+    },
+    "nba": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/workspace/scratch/721be813e757/sports-model/scripts/generate_card_force.py",
+        "--league",
+        "nba",
+        "--date",
+        "2026-10-30",
+        "--as-of-utc",
+        "2026-10-30T11:48:17.195663Z",
+        "--simulations",
+        "100000",
+        "--output-dir",
+        "/workspace/scratch/721be813e757/implementation-evidence/shared-card-final/nba",
+        "--initial-research-baselines",
+        "--personnel-research-config",
+        "/workspace/scratch/721be813e757/implementation-evidence/shared-card-final/extension-inputs/nba.json"
+      ],
+      "draw_arrays_equal": 10,
+      "events": 10,
+      "extension": {
+        "extension_failure.json": {
+          "action_authority": false,
+          "canonical_prospective_eligible": false,
+          "extension": "nba_personnel",
+          "incomplete": true,
+          "reason": "[Errno 2] No such file or directory: '/workspace/scratch/721be813e757/implementation-evidence/shared-card-final/extension-inputs/eligible-fitted-minutes-state-required.json'",
+          "status": "BLOCKED"
+        }
+      },
+      "numerical_replay": "PASS",
+      "original_card_sha256": "89f7986553d06706f4bb4c2588e7d74ccdd9a8bb230ba0f81751f96f10f343d3",
+      "replayed_card_sha256": "972b5737fa3acbd0305f45edf1db4975417077fb57f8bd91d04aba5acfebbf3f",
+      "returncode": 2
+    },
+    "nhl": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/workspace/scratch/721be813e757/sports-model/scripts/generate_card_force.py",
+        "--league",
+        "nhl",
+        "--date",
+        "2026-10-30",
+        "--as-of-utc",
+        "2026-10-30T11:58:33.118433Z",
+        "--simulations",
+        "100000",
+        "--output-dir",
+        "/workspace/scratch/721be813e757/implementation-evidence/shared-card-final/nhl",
+        "--initial-research-baselines",
+        "--nhl-context-config",
+        "/workspace/scratch/721be813e757/implementation-evidence/shared-card-final/extension-inputs/nhl.json"
+      ],
+      "draw_arrays_equal": 3,
+      "events": 3,
+      "extension": {
+        "report.json": {
+          "EXECUTION_STATUS": "COMPLETED",
+          "PREDICTIVE_VALIDATION": "NOT_ASSESSED",
+          "PUBLICATION_ELIGIBILITY": "INELIGIBLE",
+          "WAGERING_AUTHORITY": "OFF",
+          "action_authority": false,
+          "config_sha256": "97e9559bbee3e93ba9ce3781c54acacb624972b359ba3185feeae8f004a80969",
+          "contexts": [
+            {
+              "blocking_reasons": [
+                "GOALIE_TRANSFORM_FIT_AND_EVALUATION_REQUIRED",
+                "REST_SUCCESSOR_REFIT_AND_EVALUATION_REQUIRED",
+                "REST_HISTORY_CAPTURE_REQUIRED",
+                "GOALIE_UNKNOWN_OR_CONFLICTED"
+              ],
+              "data_capture": "PARTIAL",
+              "event_id": "NHL:401892611",
+              "goalies": {
+                "action_authority": false,
+                "cutoff_utc": "2026-10-30T11:58:33.118433+00:00",
+                "data_capture": "PARTIAL",
+                "event_id": "NHL:401892611",
+                "max_age_hours_policy": 6.0,
+                "numerically_used": false,
+                "per_side": {
+                  "away": {
+                    "adjustment_applied": false,
+                    "blocking_reasons": [
+                      "GOALIE_SOURCE_UNAVAILABLE"
+                    ],
+                    "player_id": null,
+                    "scenario_weights": null,
+                    "sources": [],
+                    "status": "UNKNOWN",
+                    "team_id": "11"
+                  },
+                  "home": {
+                    "adjustment_applied": false,
+                    "blocking_reasons": [
+                      "GOALIE_SOURCE_UNAVAILABLE"
+                    ],
+                    "player_id": null,
+                    "scenario_weights": null,
+                    "sources": [],
+                    "status": "UNKNOWN",
+                    "team_id": "37"
+                  }
+                },
+                "personnel_transform": "FITTED_TRANSFORM_REQUIRED",
+                "provider_authenticity": "NOT_ATTESTED_BY_BYTE_BINDING",
+                "schema": "sports.nhl_goalie_context.v1"
+              },
+              "model_usage": "NOT_USED_BY_PARENT_FORECAST",
+              "personnel_transform": "BLOCKED_UNFITTED",
+              "rest_candidate": null
+            },
+            {
+              "blocking_reasons": [
+                "GOALIE_TRANSFORM_FIT_AND_EVALUATION_REQUIRED",
+                "REST_SUCCESSOR_REFIT_AND_EVALUATION_REQUIRED",
+                "REST_HISTORY_CAPTURE_REQUIRED",
+                "GOALIE_UNKNOWN_OR_CONFLICTED"
+              ],
+              "data_capture": "PARTIAL",
+              "event_id": "NHL:401892612",
+              "goalies": {
+                "action_authority": false,
+                "cutoff_utc": "2026-10-30T11:58:33.118433+00:00",
+                "data_capture": "PARTIAL",
+                "event_id": "NHL:401892612",
+                "max_age_hours_policy": 6.0,
+                "numerically_used": false,
+                "per_side": {
+                  "away": {
+                    "adjustment_applied": false,
+                    "blocking_reasons": [
+                      "GOALIE_SOURCE_UNAVAILABLE"
+                    ],
+                    "player_id": null,
+                    "scenario_weights": null,
+                    "sources": [],
+                    "status": "UNKNOWN",
+                    "team_id": "28"
+                  },
+                  "home": {
+                    "adjustment_applied": false,
+                    "blocking_reasons": [
+                      "GOALIE_SOURCE_UNAVAILABLE"
+                    ],
+                    "player_id": null,
+                    "scenario_weights": null,
+                    "sources": [],
+                    "status": "UNKNOWN",
+                    "team_id": "26"
+                  }
+                },
+                "personnel_transform": "FITTED_TRANSFORM_REQUIRED",
+                "provider_authenticity": "NOT_ATTESTED_BY_BYTE_BINDING",
+                "schema": "sports.nhl_goalie_context.v1"
+              },
+              "model_usage": "NOT_USED_BY_PARENT_FORECAST",
+              "personnel_transform": "BLOCKED_UNFITTED",
+              "rest_candidate": null
+            },
+            {
+              "blocking_reasons": [
+                "GOALIE_TRANSFORM_FIT_AND_EVALUATION_REQUIRED",
+                "REST_SUCCESSOR_REFIT_AND_EVALUATION_REQUIRED",
+                "REST_HISTORY_CAPTURE_REQUIRED",
+                "GOALIE_UNKNOWN_OR_CONFLICTED"
+              ],
+              "data_capture": "PARTIAL",
+              "event_id": "NHL:401892613",
+              "goalies": {
+                "action_authority": false,
+                "cutoff_utc": "2026-10-30T11:58:33.118433+00:00",
+                "data_capture": "PARTIAL",
+                "event_id": "NHL:401892613",
+                "max_age_hours_policy": 6.0,
+                "numerically_used": false,
+                "per_side": {
+                  "away": {
+                    "adjustment_applied": false,
+                    "blocking_reasons": [
+                      "GOALIE_SOURCE_UNAVAILABLE"
+                    ],
+                    "player_id": null,
+                    "scenario_weights": null,
+                    "sources": [],
+                    "status": "UNKNOWN",
+                    "team_id": "124292"
+                  },
+                  "home": {
+                    "adjustment_applied": false,
+                    "blocking_reasons": [
+                      "GOALIE_SOURCE_UNAVAILABLE"
+                    ],
+                    "player_id": null,
+                    "scenario_weights": null,
+                    "sources": [],
+                    "status": "UNKNOWN",
+                    "team_id": "3"
+                  }
+                },
+                "personnel_transform": "FITTED_TRANSFORM_REQUIRED",
+                "provider_authenticity": "NOT_ATTESTED_BY_BYTE_BINDING",
+                "schema": "sports.nhl_goalie_context.v1"
+              },
+              "model_usage": "NOT_USED_BY_PARENT_FORECAST",
+              "personnel_transform": "BLOCKED_UNFITTED",
+              "rest_candidate": null
+            }
+          ],
+          "coverage": [
+            {
+              "blocking_reasons": [
+                "GOALIE_TRANSFORM_FIT_AND_EVALUATION_REQUIRED",
+                "REST_SUCCESSOR_REFIT_AND_EVALUATION_REQUIRED",
+                "REST_HISTORY_CAPTURE_REQUIRED",
+                "GOALIE_UNKNOWN_OR_CONFLICTED"
+              ],
+              "event_id": "NHL:401892611",
+              "input_eligibility": "BLOCKED",
+              "status": "COMPLETED"
+            },
+            {
+              "blocking_reasons": [
+                "GOALIE_TRANSFORM_FIT_AND_EVALUATION_REQUIRED",
+                "REST_SUCCESSOR_REFIT_AND_EVALUATION_REQUIRED",
+                "REST_HISTORY_CAPTURE_REQUIRED",
+                "GOALIE_UNKNOWN_OR_CONFLICTED"
+              ],
+              "event_id": "NHL:401892612",
+              "input_eligibility": "BLOCKED",
+              "status": "COMPLETED"
+            },
+            {
+              "blocking_reasons": [
+                "GOALIE_TRANSFORM_FIT_AND_EVALUATION_REQUIRED",
+                "REST_SUCCESSOR_REFIT_AND_EVALUATION_REQUIRED",
+                "REST_HISTORY_CAPTURE_REQUIRED",
+                "GOALIE_UNKNOWN_OR_CONFLICTED"
+              ],
+              "event_id": "NHL:401892613",
+              "input_eligibility": "BLOCKED",
+              "status": "COMPLETED"
+            }
+          ],
+          "created_at_utc": "2026-10-30T18:44:10.632183+00:00",
+          "cutoff_utc": "2026-10-30T11:58:33.118433Z",
+          "forecast_generated": false,
+          "parent_card_sha256": "785829e1781ae32c67f0361fe760ef939fff218f58aba6e3db5df9f00fdc6901",
+          "parent_forecasts_changed": false,
+          "parent_package_sha256": "9ef00269ba9c169d73ed9e3313484778c554f508c1d71fd12c94aae1fb8b41fb",
+          "procedure_id": "nhl.context_controls.research.v1",
+          "provider_authenticity": "NOT_ATTESTED_BY_BYTE_BINDING",
+          "run_id": "nhl.context_controls.research.v1:f26ae99160c710c40453",
+          "schema": "sports.nhl_context_shadow.v1",
+          "source_code_sha256": {
+            "models/current/freshness.py": "ebadba51fa545a351d37980bab3bb78d5fe603265b758114b59f0f01191e027a",
+            "models/nhl/context_controls.py": "1b4afbcc110511a75e9f2397d59950ba6c53f48d22b28ef5adfe705565f7a377",
+            "research/nhl_context.py": "f203785a8036c68b049455098cc051d8fe72c0a19d29b4b739a6a55a90c2f386",
+            "scripts/build_operational_rest_candidate.py": "0bd5b4bfc8d90d1300b0948a15af0984f5f218865afa4005f8736265d7ca897c"
+          }
+        }
+      },
+      "numerical_replay": "PASS",
+      "original_card_sha256": "bf6783c6d1ef64489f7a84966d6193a34d615a864d4219cbb81cd9a9abaf655b",
+      "replayed_card_sha256": "785829e1781ae32c67f0361fe760ef939fff218f58aba6e3db5df9f00fdc6901",
+      "returncode": 2
+    }
+  },
+  "new_independent_events": 0,
+  "pit_eligibility": "UNRESOLVED",
+  "predictive_validation": "NOT_ASSESSED",
+  "provider_authenticity": "NOT_AUTHENTICATED",
+  "schema": "sports.retained_shared_card_replay.v1",
+  "verification_script_sha256": "78240cd955cfecd8aad58eb4a4c4fb0a2d1d16c8b99e94aa64113cba2fd4544e"
+}

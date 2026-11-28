@@ -79,10 +79,11 @@ def parse_sgo_payload(payload, timestamp_captured, source_url="feed://sportsgame
                 if price is None or line is None:
                     continue
                 records.append(market_capture.make_record(
-                    eid, str(book).lower(), market, float(line), price,
+                    eid, str(book).lower(), market, line, price,
                     timestamp_captured, source_url,
-                    timestamp_source=ev.get("status", {}).get("startsAt")
-                    if isinstance(ev.get("status"), dict) else None,
+                    # Event start is not the quote's update time. This adapter
+                    # has no verified source-update field for the retained schema.
+                    timestamp_source=None,
                     grade=market_capture.GRADE_CONFIRMED,
                     grade_basis="structured SportsGameOdds feed response; the feed is the "
                                 "source of record for its own quotes (valuation-only)",
@@ -109,8 +110,8 @@ def fetch_events(sport="mlb", get=None):
             r.raise_for_status()
             return r.text
     import json
-    captured = dt.datetime.now(UTC).isoformat().replace("+00:00", "Z")
     text = get(events_url(sport))
+    captured = dt.datetime.now(UTC).isoformat().replace("+00:00", "Z")
     return parse_sgo_payload(json.loads(text), captured), text, market_capture.snapshot_hash(text)
 
 

@@ -1,0 +1,1128 @@
+{
+  "action_authority": false,
+  "new_fits": 0,
+  "new_forecasts": 0,
+  "portable_manifest_sha256": "5b2749f86815584c714141dbca364c4214f3b001143bcf4bce398eff4a6fe8c9",
+  "prospective_validation": "NOT_RUN",
+  "provider_authenticity": "NOT_ESTABLISHED",
+  "reports": {
+    "cfb/margin_frozen_distributions.json.gz": {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "matched_unique_events": 714,
+      "methods": [
+        {
+          "action_authority": false,
+          "analysis_class": "PREVIOUSLY_INSPECTED_HISTORICAL_DESCRIPTIVE",
+          "crps": 9.105728474047869,
+          "event_ids_sha256": "5357b2ff8477e543f4598ff73e34e0c321d31faa11be3b69febd8b327efc81a8",
+          "events": 714,
+          "input_sha256": "f08fddc6dce82a21871e09dd834c11e2d43728f3f73964342ba927c5082e9d39",
+          "intervals": {
+            "0.5": {
+              "covered": 0.5224089635854342,
+              "lower_miss": 0.21988795518207283,
+              "lower_probability": 0.24003744962154863,
+              "upper_miss": 0.25770308123249297,
+              "upper_probability": 0.2373303882571064,
+              "width": 22.249299719887954
+            },
+            "0.8": {
+              "covered": 0.8165266106442577,
+              "lower_miss": 0.06862745098039216,
+              "lower_probability": 0.09199967153793227,
+              "upper_miss": 0.11484593837535013,
+              "upper_probability": 0.09335320515618609,
+              "width": 41.11344537815126
+            },
+            "0.95": {
+              "covered": 0.9481792717086834,
+              "lower_miss": 0.014005602240896359,
+              "lower_probability": 0.0223946711932875,
+              "upper_miss": 0.037815126050420166,
+              "upper_probability": 0.022174366739283823,
+              "width": 63.09943977591036
+            }
+          },
+          "key_margin_mass": [
+            {
+              "margin": -10,
+              "mean_probability": 0.016316905288104658,
+              "observed_frequency": 0.014005602240896359
+            },
+            {
+              "margin": -7,
+              "mean_probability": 0.017440446401918486,
+              "observed_frequency": 0.0392156862745098
+            },
+            {
+              "margin": -3,
+              "mean_probability": 0.019058293708522748,
+              "observed_frequency": 0.0546218487394958
+            },
+            {
+              "margin": -1,
+              "mean_probability": 0.019451068181413966,
+              "observed_frequency": 0.022408963585434174
+            },
+            {
+              "margin": 0,
+              "mean_probability": 0.0,
+              "observed_frequency": 0.0
+            },
+            {
+              "margin": 1,
+              "mean_probability": 0.019721347307595616,
+              "observed_frequency": 0.018207282913165267
+            },
+            {
+              "margin": 3,
+              "mean_probability": 0.019808550465458104,
+              "observed_frequency": 0.06162464985994398
+            },
+            {
+              "margin": 7,
+              "mean_probability": 0.019979363771770904,
+              "observed_frequency": 0.04201680672268908
+            },
+            {
+              "margin": 10,
+              "mean_probability": 0.019287290269915505,
+              "observed_frequency": 0.028011204481792718
+            }
+          ],
+          "league": "cfb",
+          "log_loss": null,
+          "log_loss_status": "INFINITE_DUE_TO_ZERO_SUPPORT",
+          "model_id": "cfb.margin.empirical.research.2a9cf9fcd1774e8e",
+          "predictive_validation": "NOT_ASSESSED",
+          "product": "margin",
+          "settlement": "FULL_GAME_OT",
+          "zero_probability_outcomes": 10
+        },
+        {
+          "action_authority": false,
+          "analysis_class": "PREVIOUSLY_INSPECTED_HISTORICAL_DESCRIPTIVE",
+          "crps": 9.106209010596112,
+          "event_ids_sha256": "5357b2ff8477e543f4598ff73e34e0c321d31faa11be3b69febd8b327efc81a8",
+          "events": 714,
+          "input_sha256": "6a71a4e433f71e9933e11eebc8461f2028bc577b54bc9d2c82f56d94266a868d",
+          "intervals": {
+            "0.5": {
+              "covered": 0.5224089635854342,
+              "lower_miss": 0.21988795518207283,
+              "lower_probability": 0.24011938827203405,
+              "upper_miss": 0.25770308123249297,
+              "upper_probability": 0.23727500851908725,
+              "width": 22.23669467787115
+            },
+            "0.8": {
+              "covered": 0.8151260504201681,
+              "lower_miss": 0.0700280112044818,
+              "lower_probability": 0.09180220358366989,
+              "upper_miss": 0.11484593837535013,
+              "upper_probability": 0.09317070337153141,
+              "width": 41.11904761904762
+            },
+            "0.95": {
+              "covered": 0.9481792717086834,
+              "lower_miss": 0.014005602240896359,
+              "lower_probability": 0.022373079343204674,
+              "upper_miss": 0.037815126050420166,
+              "upper_probability": 0.02218488408185554,
+              "width": 63.14005602240896
+            }
+          },
+          "key_margin_mass": [
+            {
+              "margin": -10,
+              "mean_probability": 0.016355608082803955,
+              "observed_frequency": 0.014005602240896359
+            },
+            {
+              "margin": -7,
+              "mean_probability": 0.017466469210541017,
+              "observed_frequency": 0.0392156862745098
+            },
+            {
+              "margin": -3,
+              "mean_probability": 0.019110524291550565,
+              "observed_frequency": 0.0546218487394958
+            },
+            {
+              "margin": -1,
+              "mean_probability": 0.01949528081958174,
+              "observed_frequency": 0.022408963585434174
+            },
+            {
+              "margin": 0,
+              "mean_probability": 0.0,
+              "observed_frequency": 0.0
+            },
+            {
+              "margin": 1,
+              "mean_probability": 0.019750335111331008,
+              "observed_frequency": 0.018207282913165267
+            },
+            {
+              "margin": 3,
+              "mean_probability": 0.019850344072238412,
+              "observed_frequency": 0.06162464985994398
+            },
+            {
+              "margin": 7,
+              "mean_probability": 0.020004515222635317,
+              "observed_frequency": 0.04201680672268908
+            },
+            {
+              "margin": 10,
+              "mean_probability": 0.019315012055878236,
+              "observed_frequency": 0.028011204481792718
+            }
+          ],
+          "league": "cfb",
+          "log_loss": null,
+          "log_loss_status": "INFINITE_DUE_TO_ZERO_SUPPORT",
+          "model_id": "cfb.margin.conditional_scale.research.a1e89d6486584a98",
+          "predictive_validation": "NOT_ASSESSED",
+          "product": "margin",
+          "settlement": "FULL_GAME_OT",
+          "zero_probability_outcomes": 11
+        }
+      ]
+    },
+    "mls/margin_frozen_distributions.json.gz": {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "matched_unique_events": 405,
+      "methods": [
+        {
+          "action_authority": false,
+          "analysis_class": "PREVIOUSLY_INSPECTED_HISTORICAL_DESCRIPTIVE",
+          "crps": 0.9408736326405017,
+          "event_ids_sha256": "228bfdfe53e030bf45fbd985a33a07bf9add3aaf84247d3728f7874fe1452ce4",
+          "events": 405,
+          "input_sha256": "4f1ce57bce10e0c154dacac94aad52968e9cc01a5e88cc68b189a3db9737d14f",
+          "intervals": {
+            "0.5": {
+              "covered": 0.6938271604938272,
+              "lower_miss": 0.14074074074074075,
+              "lower_probability": 0.15236728922138779,
+              "upper_miss": 0.1654320987654321,
+              "upper_probability": 0.17161436461351018,
+              "width": 2.2444444444444445
+            },
+            "0.8": {
+              "covered": 0.8740740740740741,
+              "lower_miss": 0.04938271604938271,
+              "lower_probability": 0.06165051037815723,
+              "upper_miss": 0.07654320987654321,
+              "upper_probability": 0.06764978587352813,
+              "width": 4.1950617283950615
+            },
+            "0.95": {
+              "covered": 0.9555555555555556,
+              "lower_miss": 0.012345679012345678,
+              "lower_probability": 0.013452639886714558,
+              "upper_miss": 0.03209876543209877,
+              "upper_probability": 0.01289837258988076,
+              "width": 6.839506172839506
+            }
+          },
+          "key_margin_mass": [
+            {
+              "margin": -10,
+              "mean_probability": 0.0,
+              "observed_frequency": 0.0
+            },
+            {
+              "margin": -7,
+              "mean_probability": 0.0,
+              "observed_frequency": 0.0
+            },
+            {
+              "margin": -3,
+              "mean_probability": 0.03672560506452941,
+              "observed_frequency": 0.027160493827160494
+            },
+            {
+              "margin": -1,
+              "mean_probability": 0.17710600381126435,
+              "observed_frequency": 0.1728395061728395
+            },
+            {
+              "margin": 0,
+              "mean_probability": 0.23616131913623323,
+              "observed_frequency": 0.254320987654321
+            },
+            {
+              "margin": 1,
+              "mean_probability": 0.21495117326057853,
+              "observed_frequency": 0.2222222222222222
+            },
+            {
+              "margin": 3,
+              "mean_probability": 0.06210464572296131,
+              "observed_frequency": 0.06172839506172839
+            },
+            {
+              "margin": 7,
+              "mean_probability": 8.745025606962519e-07,
+              "observed_frequency": 0.0
+            },
+            {
+              "margin": 10,
+              "mean_probability": 0.0,
+              "observed_frequency": 0.0
+            }
+          ],
+          "league": "mls",
+          "log_loss": 1.9544926316775533,
+          "log_loss_status": "FINITE",
+          "model_id": "mls.margin.empirical.research.48eaa70dd942d06b",
+          "predictive_validation": "NOT_ASSESSED",
+          "product": "margin",
+          "settlement": "REGULATION_90_STOPPAGE",
+          "zero_probability_outcomes": 0
+        },
+        {
+          "action_authority": false,
+          "analysis_class": "PREVIOUSLY_INSPECTED_HISTORICAL_DESCRIPTIVE",
+          "crps": 0.940612135912503,
+          "event_ids_sha256": "228bfdfe53e030bf45fbd985a33a07bf9add3aaf84247d3728f7874fe1452ce4",
+          "events": 405,
+          "input_sha256": "b2a58f93f97c069192e2bd7ca615cc510d8a4e8ba155faf67a3b692c71c032b0",
+          "intervals": {
+            "0.5": {
+              "covered": 0.7086419753086419,
+              "lower_miss": 0.1259259259259259,
+              "lower_probability": 0.14170177222632285,
+              "upper_miss": 0.1654320987654321,
+              "upper_probability": 0.16977575422537108,
+              "width": 2.330864197530864
+            },
+            "0.8": {
+              "covered": 0.8814814814814815,
+              "lower_miss": 0.04197530864197531,
+              "lower_probability": 0.05498777070358953,
+              "upper_miss": 0.07654320987654321,
+              "upper_probability": 0.06511890737742099,
+              "width": 4.340740740740741
+            },
+            "0.95": {
+              "covered": 0.9555555555555556,
+              "lower_miss": 0.012345679012345678,
+              "lower_probability": 0.01432487700764196,
+              "upper_miss": 0.03209876543209877,
+              "upper_probability": 0.01424671619777762,
+              "width": 6.676543209876543
+            }
+          },
+          "key_margin_mass": [
+            {
+              "margin": -10,
+              "mean_probability": 0.0,
+              "observed_frequency": 0.0
+            },
+            {
+              "margin": -7,
+              "mean_probability": 0.0,
+              "observed_frequency": 0.0
+            },
+            {
+              "margin": -3,
+              "mean_probability": 0.03727847906610048,
+              "observed_frequency": 0.027160493827160494
+            },
+            {
+              "margin": -1,
+              "mean_probability": 0.1814000795309499,
+              "observed_frequency": 0.1728395061728395
+            },
+            {
+              "margin": 0,
+              "mean_probability": 0.2357622084579708,
+              "observed_frequency": 0.254320987654321
+            },
+            {
+              "margin": 1,
+              "mean_probability": 0.2126405702477612,
+              "observed_frequency": 0.2222222222222222
+            },
+            {
+              "margin": 3,
+              "mean_probability": 0.06386557838079289,
+              "observed_frequency": 0.06172839506172839
+            },
+            {
+              "margin": 7,
+              "mean_probability": 6.656814687621782e-05,
+              "observed_frequency": 0.0
+            },
+            {
+              "margin": 10,
+              "mean_probability": 0.0,
+              "observed_frequency": 0.0
+            }
+          ],
+          "league": "mls",
+          "log_loss": 1.9502962439046385,
+          "log_loss_status": "FINITE",
+          "model_id": "mls.margin.conditional_scale.research.dc4bea514b39654a",
+          "predictive_validation": "NOT_ASSESSED",
+          "product": "margin",
+          "settlement": "REGULATION_90_STOPPAGE",
+          "zero_probability_outcomes": 0
+        }
+      ]
+    },
+    "mls/total_frozen_distributions.json.gz": {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "matched_unique_events": 405,
+      "methods": [
+        {
+          "action_authority": false,
+          "analysis_class": "PREVIOUSLY_INSPECTED_HISTORICAL_DESCRIPTIVE",
+          "crps": 1.0278289223810133,
+          "event_ids_sha256": "228bfdfe53e030bf45fbd985a33a07bf9add3aaf84247d3728f7874fe1452ce4",
+          "events": 405,
+          "input_sha256": "6a0159e99b29c6d14638c2a626ed0ad3535e63b8c63d862f94a4708c2be331dc",
+          "intervals": {
+            "0.5": {
+              "covered": 0.5851851851851851,
+              "lower_miss": 0.18271604938271604,
+              "lower_probability": 0.1734215000798793,
+              "upper_miss": 0.23209876543209876,
+              "upper_probability": 0.21807025284905654,
+              "width": 2.0617283950617282
+            },
+            "0.8": {
+              "covered": 0.8716049382716049,
+              "lower_miss": 0.04938271604938271,
+              "lower_probability": 0.05960515412357227,
+              "upper_miss": 0.07901234567901234,
+              "upper_probability": 0.06961956684532355,
+              "width": 4.518518518518518
+            },
+            "0.95": {
+              "covered": 0.9753086419753086,
+              "lower_miss": 0.0,
+              "lower_probability": 0.0,
+              "upper_miss": 0.024691358024691357,
+              "upper_probability": 0.012697074270309975,
+              "width": 7.0
+            }
+          },
+          "key_margin_mass": [],
+          "league": "mls",
+          "log_loss": null,
+          "log_loss_status": "INFINITE_DUE_TO_ZERO_SUPPORT",
+          "model_id": "mls.total.empirical.research.d5eae8380759b623",
+          "predictive_validation": "NOT_ASSESSED",
+          "product": "total",
+          "settlement": "REGULATION_90_STOPPAGE",
+          "zero_probability_outcomes": 1
+        },
+        {
+          "action_authority": false,
+          "analysis_class": "PREVIOUSLY_INSPECTED_HISTORICAL_DESCRIPTIVE",
+          "crps": 1.0277532820273068,
+          "event_ids_sha256": "228bfdfe53e030bf45fbd985a33a07bf9add3aaf84247d3728f7874fe1452ce4",
+          "events": 405,
+          "input_sha256": "24abbcdb04da56bce758f142ee6d3cff3d5a84541df74b27f0c8919b3c9ab7f2",
+          "intervals": {
+            "0.5": {
+              "covered": 0.5876543209876544,
+              "lower_miss": 0.18271604938271604,
+              "lower_probability": 0.17382431226816708,
+              "upper_miss": 0.22962962962962963,
+              "upper_probability": 0.21626721708251714,
+              "width": 2.079012345679012
+            },
+            "0.8": {
+              "covered": 0.8740740740740741,
+              "lower_miss": 0.04938271604938271,
+              "lower_probability": 0.05959314869987706,
+              "upper_miss": 0.07654320987654321,
+              "upper_probability": 0.06865877555353807,
+              "width": 4.538271604938272
+            },
+            "0.95": {
+              "covered": 0.9753086419753086,
+              "lower_miss": 0.0,
+              "lower_probability": 0.0,
+              "upper_miss": 0.024691358024691357,
+              "upper_probability": 0.012122727263936144,
+              "width": 7.007407407407407
+            }
+          },
+          "key_margin_mass": [],
+          "league": "mls",
+          "log_loss": null,
+          "log_loss_status": "INFINITE_DUE_TO_ZERO_SUPPORT",
+          "model_id": "mls.total.conditional_scale.research.bd3e1664b6e7017d",
+          "predictive_validation": "NOT_ASSESSED",
+          "product": "total",
+          "settlement": "REGULATION_90_STOPPAGE",
+          "zero_probability_outcomes": 1
+        }
+      ]
+    },
+    "nba/margin_frozen_distributions.json.gz": {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "matched_unique_events": 1230,
+      "methods": [
+        {
+          "action_authority": false,
+          "analysis_class": "PREVIOUSLY_INSPECTED_HISTORICAL_DESCRIPTIVE",
+          "crps": 8.259648357402762,
+          "event_ids_sha256": "ed17cffd49e1b33a03e972f4c65ed827d545ab0e7d23a496da2d3502ae7095cc",
+          "events": 1230,
+          "input_sha256": "fcee49935bc2c7a782d9a233788d7a5fb522d8be0bd8c6c2f307f84f6dc72449",
+          "intervals": {
+            "0.5": {
+              "covered": 0.5170731707317073,
+              "lower_miss": 0.24796747967479674,
+              "lower_probability": 0.2374133675006056,
+              "upper_miss": 0.23495934959349593,
+              "upper_probability": 0.2393286886175836,
+              "width": 18.74878048780488
+            },
+            "0.8": {
+              "covered": 0.7926829268292683,
+              "lower_miss": 0.11138211382113822,
+              "lower_probability": 0.09307188994258436,
+              "upper_miss": 0.0959349593495935,
+              "upper_probability": 0.0961836178390992,
+              "width": 36.24146341463415
+            },
+            "0.95": {
+              "covered": 0.9455284552845529,
+              "lower_miss": 0.041463414634146344,
+              "lower_probability": 0.02270903395891077,
+              "upper_miss": 0.013008130081300813,
+              "upper_probability": 0.02331213532248449,
+              "width": 58.25121951219512
+            }
+          },
+          "key_margin_mass": [
+            {
+              "margin": -10,
+              "mean_probability": 0.019842908284310422,
+              "observed_frequency": 0.026829268292682926
+            },
+            {
+              "margin": -7,
+              "mean_probability": 0.022724409308646987,
+              "observed_frequency": 0.01869918699186992
+            },
+            {
+              "margin": -3,
+              "mean_probability": 0.025367551598357668,
+              "observed_frequency": 0.022764227642276424
+            },
+            {
+              "margin": -1,
+              "mean_probability": 0.026265086207055394,
+              "observed_frequency": 0.01707317073170732
+            },
+            {
+              "margin": 0,
+              "mean_probability": 0.0,
+              "observed_frequency": 0.0
+            },
+            {
+              "margin": 1,
+              "mean_probability": 0.026818833173477753,
+              "observed_frequency": 0.02113821138211382
+            },
+            {
+              "margin": 3,
+              "mean_probability": 0.026729271391445375,
+              "observed_frequency": 0.028455284552845527
+            },
+            {
+              "margin": 7,
+              "mean_probability": 0.025021993287993198,
+              "observed_frequency": 0.02926829268292683
+            },
+            {
+              "margin": 10,
+              "mean_probability": 0.022602918595757412,
+              "observed_frequency": 0.02113821138211382
+            }
+          ],
+          "league": "nba",
+          "log_loss": null,
+          "log_loss_status": "INFINITE_DUE_TO_ZERO_SUPPORT",
+          "model_id": "nba.margin.empirical.research.b8cc5fd2b7055661",
+          "predictive_validation": "NOT_ASSESSED",
+          "product": "margin",
+          "settlement": "FULL_GAME_OT",
+          "zero_probability_outcomes": 4
+        },
+        {
+          "action_authority": false,
+          "analysis_class": "PREVIOUSLY_INSPECTED_HISTORICAL_DESCRIPTIVE",
+          "crps": 8.26416034204369,
+          "event_ids_sha256": "ed17cffd49e1b33a03e972f4c65ed827d545ab0e7d23a496da2d3502ae7095cc",
+          "events": 1230,
+          "input_sha256": "276df590d33ea392818b01b506507043d8946f40002532ea80db46a222ae1154",
+          "intervals": {
+            "0.5": {
+              "covered": 0.508130081300813,
+              "lower_miss": 0.25365853658536586,
+              "lower_probability": 0.23738280216579827,
+              "upper_miss": 0.23821138211382115,
+              "upper_probability": 0.2397033941741562,
+              "width": 18.266666666666666
+            },
+            "0.8": {
+              "covered": 0.7869918699186992,
+              "lower_miss": 0.11951219512195121,
+              "lower_probability": 0.09329805886293129,
+              "upper_miss": 0.09349593495934959,
+              "upper_probability": 0.09467223777282176,
+              "width": 35.9390243902439
+            },
+            "0.95": {
+              "covered": 0.9447154471544715,
+              "lower_miss": 0.04227642276422764,
+              "lower_probability": 0.023264155516688728,
+              "upper_miss": 0.013008130081300813,
+              "upper_probability": 0.02216532093148492,
+              "width": 57.91463414634146
+            }
+          },
+          "key_margin_mass": [
+            {
+              "margin": -10,
+              "mean_probability": 0.019571670325244178,
+              "observed_frequency": 0.026829268292682926
+            },
+            {
+              "margin": -7,
+              "mean_probability": 0.02208420909543622,
+              "observed_frequency": 0.01869918699186992
+            },
+            {
+              "margin": -3,
+              "mean_probability": 0.024687776469282257,
+              "observed_frequency": 0.022764227642276424
+            },
+            {
+              "margin": -1,
+              "mean_probability": 0.025712458679038135,
+              "observed_frequency": 0.01707317073170732
+            },
+            {
+              "margin": 0,
+              "mean_probability": 0.0,
+              "observed_frequency": 0.0
+            },
+            {
+              "margin": 1,
+              "mean_probability": 0.026304220611939485,
+              "observed_frequency": 0.02113821138211382
+            },
+            {
+              "margin": 3,
+              "mean_probability": 0.026371049057039648,
+              "observed_frequency": 0.028455284552845527
+            },
+            {
+              "margin": 7,
+              "mean_probability": 0.025119025455719875,
+              "observed_frequency": 0.02926829268292683
+            },
+            {
+              "margin": 10,
+              "mean_probability": 0.023036530025869584,
+              "observed_frequency": 0.02113821138211382
+            }
+          ],
+          "league": "nba",
+          "log_loss": null,
+          "log_loss_status": "INFINITE_DUE_TO_ZERO_SUPPORT",
+          "model_id": "nba.margin.conditional_scale.research.c842ccc8f101a9bc",
+          "predictive_validation": "NOT_ASSESSED",
+          "product": "margin",
+          "settlement": "FULL_GAME_OT",
+          "zero_probability_outcomes": 6
+        }
+      ]
+    },
+    "nba/total_frozen_distributions.json.gz": {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "matched_unique_events": 1230,
+      "methods": [
+        {
+          "action_authority": false,
+          "analysis_class": "PREVIOUSLY_INSPECTED_HISTORICAL_DESCRIPTIVE",
+          "crps": 10.778329459054627,
+          "event_ids_sha256": "ed17cffd49e1b33a03e972f4c65ed827d545ab0e7d23a496da2d3502ae7095cc",
+          "events": 1230,
+          "input_sha256": "35c6ae9b928e825fb62b332ba805635b535523b8440c7f269466366c5429ea38",
+          "intervals": {
+            "0.5": {
+              "covered": 0.5292682926829269,
+              "lower_miss": 0.21707317073170732,
+              "lower_probability": 0.24060393556626594,
+              "upper_miss": 0.25365853658536586,
+              "upper_probability": 0.2379371736645837,
+              "width": 25.961788617886178
+            },
+            "0.8": {
+              "covered": 0.7715447154471544,
+              "lower_miss": 0.1040650406504065,
+              "lower_probability": 0.09508727225686897,
+              "upper_miss": 0.12439024390243902,
+              "upper_probability": 0.09568481765681694,
+              "width": 45.87235772357724
+            },
+            "0.95": {
+              "covered": 0.9390243902439024,
+              "lower_miss": 0.027642276422764227,
+              "lower_probability": 0.023207217016812907,
+              "upper_miss": 0.03333333333333333,
+              "upper_probability": 0.02348859178259192,
+              "width": 71.66260162601625
+            }
+          },
+          "key_margin_mass": [],
+          "league": "nba",
+          "log_loss": null,
+          "log_loss_status": "INFINITE_DUE_TO_ZERO_SUPPORT",
+          "model_id": "nba.total.empirical.research.ec9c0599f7ae758b",
+          "predictive_validation": "NOT_ASSESSED",
+          "product": "total",
+          "settlement": "FULL_GAME_OT",
+          "zero_probability_outcomes": 6
+        },
+        {
+          "action_authority": false,
+          "analysis_class": "PREVIOUSLY_INSPECTED_HISTORICAL_DESCRIPTIVE",
+          "crps": 10.779315295443524,
+          "event_ids_sha256": "ed17cffd49e1b33a03e972f4c65ed827d545ab0e7d23a496da2d3502ae7095cc",
+          "events": 1230,
+          "input_sha256": "c2b01f83938671f80dcc9f3d1eb30f6b7b0b3854d97f1fb9c180d620058190ee",
+          "intervals": {
+            "0.5": {
+              "covered": 0.532520325203252,
+              "lower_miss": 0.2146341463414634,
+              "lower_probability": 0.240096268212575,
+              "upper_miss": 0.2528455284552846,
+              "upper_probability": 0.2379747875632123,
+              "width": 26.090243902439024
+            },
+            "0.8": {
+              "covered": 0.775609756097561,
+              "lower_miss": 0.1024390243902439,
+              "lower_probability": 0.09586202485338827,
+              "upper_miss": 0.12195121951219512,
+              "upper_probability": 0.0956597999782993,
+              "width": 45.826829268292684
+            },
+            "0.95": {
+              "covered": 0.9390243902439024,
+              "lower_miss": 0.026016260162601626,
+              "lower_probability": 0.023035796910985548,
+              "upper_miss": 0.034959349593495934,
+              "upper_probability": 0.023856297272521358,
+              "width": 71.69268292682926
+            }
+          },
+          "key_margin_mass": [],
+          "league": "nba",
+          "log_loss": null,
+          "log_loss_status": "INFINITE_DUE_TO_ZERO_SUPPORT",
+          "model_id": "nba.total.conditional_scale.research.39664d10eb36f525",
+          "predictive_validation": "NOT_ASSESSED",
+          "product": "total",
+          "settlement": "FULL_GAME_OT",
+          "zero_probability_outcomes": 8
+        }
+      ]
+    },
+    "nhl/margin_frozen_distributions.json.gz": {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "matched_unique_events": 1312,
+      "methods": [
+        {
+          "action_authority": false,
+          "analysis_class": "PREVIOUSLY_INSPECTED_HISTORICAL_DESCRIPTIVE",
+          "crps": 1.4604358380331266,
+          "event_ids_sha256": "d659665bea4d63763dc34a810d72ba50a3b941d161fa98137343ea15069943cd",
+          "events": 1312,
+          "input_sha256": "82a6dab302d6721edb02f42629fef583d767d27bf9063b56efd47e988d8879ad",
+          "intervals": {
+            "0.5": {
+              "covered": 0.6905487804878049,
+              "lower_miss": 0.1638719512195122,
+              "lower_probability": 0.18884716535092727,
+              "upper_miss": 0.14557926829268292,
+              "upper_probability": 0.1858060987942375,
+              "width": 4.473323170731708
+            },
+            "0.8": {
+              "covered": 0.8978658536585366,
+              "lower_miss": 0.0586890243902439,
+              "lower_probability": 0.06212566503445874,
+              "upper_miss": 0.04344512195121951,
+              "upper_probability": 0.06524947595794157,
+              "width": 7.065548780487805
+            },
+            "0.95": {
+              "covered": 0.9786585365853658,
+              "lower_miss": 0.012957317073170731,
+              "lower_probability": 0.01630950249385476,
+              "upper_miss": 0.008384146341463415,
+              "upper_probability": 0.015463990030900815,
+              "width": 9.762195121951219
+            }
+          },
+          "key_margin_mass": [
+            {
+              "margin": -10,
+              "mean_probability": 4.204711116429066e-08,
+              "observed_frequency": 0.0
+            },
+            {
+              "margin": -7,
+              "mean_probability": 0.0040015184232265405,
+              "observed_frequency": 0.0022865853658536584
+            },
+            {
+              "margin": -3,
+              "mean_probability": 0.10050733176027642,
+              "observed_frequency": 0.10365853658536585
+            },
+            {
+              "margin": -1,
+              "mean_probability": 0.13640312016120382,
+              "observed_frequency": 0.2111280487804878
+            },
+            {
+              "margin": 0,
+              "mean_probability": 0.0,
+              "observed_frequency": 0.0
+            },
+            {
+              "margin": 1,
+              "mean_probability": 0.14682110004029045,
+              "observed_frequency": 0.22103658536585366
+            },
+            {
+              "margin": 3,
+              "mean_probability": 0.1186773312990587,
+              "observed_frequency": 0.12728658536585366
+            },
+            {
+              "margin": 7,
+              "mean_probability": 0.005395235738443199,
+              "observed_frequency": 0.0022865853658536584
+            },
+            {
+              "margin": 10,
+              "mean_probability": 7.556162077113705e-07,
+              "observed_frequency": 0.0
+            }
+          ],
+          "league": "nhl",
+          "log_loss": null,
+          "log_loss_status": "INFINITE_DUE_TO_ZERO_SUPPORT",
+          "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16",
+          "predictive_validation": "NOT_ASSESSED",
+          "product": "margin",
+          "settlement": "FULL_GAME_OT_SO_PLUS_ONE",
+          "zero_probability_outcomes": 1
+        },
+        {
+          "action_authority": false,
+          "analysis_class": "PREVIOUSLY_INSPECTED_HISTORICAL_DESCRIPTIVE",
+          "crps": 1.4609214261481662,
+          "event_ids_sha256": "d659665bea4d63763dc34a810d72ba50a3b941d161fa98137343ea15069943cd",
+          "events": 1312,
+          "input_sha256": "32061f9437716cbea3735ea5a2b8cb29b7616abf3d5bbcd31ba53bbd4aab0d7e",
+          "intervals": {
+            "0.5": {
+              "covered": 0.6989329268292683,
+              "lower_miss": 0.1600609756097561,
+              "lower_probability": 0.18665844993855754,
+              "upper_miss": 0.1410060975609756,
+              "upper_probability": 0.18346915766725555,
+              "width": 4.5198170731707314
+            },
+            "0.8": {
+              "covered": 0.9016768292682927,
+              "lower_miss": 0.057164634146341466,
+              "lower_probability": 0.06392749418688838,
+              "upper_miss": 0.041158536585365856,
+              "upper_probability": 0.06571577577099824,
+              "width": 7.103658536585366
+            },
+            "0.95": {
+              "covered": 0.9778963414634146,
+              "lower_miss": 0.013719512195121951,
+              "lower_probability": 0.016678398245369565,
+              "upper_miss": 0.008384146341463415,
+              "upper_probability": 0.016238078293645004,
+              "width": 9.814786585365853
+            }
+          },
+          "key_margin_mass": [
+            {
+              "margin": -10,
+              "mean_probability": 0.0,
+              "observed_frequency": 0.0
+            },
+            {
+              "margin": -7,
+              "mean_probability": 0.004162300510685016,
+              "observed_frequency": 0.0022865853658536584
+            },
+            {
+              "margin": -3,
+              "mean_probability": 0.09886152576197776,
+              "observed_frequency": 0.10365853658536585
+            },
+            {
+              "margin": -1,
+              "mean_probability": 0.13475101869236078,
+              "observed_frequency": 0.2111280487804878
+            },
+            {
+              "margin": 0,
+              "mean_probability": 0.0,
+              "observed_frequency": 0.0
+            },
+            {
+              "margin": 1,
+              "mean_probability": 0.14618898764196187,
+              "observed_frequency": 0.22103658536585366
+            },
+            {
+              "margin": 3,
+              "mean_probability": 0.12063676052766782,
+              "observed_frequency": 0.12728658536585366
+            },
+            {
+              "margin": 7,
+              "mean_probability": 0.006445311853903927,
+              "observed_frequency": 0.0022865853658536584
+            },
+            {
+              "margin": 10,
+              "mean_probability": 0.0,
+              "observed_frequency": 0.0
+            }
+          ],
+          "league": "nhl",
+          "log_loss": null,
+          "log_loss_status": "INFINITE_DUE_TO_ZERO_SUPPORT",
+          "model_id": "nhl.margin.conditional_scale.research.a004b68524900cd9",
+          "predictive_validation": "NOT_ASSESSED",
+          "product": "margin",
+          "settlement": "FULL_GAME_OT_SO_PLUS_ONE",
+          "zero_probability_outcomes": 1
+        },
+        {
+          "action_authority": false,
+          "analysis_class": "PREVIOUSLY_INSPECTED_HISTORICAL_DESCRIPTIVE",
+          "crps": 1.4563328455439204,
+          "event_ids_sha256": "d659665bea4d63763dc34a810d72ba50a3b941d161fa98137343ea15069943cd",
+          "events": 1312,
+          "input_sha256": "0e782a71889d5f5ca0a7b126590af4900ed5d2448f55dc6924920998b2e8704b",
+          "intervals": {
+            "0.5": {
+              "covered": 0.6547256097560976,
+              "lower_miss": 0.18521341463414634,
+              "lower_probability": 0.18611150414405575,
+              "upper_miss": 0.1600609756097561,
+              "upper_probability": 0.1822912259253085,
+              "width": 4.084603658536586
+            },
+            "0.8": {
+              "covered": 0.868140243902439,
+              "lower_miss": 0.07393292682926829,
+              "lower_probability": 0.06182720486368359,
+              "upper_miss": 0.057926829268292686,
+              "upper_probability": 0.06155267316197137,
+              "width": 6.5495426829268295
+            },
+            "0.95": {
+              "covered": 0.9695121951219512,
+              "lower_miss": 0.021341463414634148,
+              "lower_probability": 0.014863945812251367,
+              "upper_miss": 0.009146341463414634,
+              "upper_probability": 0.013942274456904774,
+              "width": 9.009908536585366
+            }
+          },
+          "key_margin_mass": [
+            {
+              "margin": -10,
+              "mean_probability": 1.1510637986669343e-08,
+              "observed_frequency": 0.0
+            },
+            {
+              "margin": -7,
+              "mean_probability": 0.002096081722596617,
+              "observed_frequency": 0.0022865853658536584
+            },
+            {
+              "margin": -3,
+              "mean_probability": 0.0940583619720284,
+              "observed_frequency": 0.10365853658536585
+            },
+            {
+              "margin": -1,
+              "mean_probability": 0.14976216218693278,
+              "observed_frequency": 0.2111280487804878
+            },
+            {
+              "margin": 0,
+              "mean_probability": 0.0,
+              "observed_frequency": 0.0
+            },
+            {
+              "margin": 1,
+              "mean_probability": 0.16445456674648692,
+              "observed_frequency": 0.22103658536585366
+            },
+            {
+              "margin": 3,
+              "mean_probability": 0.11990382481097009,
+              "observed_frequency": 0.12728658536585366
+            },
+            {
+              "margin": 7,
+              "mean_probability": 0.0031222668827638033,
+              "observed_frequency": 0.0022865853658536584
+            },
+            {
+              "margin": 10,
+              "mean_probability": 2.719601034779477e-07,
+              "observed_frequency": 0.0
+            }
+          ],
+          "league": "nhl",
+          "log_loss": null,
+          "log_loss_status": "INFINITE_DUE_TO_ZERO_SUPPORT",
+          "model_id": "nhl.margin.empirical.research.ce191ef893a5dd16.cdf.971cd24841edf05d",
+          "predictive_validation": "NOT_ASSESSED",
+          "product": "margin",
+          "settlement": "FULL_GAME_OT_SO_PLUS_ONE",
+          "zero_probability_outcomes": 1
+        }
+      ]
+    },
+    "nhl/total_frozen_distributions.json.gz": {
+      "action_authority": false,
+      "automatic_promotion": false,
+      "matched_unique_events": 1312,
+      "methods": [
+        {
+          "action_authority": false,
+          "analysis_class": "PREVIOUSLY_INSPECTED_HISTORICAL_DESCRIPTIVE",
+          "crps": 1.2862485655638178,
+          "event_ids_sha256": "d659665bea4d63763dc34a810d72ba50a3b941d161fa98137343ea15069943cd",
+          "events": 1312,
+          "input_sha256": "a326d08864a742e07f6756dbb50d98c5f67732efbc403ceb168c2a4fc2b76c77",
+          "intervals": {
+            "0.5": {
+              "covered": 0.618140243902439,
+              "lower_miss": 0.18140243902439024,
+              "lower_probability": 0.19497290393710567,
+              "upper_miss": 0.20045731707317074,
+              "upper_probability": 0.20187016283972148,
+              "width": 2.9474085365853657
+            },
+            "0.8": {
+              "covered": 0.8894817073170732,
+              "lower_miss": 0.04496951219512195,
+              "lower_probability": 0.049762869008652025,
+              "upper_miss": 0.06554878048780488,
+              "upper_probability": 0.07609189807107532,
+              "width": 6.053353658536586
+            },
+            "0.95": {
+              "covered": 0.96875,
+              "lower_miss": 0.01600609756097561,
+              "lower_probability": 0.012082655623316335,
+              "upper_miss": 0.01524390243902439,
+              "upper_probability": 0.014459616949029714,
+              "width": 9.022103658536585
+            }
+          },
+          "key_margin_mass": [],
+          "league": "nhl",
+          "log_loss": null,
+          "log_loss_status": "INFINITE_DUE_TO_ZERO_SUPPORT",
+          "model_id": "nhl.total.empirical.research.b83ea2a994a5037c",
+          "predictive_validation": "NOT_ASSESSED",
+          "product": "total",
+          "settlement": "FULL_GAME_OT_SO_PLUS_ONE",
+          "zero_probability_outcomes": 1
+        },
+        {
+          "action_authority": false,
+          "analysis_class": "PREVIOUSLY_INSPECTED_HISTORICAL_DESCRIPTIVE",
+          "crps": 1.2860738397758582,
+          "event_ids_sha256": "d659665bea4d63763dc34a810d72ba50a3b941d161fa98137343ea15069943cd",
+          "events": 1312,
+          "input_sha256": "5ddc2941b854d5e3cebcd0665b737d382c49896fd5bd4f1107114efcab749421",
+          "intervals": {
+            "0.5": {
+              "covered": 0.6166158536585366,
+              "lower_miss": 0.18140243902439024,
+              "lower_probability": 0.19446717101466746,
+              "upper_miss": 0.20198170731707318,
+              "upper_probability": 0.20230738170690094,
+              "width": 2.9359756097560976
+            },
+            "0.8": {
+              "covered": 0.8894817073170732,
+              "lower_miss": 0.04496951219512195,
+              "lower_probability": 0.050172688810858304,
+              "upper_miss": 0.06554878048780488,
+              "upper_probability": 0.07585240735657764,
+              "width": 6.043445121951219
+            },
+            "0.95": {
+              "covered": 0.9695121951219512,
+              "lower_miss": 0.01524390243902439,
+              "lower_probability": 0.012306293124760908,
+              "upper_miss": 0.01524390243902439,
+              "upper_probability": 0.014231243479118952,
+              "width": 8.997713414634147
+            }
+          },
+          "key_margin_mass": [],
+          "league": "nhl",
+          "log_loss": null,
+          "log_loss_status": "INFINITE_DUE_TO_ZERO_SUPPORT",
+          "model_id": "nhl.total.conditional_scale.research.278eda7a70731f48",
+          "predictive_validation": "NOT_ASSESSED",
+          "product": "total",
+          "settlement": "FULL_GAME_OT_SO_PLUS_ONE",
+          "zero_probability_outcomes": 1
+        }
+      ]
+    }
+  },
+  "schema": "sports.distribution_tail_audit.v1",
+  "source_hashes": {
+    "cfb/margin_frozen_distributions.json.gz": "32e2696868069d4ad5c39fa15276d1a1dc45dc4fc694ed8d0be64bfad48de946",
+    "mls/margin_frozen_distributions.json.gz": "d12c43846f59b5357575c91c755bd49edd3a7afc15f7ed2ef11110edbf464e95",
+    "mls/total_frozen_distributions.json.gz": "203ab3fb0ea4c8a67ea76acdd35a0fe03772746cd7c259a8472cdabc4809b5be",
+    "nba/margin_frozen_distributions.json.gz": "cb8feffa902c53dccbd84fa7ca46dab770e954b728c9fad7fb103bc141d8f1d4",
+    "nba/total_frozen_distributions.json.gz": "c4fc03096a29dc7d624b94ccc29ef09d54b9939d8269382fe1ff5ea73417e0f0",
+    "nhl/margin_frozen_distributions.json.gz": "9bf4cdb95187c80b12eb3f17e130058f02253675f94e71b95a57b92ca3ae8017",
+    "nhl/total_frozen_distributions.json.gz": "71dae16492e863146eb368e51f3c444fcaa31ec51599f215c01596e616526a3a"
+  }
+}

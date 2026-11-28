@@ -66,7 +66,7 @@ def parse_oddsapi_payload(payload, timestamp_captured, source_url="feed://theodd
                     if line is None:
                         continue
                     records.append(market_capture.make_record(
-                        eid, book, market, float(line), price, timestamp_captured,
+                        eid, book, market, line, price, timestamp_captured,
                         source_url,
                         timestamp_source=bk.get("last_update"),
                         grade=market_capture.GRADE_CONFIRMED,
@@ -93,8 +93,8 @@ def fetch_odds(league="mlb", get=None):
             r.raise_for_status()
             return r.text
     import json
-    captured = dt.datetime.now(UTC).isoformat().replace("+00:00", "Z")
     text = get(odds_url(league))
+    captured = dt.datetime.now(UTC).isoformat().replace("+00:00", "Z")
     return parse_oddsapi_payload(json.loads(text), captured), text, market_capture.snapshot_hash(text)
 
 

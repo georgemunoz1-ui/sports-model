@@ -1,0 +1,47 @@
+{
+  "revision": "8a560499ca44ba978431e2d96ad6d0876018e554",
+  "created_at_utc": "2026-10-30T18:32:44.299710+00:00",
+  "cases": [
+    {
+      "case": "infinite_operands",
+      "before": "ACCEPTED_INVALID_INPUT",
+      "after": "INVALID_COMPARISON_VALUE:root"
+    },
+    {
+      "case": "boolean_float",
+      "before": "ACCEPTED_INVALID_INPUT",
+      "after": "INVALID_COMPARISON_VALUE:root"
+    },
+    {
+      "case": "boolean_int",
+      "before": "ACCEPTED_INVALID_INPUT",
+      "after": "REPLAY_IDENTITY:root"
+    },
+    {
+      "case": "boolean_price",
+      "before": "ACCEPTED_INVALID_INPUT",
+      "after": "record fails schema: [{'code': 'UNPARSEABLE_PRICE', 'price': True}]"
+    },
+    {
+      "case": "nan_price",
+      "before": "ACCEPTED_INVALID_INPUT",
+      "after": "record fails schema: [{'code': 'UNPARSEABLE_PRICE', 'price': nan}]"
+    },
+    {
+      "case": "infinite_price",
+      "before": "ACCEPTED_INVALID_INPUT",
+      "after": "record fails schema: [{'code': 'UNPARSEABLE_PRICE', 'price': inf}]"
+    },
+    {
+      "case": "zero_price",
+      "before": "ACCEPTED_INVALID_INPUT",
+      "after": "record fails schema: [{'code': 'UNPARSEABLE_PRICE', 'price': 0}]"
+    },
+    {
+      "case": "bad_timestamp",
+      "before": "ACCEPTED_INVALID_INPUT",
+      "after": "record fails schema: [{'code': 'INVALID_QUOTE_TIMESTAMP', 'field': 'timestamp_captured'}]"
+    }
+  ],
+  "scope": "independent execution of unmodified affected functions; fixture values only"
+}

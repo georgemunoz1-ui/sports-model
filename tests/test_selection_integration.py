@@ -246,3 +246,42 @@ def test_replay_writer_uses_actual_clock_and_never_prospective_stream(tmp_path):
     assert not receipt["prospective_registration_verified"]
     assert not (tmp_path / "replay/registration.jsonl").exists()
     assert not (tmp_path / "forecast_stream.jsonl").exists()
+
+
+@pytest.mark.parametrize("league", ["nba", "nhl", "mls"])
+def test_consumed_state_missing_blocks_baseline_quality(league):
+    source = card(league)
+    if league == "mls":
+        source["forecasts"][0]["diagnostics"].update(
+            outcome_order=["away", "draw", "home"], analytic_probabilities=[.2, .2, .6])
+    decision = build(source)["decisions"][0]
+    assert "CONSUMED_STATE_RECEIPT_ABSENT" in decision["blocking_reasons"]
+    assert decision["raw_probability"] == .6
+
+
+def test_state_receipt_requires_bound_features_and_explicit_age_policy():
+    from models.current.freshness import state_freshness_receipt
+    from pipelines.cards.research_selection import content_hash
+
+    source = card()
+    row = source["forecasts"][0]
+    features = {"home_rest": 1., "away_rest": 1.}
+    row.update(home_id="H", away_id="A", model_input_snapshot=features,
+               input_snapshot_hash=content_hash(features))
+    package = {"model_id": row["model_id"], "model_sha256": row["model_state_config_hash"],
+               "training_cutoff_utc": source["as_of_utc"], "team_state": {
+                   team: {"last": "2026-10-21T23:00:00Z"} for team in ("H", "A")}}
+    def reasons(limit):
+        row["diagnostics"]["state_freshness_receipt"] = state_freshness_receipt(
+            package, row, features, cutoff_utc=source["as_of_utc"], max_state_age_hours=limit)
+        return build(source)["decisions"][0]["blocking_reasons"]
+
+    assert "CONSUMED_STATE_AGE_POLICY_UNESTABLISHED" in reasons(None)
+    assert "AWAY:CONSUMED_STATE_OLDER_THAN_POLICY" in reasons(17)
+    clean = reasons(18)
+    assert not any("STATE_AGE" in r or "CONSUMED_STATE" in r or "REST_" in r for r in clean)
+    receipt = row["diagnostics"]["state_freshness_receipt"]
+    receipt["event_id"] = "TEST_ONLY:other"
+    receipt.pop("receipt_sha256")
+    receipt["receipt_sha256"] = content_hash(receipt)
+    assert "STATE_RECEIPT_INVALID_OR_PARENT_MISMATCH" in build(source)["decisions"][0]["blocking_reasons"]

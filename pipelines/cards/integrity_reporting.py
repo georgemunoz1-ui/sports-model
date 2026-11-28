@@ -74,7 +74,7 @@ def _parent_bound(receipt, row, cutoff, *, input_required=True):
             and _same_time(receipt.get("cutoff_utc"), cutoff))
 
 
-def _freshness(row, cutoff):
+def consumed_state_evidence(row, cutoff):
     raw = _obj(_obj(row.get("diagnostics")).get("state_freshness_receipt"))
     result = {"status": "UNKNOWN", "per_side": {}, "reasons": [], "policy_max_age_hours": None}
     if not raw:
@@ -95,28 +95,48 @@ def _freshness(row, cutoff):
     result.update(status="RECEIPT_BOUND", policy_max_age_hours=raw.get("max_state_age_hours_policy"),
                   training_cutoff_utc=raw.get("training_cutoff_utc"), receipt_sha256=raw["receipt_sha256"])
     result["reasons"] = [str(v) for v in _rows(raw.get("blocking_reasons"))]
+    try:
+        if _time(raw.get("training_cutoff_utc")) > _time(cutoff):
+            result["reasons"].append("FIT_NOT_AVAILABLE_PREFORECAST")
+    except (TypeError, ValueError, OverflowError):
+        result["reasons"].append("TRAINING_CUTOFF_UNKNOWN")
     for side in ("home", "away"):
         item = _obj(_obj(raw.get("per_side")).get(side))
         stamp = item.get("consumed_state_last_start_utc")
         age = _number(item.get("state_age_at_cutoff_hours"))
+        team_id = row.get(side + "_id")
+        team_bound = bool(team_id) and team_id == item.get("team_id") and row.get("home_id") != row.get("away_id")
+        expected_rest = None
         try:
-            expected_age = (_time(cutoff) - _time(stamp)).total_seconds() / 3600
+            prior_start = _time(stamp)
+            expected_age = (_time(cutoff) - prior_start).total_seconds() / 3600
+            days = (_time(row.get("start_time_utc")) - prior_start).total_seconds() / 86400
+            expected_rest = min(14., max(0., days))
             valid = age is not None and math.isclose(age, expected_age, abs_tol=1e-8, rel_tol=0)
         except (TypeError, ValueError, OverflowError):
             valid = False
         actual = _number(features.get(side + "_rest"))
         declared = _number(item.get("rest_feature_value"))
-        used = actual is not None and declared == actual and item.get("feature_matches_consumed_state") is True
+        reconstructed = _number(item.get("rest_reconstructed_value"))
+        used = (team_bound and valid and age > 0 and item.get("imputed") is False
+                and actual is not None and actual == declared and reconstructed == expected_rest
+                and math.isclose(actual, expected_rest, rel_tol=0, abs_tol=1e-10)
+                and item.get("feature_matches_consumed_state") is True)
         result["per_side"][side] = {"team_id": item.get("team_id"),
             "consumed_state_last_start_utc": stamp if valid else None,
             "state_age_at_cutoff_hours": age if valid else None,
             "rest_feature_value": declared, "rest_feature_trace_bound": used,
             "rest_basis": item.get("rest_basis"), "imputed": item.get("imputed") is True,
             "reasons": [str(v) for v in _rows(item.get("blocking_reasons"))]}
+        result["reasons"].extend(side.upper() + ":" + reason
+                                 for reason in result["per_side"][side]["reasons"])
+        if not team_bound:
+            result["reasons"].append(side.upper() + ":STATE_TEAM_IDENTITY_UNBOUND")
         if not valid:
             result["reasons"].append(side.upper() + ":STATE_TIMESTAMP_UNKNOWN_OR_INVALID")
         if not used:
             result["reasons"].append(side.upper() + ":REST_CONSUMPTION_TRACE_UNPROVEN")
+    result["reasons"] = list(dict.fromkeys(result["reasons"]))
     return result
 
 
@@ -236,7 +256,7 @@ def integrity_report(card):
     """Build a diagnostic report without changing any field on the input card."""
     card = _obj(card); cutoff = card.get("as_of_utc"); events = []
     for raw in _rows(card.get("forecasts")):
-        row = _obj(raw); freshness = _freshness(row, cutoff)
+        row = _obj(raw); freshness = consumed_state_evidence(row, cutoff)
         consumption = _consumption(row, cutoff, freshness); margins = _margins(row, card, cutoff)
         flags = []
         if margins["sign_disagreement"]:

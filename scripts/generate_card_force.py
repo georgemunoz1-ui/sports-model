@@ -131,6 +131,10 @@ def normalize(event, raw):
         "action_authority": False,
         "action_status": "SHADOW_ONLY",
     }
+    if "state_freshness_receipt" in result["diagnostics"]:
+        # Bind receipt team roles to the schedule independently of receipt claims.
+        for side in ("home", "away"):
+            result[side + "_id"] = event.get(side + "_id")
     for key in ("identity_semantics", "numerical_identity", "forecast_procedure_id",
                 "feature_procedure_id", "calibration_procedure_id"):
         if key in raw:
@@ -309,7 +313,16 @@ def attach_grading(card):
     return card
 
 
-def attach_state_receipt(raw, event, context, league):
+def validate_state_age_policy(league, hours):
+    if hours is None:
+        return
+    if league.lower() not in {"nba", "nhl", "mls"}:
+        raise ValueError("STATE_AGE_POLICY_REQUIRES_NBA_NHL_OR_MLS_BASELINE")
+    if type(hours) not in (int, float) or not math.isfinite(hours) or hours <= 0:
+        raise ValueError("POSITIVE_FINITE_STATE_AGE_HOURS_REQUIRED")
+
+
+def attach_state_receipt(raw, event, context, league, *, max_state_age_hours=None):
     """Add an input trace after forecasting without editing pinned model code."""
     import copy
     result = copy.deepcopy(raw)
@@ -325,7 +338,7 @@ def attach_state_receipt(raw, event, context, league):
         if package.get("model_id") != result["model_id"]:
             raise ValueError("RECEIPT_MODEL_IDENTITY_MISMATCH")
         receipt = state_freshness_receipt(package, event, result["model_input_snapshot"],
-                                          cutoff_utc=context["cutoff"])
+                                          cutoff_utc=context["cutoff"], max_state_age_hours=max_state_age_hours)
         if (receipt["input_snapshot_hash"] != result.get("input_snapshot_hash") or
                 receipt["model_state_config_hash"] != result.get("model_state_config_hash")):
             raise ValueError("RECEIPT_PARENT_HASH_MISMATCH")
@@ -336,8 +349,9 @@ def attach_state_receipt(raw, event, context, league):
     return result
 
 
-def generate(card_date, league, as_of, simulations, overrides, roster_bundle=None, require_roster_aware=False, *, identity_semantics="legacy.v1"):
+def generate(card_date, league, as_of, simulations, overrides, roster_bundle=None, require_roster_aware=False, *, identity_semantics="legacy.v1", max_state_age_hours=None):
     from sports.rosters import attach, assess, load_bundle
+    validate_state_age_policy(league, max_state_age_hours)
     roster = load_bundle(roster_bundle) if roster_bundle else None
     adapter = load_adapter(league)
     schedule = adapter.load_schedule(card_date, as_of)
@@ -381,7 +395,7 @@ def generate(card_date, league, as_of, simulations, overrides, roster_bundle=Non
             if league.lower() == 'nfl':
                 from pipelines.cards.nfl_flip_integration import attach_diagnostic
                 raw['diagnostics'] = attach_diagnostic(raw.get('diagnostics', {}), context.get('model'))
-            raw = attach_state_receipt(raw, event, context, league)
+            raw = attach_state_receipt(raw, event, context, league, max_state_age_hours=max_state_age_hours)
             raw = attach(raw, league.lower(), event, as_of, roster)
             # Guard the rare case where network/simulation time crosses first pitch.
             if now_utc() >= event_start:
@@ -544,6 +558,10 @@ def main():
     parser.add_argument("--league", required=True, choices=["mlb", "cfb", "nfl", "wnba", "nba", "nhl", "mls"])
     parser.add_argument("--as-of-utc")
     parser.add_argument("--initial-research-baselines",action="store_true",help="Explicit NBA/NHL/MLS research models; does not change tested defaults")
+    parser.add_argument("--max-state-age-hours", type=float, metavar="HOURS",
+                        help="Declared positive maximum age of each consumed team state at cutoff "
+                             "for NBA/NHL/MLS initial research baselines. Omit to report ages "
+                             "without a selection freshness policy. Does not change model inference.")
     parser.add_argument("--simulations", type=int, default=100000)
     parser.add_argument("--manual-overrides")
     parser.add_argument("--roster-bundle", type=Path, help="Retained all-sports roster bundle.json; adds validated personnel coverage")
@@ -555,6 +573,10 @@ def main():
     parser.add_argument("--selection-config", type=Path, help="Frozen research selector configuration; absent config emits unqualified diagnostic NO_PICK")
     parser.add_argument("--output-dir", default="output")
     args = parser.parse_args()
+    try:
+        validate_state_age_policy(args.league, args.max_state_age_hours)
+    except ValueError as exc:
+        parser.error(str(exc))
     if args.initial_research_baselines:os.environ['SPORTS_INITIAL_BASELINES']='1'
     as_of = args.as_of_utc or now_utc().isoformat().replace("+00:00", "Z")
 
@@ -563,7 +585,7 @@ def main():
     os.environ['SPORTS_RESEARCH_DRAW_OUTPUT']=str((output/'draws').resolve())
     if args.league == "mlb":
         os.environ["MLB_DRAW_OUTPUT"] = str((output / "draws").resolve())
-    card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides, args.roster_bundle, args.require_roster_aware, identity_semantics=args.identity_semantics)
+    card = generate(args.date, args.league, as_of, args.simulations, args.manual_overrides, args.roster_bundle, args.require_roster_aware, identity_semantics=args.identity_semantics, max_state_age_hours=args.max_state_age_hours)
     (output / "diagnostic_card.json").write_text(json.dumps(card, indent=2, sort_keys=True) + "\n")
     from pipelines.cards.selection_integration import write_card_selection
     selection_config = json.loads(args.selection_config.read_text()) if args.selection_config else None

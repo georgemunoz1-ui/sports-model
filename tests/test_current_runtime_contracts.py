@@ -109,3 +109,57 @@ def test_nfl_runtime_default_cannot_point_to_failed_ensemble():
     config=json.loads((root/'data/nfl/contextual_v1/runtime.json').read_text())
     assert config['default_research_model']==select('nfl')['default_model_id']
     assert 'combined' not in config['default_research_model']
+
+
+@pytest.mark.parametrize("flag,expected", [([], None), (["--max-state-age-hours", "12"], 12.0)])
+def test_card_cli_binds_explicit_state_age_policy_without_refitting(tmp_path, monkeypatch, flag, expected):
+    import sys
+    from scripts import generate_card_force as runner
+    from models.current.baseline import FEATURES
+
+    source = package()
+    cutoff = dt.datetime.now(dt.timezone.utc).replace(microsecond=0)
+    day = (cutoff + dt.timedelta(days=2)).date().isoformat()
+    fixture = event(day)
+    fixture.pop("home_score")
+    fixture.pop("away_score")
+    fixture["slate_date"] = day
+    stamp = (cutoff - dt.timedelta(hours=18)).isoformat()
+
+    def head(kind, intercept):
+        return {"kind": kind, "coefficient": [0.] * 9, "intercept": intercept, "mean": [0.] * 9,
+                "scale": [1.] * 9, "impute": [0.] * 9}
+
+    source.update(captured_at_utc=cutoff.isoformat(), training_cutoff_utc=cutoff.isoformat(),
+                  source_fetches=[{"fetched_at_utc": cutoff.isoformat()}], events=[fixture],
+                  covered_dates=[day], feature_names=FEATURES, data_grade="TEST_ONLY", model_lineage={},
+                  fitted_model={"winner": head("logistic", 0.5), "margin": head("linear", 3.),
+                                "total": head("linear", 200.)},
+                  team_state={t: {"last": stamp, "n": 10, "for": 100., "against": 100.} for t in ("1","2")})
+    source["model_sha256"] = digest({"model": source["fitted_model"], "state": source["team_state"], "prior": source["prior"]})
+    (tmp_path/"nba").mkdir()
+    (tmp_path/"nba"/"package.json").write_text(json.dumps(source))
+    out = tmp_path/"card"
+    monkeypatch.setenv("SPORTS_RESEARCH_PACKAGE_DIR", str(tmp_path))
+    monkeypatch.setenv("SPORTS_INITIAL_BASELINES", "1")
+    monkeypatch.setenv("SPORTS_RESEARCH_DRAW_OUTPUT", str(out/"draws"))
+    monkeypatch.setattr(sys, "argv", ["generate_card_force.py", "--league", "nba", "--date", day,
+        "--simulations", "50", "--initial-research-baselines", "--identity-semantics", "legacy.v1",
+        "--as-of-utc", cutoff.isoformat(), "--output-dir", str(out), *flag])
+    with pytest.raises(SystemExit) as exited:
+        runner.main()
+    assert exited.value.code == 0
+    row = json.loads((out/"diagnostic_card.json").read_text())["forecasts"][0]
+    receipt = row["diagnostics"]["state_freshness_receipt"]
+    assert receipt["max_state_age_hours_policy"] == expected
+    assert ("HOME:CONSUMED_STATE_OLDER_THAN_POLICY" in receipt["blocking_reasons"]) == bool(flag)
+    assert row["model_p"] == pytest.approx(1 / (1 + np.exp(-0.5)))
+    assert row["home_id"] == "1" and row["away_id"] == "2"
+
+
+@pytest.mark.parametrize("league,hours", [("cfb", 10), ("nba", -1), ("nhl", 0), ("mls", float("nan")),
+                                          ("nba", float("inf")), ("nba", True)])
+def test_invalid_policy_rejected_before_acquisition(league, hours):
+    from scripts.generate_card_force import generate
+    with pytest.raises(ValueError, match="STATE_AGE"):
+        generate("unused", league, "unused", 1, None, max_state_age_hours=hours)

@@ -15,6 +15,7 @@ import math
 from pathlib import Path
 import re
 
+from pipelines.cards.integrity_reporting import consumed_state_evidence
 from pipelines.cards.research_selection import (
     content_hash, seal_forecast, seal_quality_receipt, select_research,
     selector_config_artifact, selector_config_id, target_id, verify_selection_record,
@@ -128,12 +129,27 @@ def _identity(row, *, product=None):
     return binding, blocks, objects
 
 
-def _quality_blocks(row, league):
+def _quality_blocks(row, league, cutoff):
     blocks, notes = [], []
     receipt = (row.get("diagnostics") or {}).get("state_freshness_receipt")
-    if receipt:
-        blocks.extend(receipt.get("blocking_reasons", []))
-        notes.extend(receipt.get("review_notes", []))
+    # These baseline runners issue v1 consumed-state receipts. Other models
+    # can have different state contracts and should not inherit a rest policy.
+    expected = league in {"nba", "nhl", "mls"} and row.get("model_id") == f"{league}.initial_causal_score.research.v1"
+    if expected or receipt is not None:
+        evidence = consumed_state_evidence(row, cutoff)
+        blocks.extend(evidence["reasons"])
+        if evidence["status"] == "RECEIPT_BOUND":
+            notes.extend(receipt.get("review_notes", []))
+            limit = evidence["policy_max_age_hours"]
+            if type(limit) not in (float, int) or not math.isfinite(limit) or limit <= 0:
+                blocks.append("CONSUMED_STATE_AGE_POLICY_UNESTABLISHED")
+            else:
+                for side, item in evidence["per_side"].items():
+                    age = item["state_age_at_cutoff_hours"]
+                    if age is not None and age <= 0:
+                        blocks.append(side.upper() + ":CONSUMED_STATE_NOT_PREFORECAST")
+                    elif age is not None and age > limit:
+                        blocks.append(side.upper() + ":CONSUMED_STATE_OLDER_THAN_POLICY")
     else:
         notes.append("STATE_FRESHNESS_RECEIPT_NOT_PRESENT_IN_PARENT")
     # Existing NHL coefficients learned an embargoed rest proxy. A corrected
@@ -193,7 +209,7 @@ def build_card_selection(card, *, source_sha256, source_ref, evaluated_at_utc,
         sealed = seal_forecast({"schema": "research-forecast-v1", "procedure_id": procedure,
             "input_snapshot_sha256": snapshot, "target": target, "probabilities": probabilities,
             "probability_basis": basis, "forecast_cutoff_utc": cutoff, "forecast_created_at_utc": created})
-        event_blocks, notes = _quality_blocks(row, league)
+        event_blocks, notes = _quality_blocks(row, league, cutoff)
         blocks.extend(event_blocks)
         if default_policy:
             blocks.append("AUTOMATIC_DIAGNOSTIC_POLICY_NOT_PREREGISTERED")

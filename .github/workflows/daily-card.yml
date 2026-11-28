@@ -1,0 +1,358 @@
+name: Daily Card Generation
+
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Current Pacific slate date (YYYY-MM-DD)'
+        type: string
+        required: true
+      nfl_state_id:
+        description: 'Reviewed prior state ID; defaults to repository NFL_STATE_ID'
+        type: string
+        required: false
+      nfl_seed_id:
+        description: 'Must match independently configured seed pin'
+        type: string
+        required: false
+  pull_request:
+    paths:
+      - '.github/workflows/daily-card.yml'
+      - 'scripts/daily_card_workflow.py'
+      - 'scripts/nhl_atomic_capture.py'
+      - 'tests/test_daily_card_workflow.py'
+      - 'tests/test_nhl_atomic_capture.py'
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-consolidated.txt
+      - name: Offline contracts and native CLI smoke tests
+        run: |
+          python -m py_compile scripts/daily_card_workflow.py
+          python -m unittest discover -s tests -p 'test_daily_card_workflow.py' -v
+          python -m unittest discover -s tests -p 'test_nhl_atomic_capture.py' -v
+          for script in capture_operational_inputs capture_model_recovery prepare_cfb_current capture_team_histories prepare_initial_baselines generate_card_force advance_nfl_weekly_state prepare_nfl_weekly_events run_fresh_nfl_research check_cutoff_integrity; do
+            python "scripts/$script.py" --help >/dev/null
+          done
+      - name: Lint workflow
+        run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7 .github/workflows/daily-card.yml
+      - name: Build transient-lock artifact regression fixture
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from unittest.mock import patch
+          from scripts import daily_card_workflow as d
+          from scripts import nhl_atomic_capture as atomic
+
+          root = Path("artifact-contract-fixture")
+          root.mkdir()
+          history = root / "history"
+
+          def fake_capture(script, *args):
+              history.mkdir()
+              (history / ".collector.lock").touch()
+              (history / "report.json").write_text('{"status":"SYNTHETIC_FIXTURE"}')
+              (history / "dependency.lock").write_bytes(b"retained evidence")
+              atomic.manifest(history)
+
+          with patch.object(d, "run", fake_capture):
+              d.capture_nhl_history(history)
+          d.verify_manifest(history)
+          d.write(root / "stage_manifest.json", d.manifest(root, "stage_manifest.json"))
+          PY
+      - name: Upload regression fixture with normal hidden-file policy
+        uses: actions/upload-artifact@v4
+        with:
+          name: contract-lockfile-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifact-contract-fixture
+          include-hidden-files: false
+          if-no-files-found: error
+          retention-days: 1
+      - name: Download regression fixture
+        uses: actions/download-artifact@v4
+        with:
+          name: contract-lockfile-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifact-contract-readback
+      - name: Verify downloaded fixture and nested native manifest
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from scripts import daily_card_workflow as d
+
+          root = Path("artifact-contract-readback")
+          d.verify_manifest(root, "stage_manifest.json")
+          d.verify_manifest(root / "history")
+          assert not (root / "history/.collector.lock").exists()
+          assert (root / "history/dependency.lock").read_bytes() == b"retained evidence"
+          print("LOCKFILE_ARTIFACT_ROUNDTRIP_PASS")
+          PY
+
+  validate:
+    # A single live research acceptance on this owner-authorized, same-repo
+    # review PR opening. Other PRs run offline checks only.
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'research/daily-card-workflow-20261128') }}
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      date: ${{ steps.date.outputs.date }}
+      attempt: ${{ steps.date.outputs.attempt }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - id: date
+        env:
+          REQUESTED_DATE: ${{ inputs.date }}
+        run: python scripts/daily_card_workflow.py validate
+
+  operational:
+    needs: validate
+    if: ${{ always() && !cancelled() && needs.validate.result == 'success' && needs.validate.outputs.attempt == format('{0}', github.run_attempt) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      DATE: ${{ needs.validate.outputs.date }}
+      VALIDATED_ATTEMPT: ${{ needs.validate.outputs.attempt }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-consolidated.txt
+      - name: Acquire operational sources
+        run: python scripts/daily_card_workflow.py acquire --kind operational --date "$DATE" --output artifact
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-raw-operational-${{ needs.validate.outputs.date }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifact
+          retention-days: 7
+          if-no-files-found: error
+
+  recovery:
+    needs: validate
+    if: ${{ always() && !cancelled() && needs.validate.result == 'success' && needs.validate.outputs.attempt == format('{0}', github.run_attempt) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      DATE: ${{ needs.validate.outputs.date }}
+      VALIDATED_ATTEMPT: ${{ needs.validate.outputs.attempt }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-consolidated.txt
+      - name: Acquire independent recovery sources
+        run: python scripts/daily_card_workflow.py acquire --kind recovery --date "$DATE" --output artifact
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-raw-recovery-${{ needs.validate.outputs.date }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifact
+          retention-days: 7
+          if-no-files-found: error
+
+  cfb_card:
+    needs: [validate, recovery]
+    if: ${{ always() && !cancelled() && needs.validate.result == 'success' && needs.validate.outputs.attempt == format('{0}', github.run_attempt) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      DATE: ${{ needs.validate.outputs.date }}
+      VALIDATED_ATTEMPT: ${{ needs.validate.outputs.attempt }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-consolidated.txt
+      - name: Download recovery inputs
+        id: download
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: evidence-raw-recovery-${{ needs.validate.outputs.date }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: inputs
+      - name: CFB package, native inference and verification
+        run: python scripts/daily_card_workflow.py shared --league cfb --date "$DATE" --inputs "inputs/$DATE" --output artifact
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-cfb-${{ needs.validate.outputs.date }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifact
+          retention-days: 7
+          if-no-files-found: error
+
+  basketball_hockey:
+    name: Native ${{ matrix.league }}
+    needs: [validate, operational]
+    if: ${{ always() && !cancelled() && needs.validate.result == 'success' && needs.validate.outputs.attempt == format('{0}', github.run_attempt) }}
+    strategy:
+      fail-fast: false
+      matrix:
+        league: [nba, nhl]
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      DATE: ${{ needs.validate.outputs.date }}
+      VALIDATED_ATTEMPT: ${{ needs.validate.outputs.attempt }}
+      LEAGUE: ${{ matrix.league }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-consolidated.txt
+      - name: Download operational inputs
+        id: download
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: evidence-raw-operational-${{ needs.validate.outputs.date }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: inputs
+      - name: History, scoped package, native inference and verification
+        run: python scripts/daily_card_workflow.py shared --league "$LEAGUE" --date "$DATE" --inputs "inputs/$DATE" --output artifact
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-${{ matrix.league }}-${{ needs.validate.outputs.date }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifact
+          retention-days: 7
+          if-no-files-found: error
+
+  cbb_card:
+    needs: validate
+    if: ${{ always() && !cancelled() && needs.validate.result == 'success' && needs.validate.outputs.attempt == format('{0}', github.run_attempt) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      DATE: ${{ needs.validate.outputs.date }}
+      VALIDATED_ATTEMPT: ${{ needs.validate.outputs.attempt }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-consolidated.txt
+      - uses: actions/checkout@v4
+        with:
+          ref: fd0634c324c720362e77b9be4042c34e0c730bdb
+          path: cbb-research
+          persist-credentials: false
+      - name: Install pinned CBB environment
+        run: python -m pip install -r cbb-research/requirements-consolidated.txt
+      - name: CBB native reconciliation and offline verifier
+        run: python scripts/daily_card_workflow.py cbb --date "$DATE" --checkout cbb-research --output artifact
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-cbb-${{ needs.validate.outputs.date }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifact
+          retention-days: 7
+          if-no-files-found: error
+
+  nfl_card:
+    needs: [validate, operational]
+    if: ${{ always() && !cancelled() && needs.validate.result == 'success' && needs.validate.outputs.attempt == format('{0}', github.run_attempt) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      actions: read
+    env:
+      DATE: ${{ needs.validate.outputs.date }}
+      VALIDATED_ATTEMPT: ${{ needs.validate.outputs.attempt }}
+      NFL_STATE_ID: ${{ inputs.nfl_state_id || vars.NFL_STATE_ID }}
+      NFL_SEED_ID: ${{ inputs.nfl_seed_id || vars.NFL_WEEKLY_STATE_SEED_SHA256 }}
+      NFL_WEEKLY_STATE_SEED_SHA256: ${{ vars.NFL_WEEKLY_STATE_SEED_SHA256 }}
+      NFL_STATE_ARTIFACT_ID: ${{ vars.NFL_STATE_ARTIFACT_ID }}
+      NFL_STATE_ARCHIVE_SHA256: ${{ vars.NFL_STATE_ARCHIVE_SHA256 }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-consolidated.txt
+      - name: Download operational inputs
+        id: download
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: evidence-raw-operational-${{ needs.validate.outputs.date }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: inputs
+      - name: Reconcile NFL schedule and run verified weekly state if eligible
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/daily_card_workflow.py nfl --date "$DATE" --inputs "inputs/$DATE" --output artifact
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-nfl-${{ needs.validate.outputs.date }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifact
+          retention-days: 7
+          if-no-files-found: error
+
+  finalize:
+    needs: [validate, operational, recovery, cfb_card, basketball_hockey, cbb_card, nfl_card]
+    if: ${{ always() && !cancelled() && needs.validate.result == 'success' && needs.validate.outputs.attempt == format('{0}', github.run_attempt) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DATE: ${{ needs.validate.outputs.date }}
+      VALIDATED_ATTEMPT: ${{ needs.validate.outputs.attempt }}
+      JOB_RESULTS: ${{ toJSON(needs) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download every evidence artifact for this attempt
+        id: download
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          pattern: evidence-*-${{ needs.validate.outputs.date }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: final_card
+          merge-multiple: false
+      - name: Validate artifact manifests and publish explicit coverage
+        env:
+          DOWNLOAD_OUTCOME: ${{ steps.download.outcome }}
+        run: python scripts/daily_card_workflow.py finalize --date "$DATE" --inputs final_card --output aggregate
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-card-${{ needs.validate.outputs.date }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: aggregate
+          retention-days: 7
+          if-no-files-found: error

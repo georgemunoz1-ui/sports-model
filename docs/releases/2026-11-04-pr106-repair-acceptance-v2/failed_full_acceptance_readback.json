@@ -1,0 +1,41 @@
+{
+  "schema": "pr106-independent-failed-acceptance-readback-v1",
+  "status": "SOFTWARE_STEPS_PASSED_EVIDENCE_DELIVERY_FAILED",
+  "source_commit": "9f9a5f032a5aa9e41ce95b3a6b287427a75d3bdc",
+  "current_head": "9f9a5f032a5aa9e41ce95b3a6b287427a75d3bdc",
+  "command_exit_codes": [
+    0,
+    0
+  ],
+  "pytest_counts": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 2372
+  },
+  "research_unittest_counts": {
+    "errors": 0,
+    "expected_failures": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 131,
+    "unexpected_successes": 0
+  },
+  "source_manifest_entries": 3129,
+  "source_manifests_equal": true,
+  "reference_files_checked": 3135,
+  "mismatches": [
+    {
+      "path": "docs/releases/2026-11-04-pr106-repair-acceptance-v1/acceptance.log",
+      "expected": "09f8f5a30b01cb9a0f0cbf6747b6d6e8be554a8836333887c4be248e6174dec6",
+      "actual": "8d763a284762805c2b5660ae6fd141aec60e3d1d65fabba9a462317b67373408"
+    }
+  ],
+  "packet_created": false,
+  "receipt_sha256": "754800b49b5469a2a5f5436173ab586af6a0d1e152d82bf699d9dc5280f46b95",
+  "cause": "UNPROVEN; log truncated mid-unittest despite structured completion receipts",
+  "tests_rerun": false,
+  "repository_edits": false,
+  "predictive_validation_granted": false,
+  "hosted_verification": "PENDING"
+}

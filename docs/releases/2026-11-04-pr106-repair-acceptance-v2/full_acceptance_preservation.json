@@ -1,0 +1,53 @@
+{
+  "schema": "pr106-independent-environment-preservation-readback-v1",
+  "source_commit": "4cac730745872f5ad9300c111234d5bf1c853e2a",
+  "current_environment_matches_recorded_fingerprint": true,
+  "recorded_package_entries": 92,
+  "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "dependency_pin_conformance": "NOT_ASSESSED",
+  "original_head": "335820332d884a3d9e66b5aeaa0f15fa933e2607",
+  "all_original_blob_files_checked": 3114,
+  "original_blob_files_unchanged": 3110,
+  "expected_repair_modified_original_paths": [
+    ".github/workflows/research-overhaul.yml",
+    "pipelines/cards/volatility_routing.py",
+    "scripts/cross_sport_volatility_research.py",
+    "tests/test_volatility_routing.py"
+  ],
+  "protected_original_files_checked": 1637,
+  "protected_path_scope": [
+    "data/**",
+    "models/**",
+    "forecasts/**",
+    "artifacts/**",
+    "state.json",
+    "AUTHORIZATIONS.md",
+    "docs/progress.md",
+    "pipelines/cards/volatility_research.py"
+  ],
+  "protected_violations": [],
+  "failed_v1_original_seven_files_unchanged": {
+    "acceptance.json": "754800b49b5469a2a5f5436173ab586af6a0d1e152d82bf699d9dc5280f46b95",
+    "acceptance.log": "8d763a284762805c2b5660ae6fd141aec60e3d1d65fabba9a462317b67373408",
+    "pytest-tests.json": "81355ff24bfb3f65de2485860e1ac62868791bf0e40b067452247f9bb6184629",
+    "research-tests.json": "c91b29c0068cb68dd992de9f7512cc7989d53739e37feefa32d0f6e43389d7ce",
+    "sources-after.json": "5d8a007e478be4eb2bfcc7631e2b0fd140be38faec7ee123f4d594b50e926745",
+    "sources-before.json": "5d8a007e478be4eb2bfcc7631e2b0fd140be38faec7ee123f4d594b50e926745",
+    "tests.xml": "a619cc4bf113edac53101425df9fa152b501e64f9e83b2f0cf2a5459683b1747"
+  },
+  "failed_v1_files_unchanged_since_retention_commit_f7fc626": [
+    "docs/releases/2026-11-04-pr106-repair-acceptance-v1/acceptance.json",
+    "docs/releases/2026-11-04-pr106-repair-acceptance-v1/acceptance.log",
+    "docs/releases/2026-11-04-pr106-repair-acceptance-v1/delivery-status.json",
+    "docs/releases/2026-11-04-pr106-repair-acceptance-v1/pytest-tests.json",
+    "docs/releases/2026-11-04-pr106-repair-acceptance-v1/research-tests.json",
+    "docs/releases/2026-11-04-pr106-repair-acceptance-v1/sources-after.json",
+    "docs/releases/2026-11-04-pr106-repair-acceptance-v1/sources-before.json",
+    "docs/releases/2026-11-04-pr106-repair-acceptance-v1/tests.xml"
+  ],
+  "v2_log_complete_final_summary": true,
+  "tests_rerun": false,
+  "repository_edits": false,
+  "predictive_validation_granted": false,
+  "wagering_authority": "OFF"
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "sports.local_evidence_delivery_status.v1",
+  "recorded_at_utc": "2026-11-04T17:47:56.284641+00:00",
+  "status": "FAILED_LOG_BINDING",
+  "software_test_counts": {
+    "pytest": 2372,
+    "research_unittest": 131,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "successor_packet_created": false,
+  "receipt_claimed_log_sha256": "09f8f5a30b01cb9a0f0cbf6747b6d6e8be554a8836333887c4be248e6174dec6",
+  "actual_retained_log_sha256": "8d763a284762805c2b5660ae6fd141aec60e3d1d65fabba9a462317b67373408",
+  "exact_error": "EVIDENCE_HASH_MISMATCH:docs/releases/2026-11-04-pr106-repair-acceptance-v1/acceptance.log",
+  "practical_impact": "This attempt cannot certify complete retained acceptance evidence despite passing structured test results. No successor packet was created.",
+  "cause": "UNDETERMINED; retained log is truncated; concurrent read-only progress reads occurred. No competing writer has been demonstrated.",
+  "historical_attempt_preserved": true,
+  "files_sha256": {
+    "tests.xml": "a619cc4bf113edac53101425df9fa152b501e64f9e83b2f0cf2a5459683b1747",
+    "acceptance.json": "754800b49b5469a2a5f5436173ab586af6a0d1e152d82bf699d9dc5280f46b95",
+    "sources-after.json": "5d8a007e478be4eb2bfcc7631e2b0fd140be38faec7ee123f4d594b50e926745",
+    "research-tests.json": "c91b29c0068cb68dd992de9f7512cc7989d53739e37feefa32d0f6e43389d7ce",
+    "acceptance.log": "8d763a284762805c2b5660ae6fd141aec60e3d1d65fabba9a462317b67373408",
+    "pytest-tests.json": "81355ff24bfb3f65de2485860e1ac62868791bf0e40b067452247f9bb6184629",
+    "sources-before.json": "5d8a007e478be4eb2bfcc7631e2b0fd140be38faec7ee123f4d594b50e926745"
+  },
+  "required_next_action": "Repair evidence-log delivery and execute a new separately retained full acceptance attempt; never rehash this receipt in place.",
+  "action_authority": false,
+  "publication_allowed": false,
+  "predictive_validation_granted": false,
+  "wagering_authority": "OFF"
+}

@@ -1,0 +1,86 @@
+{
+  "action_authority": false,
+  "artifact_sha256": "d78415a4d8c7e03d538eec4b35a0d2eaf9421945ee9203cb0b086c9dcbeb5bbb",
+  "artifacts": [
+    {
+      "artifact_sha256": "225cfacb36506b59382c4c65120320498f4756bface1d0963424a88eec1e6e8a",
+      "method": "empirical",
+      "model_id": "nhl.joint_score.empirical.research.55254f86d8e9bbb8",
+      "path": "data/research/volatility_matrix_replay_20261103/nhl/empirical.json",
+      "volatility": {
+        "away_score_sd": 1.7536306793876533,
+        "away_score_variance": 3.075220559689602,
+        "bias_applied_to_point_forecast": false,
+        "conditional_scale": 1.0,
+        "covariance_estimator": "SAMPLE_COVARIANCE_DDOF_1",
+        "empirical_margin_variance_before_discretization": 6.83838725024827,
+        "empirical_residual_pool_population_scale": 0.9992378048780488,
+        "empirical_total_variance_before_discretization": 5.383139051274422,
+        "home_away_correlation": -0.11907449365902985,
+        "home_away_covariance": -0.364089557027782,
+        "home_score_sd": 1.743618002212592,
+        "home_score_variance": 3.04020373763983,
+        "margin_sd": 2.616028174807182,
+        "margin_variance": 6.843603411384996,
+        "mean_bias_actual_minus_predicted": [
+          0.010036298225074673,
+          -0.005547455112053218
+        ],
+        "predictive_sd_not_monte_carlo_se": true,
+        "scale_features_used": {},
+        "total_sd": 2.321043985639623,
+        "total_variance": 5.387245183273868
+      }
+    },
+    {
+      "artifact_sha256": "428b4c6dfc79eca8447ad92b446afd0a4769483002dbac2ffdae6ae05593e32a",
+      "method": "ledoit_wolf",
+      "model_id": "nhl.joint_score.ledoit_wolf.research.c3581700b405851d",
+      "path": "data/research/volatility_matrix_replay_20261103/nhl/ledoit_wolf.json",
+      "volatility": {
+        "away_score_sd": 1.75221874922601,
+        "away_score_variance": 3.0702705451391625,
+        "bias_applied_to_point_forecast": false,
+        "conditional_scale": 1.0,
+        "covariance_estimator": "SAMPLE_COVARIANCE_DDOF_1",
+        "empirical_margin_variance_before_discretization": 6.724869486839092,
+        "empirical_residual_pool_population_scale": 0.9992378048780488,
+        "empirical_total_variance_before_discretization": 5.487341626953777,
+        "home_away_correlation": -0.10133648542855331,
+        "home_away_covariance": -0.30961795426573874,
+        "home_score_sd": 1.743700836044469,
+        "home_score_variance": 3.0404926056221804,
+        "margin_sd": 2.5942241729065785,
+        "margin_variance": 6.729999059292821,
+        "mean_bias_actual_minus_predicted": [
+          0.010036298225074673,
+          -0.005547455112053218
+        ],
+        "predictive_sd_not_monte_carlo_se": true,
+        "scale_features_used": {},
+        "total_sd": 2.343400785659565,
+        "total_variance": 5.491527242229866
+      }
+    }
+  ],
+  "fitted_at": "2026-11-03T18:02:42Z",
+  "joint_input_rows_sha256": "4286dda09611b86ef47b75ae8e10c74245fce354ad268f427d6ec896a6ae2ec2",
+  "league": "nhl",
+  "prospective_grade_eligible": false,
+  "schema": "sports.volatility_matrix_replay_fit.research.v1",
+  "source_provenance": {
+    "forecast_hash_derivation": "COMPOSITE_MARGIN_TOTAL_FORECAST_HASH_HOME_MINUS_AWAY_V1",
+    "historical_availability_proven": false,
+    "prospective_evidence": false,
+    "score_derivation": "HOME_EQUALS_TOTAL_PLUS_MARGIN_OVER_TWO_AWAY_EQUALS_TOTAL_MINUS_MARGIN_OVER_TWO",
+    "source_capture_kind": "RETROSPECTIVE_RECONSTRUCTION",
+    "source_files": {
+      "margin_cohort.json.gz": "22bea70e63b67fbed25ab0fad590419119ba1d93bd52f21caa354d0c9b114cf9",
+      "total_cohort.json.gz": "b724bcb4c9f1286a886695f7ec9b12328a611c0f5d2aed190c1d337822039538"
+    },
+    "source_row_count": 1312,
+    "timestamp_basis": "SIMULATED_START_MINUS_1H_AND_START_PLUS_48H_NOT_CAPTURE"
+  },
+  "status": "FITTED_RESEARCH_NOT_VALIDATED",
+  "training_n": 1312
+}

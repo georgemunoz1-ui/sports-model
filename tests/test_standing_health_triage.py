@@ -153,3 +153,25 @@ def test_evaluation_rejects_duplicate_cross_date_and_outcome_conflicts():
             call([row], [dict(row, slate_date="2026-08-26")])
         with pytest.raises(ValueError, match="OUTCOME_CONFLICT"):
             call([row], [dict(row, home_win=0, y=0)])
+
+def test_leaf_trend_counts_each_ordinal_and_excludes_parent(tmp_path):
+    parent = triage.seal(dict(card(tmp_path), issue_id="parent"))
+    children = [triage.seal(dict(card(tmp_path), issue_id=f"unit-{i}",
+        parent_issue_id="parent", unit_ordinal=i, trend_included=False))
+        for i in range(1, 7)]
+    prior = dict(issues=[], trend={"aged_over_14_days": 2})
+    r = triage.report({"issues": [parent] + children}, [prior], NOW, tmp_path)
+    assert r["trend"]["aged_over_14_days"] == 6
+    assert r["trend"]["previous_session_count"] == 2
+    assert r["trend"]["previous_session_counting_basis"] == "LEGACY_GROUPED_OR_UNKNOWN"
+    assert "parent" not in r["trend"]["aged_issue_ids"]
+
+def test_leaf_trend_does_not_count_resolved_child_or_review_as_progress(tmp_path):
+    parent = triage.seal(dict(card(tmp_path), issue_id="parent"))
+    child = triage.seal(dict(card(tmp_path), issue_id="child", parent_issue_id="parent",
+        trend_included=False, last_verified_at_utc=NOW.isoformat()))
+    resolved = triage.seal(dict(card(tmp_path), issue_id="resolved",
+        parent_issue_id="parent", status="RESOLVED", closure_evidence="proof"))
+    r = triage.report({"issues": [parent, child, resolved]}, [], NOW, tmp_path)
+    assert r["trend"]["aged_over_14_days"] == 1
+    assert r["trend"]["aged_issue_ids"] == ["child"]

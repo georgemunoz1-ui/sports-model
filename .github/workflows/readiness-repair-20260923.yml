@@ -1,0 +1,59 @@
+name: Explicit-date readiness evidence
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Date to audit; never a prospective forecast registration'
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-consolidated.txt
+      - name: Record binding repository health
+        run: |
+          mkdir -p evidence
+          python harness/healthcheck.py > evidence/health.txt 2>&1 || rc=$?
+          echo "${rc:-0}" > evidence/health.exit
+          tail -35 evidence/health.txt
+      - name: Test leaf counting and packet controls
+        run: |
+          set -o pipefail
+          python -m pytest tests/test_mlb_research_review.py tests/test_standing_health_triage.py tests/test_review_mlb_current_readiness.py tests/test_mlb_current_path.py tests/test_model_defaults.py tests/test_current_runtime_contracts.py -q | tee evidence/tests.txt
+      - name: Acquire official inputs and execute requested-date package context
+        id: packet
+        env:
+          READINESS_DATE: ${{ inputs.date }}
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python scripts/review_mlb_current_readiness.py --date "$READINESS_DATE" --output evidence/current | tee evidence/current.log
+      - name: Read-only triage with corrected leaf count
+        if: always()
+        run: |
+          python scripts/standing_health_triage.py > evidence/triage.json || rc=$?
+          echo "${rc:-0}" > evidence/triage.exit
+          python - <<'PY'
+          import json
+          r=json.load(open('evidence/triage.json'))
+          print(json.dumps({k:r[k] for k in ['trend','validation_errors','accepted_risks_present','accepted_risk_release_override','official_release_eligible']},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: readiness-repair-${{ github.run_id }}
+          path: evidence
+          retention-days: 90
+      - name: Report real package acquisition failure
+        if: steps.packet.outcome == 'failure'
+        run: exit 1

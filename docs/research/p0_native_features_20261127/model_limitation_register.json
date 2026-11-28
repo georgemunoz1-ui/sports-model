@@ -1,0 +1,38 @@
+{
+  "schema": "model_limitation_register.v1",
+  "base_commit": "4f499e5af44222632bc7256e10532d14bea191c0",
+  "leagues": {
+    "NFL": {
+      "limitation": "77 dimensions outside selected QB schema; no evidence that combined beats QB",
+      "status": "OPEN_RESEARCH_REVIEW"
+    },
+    "CFB": {
+      "limitation": "selected total head absent; separately fitted efficiency/personnel arms",
+      "status": "OPEN_RESEARCH_REVIEW"
+    },
+    "NBA": {
+      "limitation": "nine-feature baseline; existing v1.1 defense-direction fix; target-head-specific subsets; continuous joint law not exact settlement",
+      "status": "OPEN_RESEARCH_REVIEW"
+    },
+    "CBB": {
+      "limitation": "draft PR 108 only; no explicit pace/Four Factors in projection; conditional dispersion not established",
+      "status": "OPEN_RESEARCH_REVIEW"
+    },
+    "WNBA": {
+      "limitation": "separate FF7 heads; correction engine defaults optional availability to zero; validate missingness",
+      "status": "OPEN_RESEARCH_REVIEW"
+    },
+    "MLB": {
+      "limitation": "selected V13 winner scope; separate postseason feature increments; full-game score settlement not established",
+      "status": "OPEN_RESEARCH_REVIEW"
+    },
+    "NHL": {
+      "limitation": "initial baseline only; separate NHL simulator default parameters are not validated fit; margin adapter is uncalibrated",
+      "status": "OPEN_RESEARCH_REVIEW"
+    },
+    "MLS": {
+      "limitation": "independent Poisson baseline; dependence/low-score calibration and spread settlement not established",
+      "status": "OPEN_RESEARCH_REVIEW"
+    }
+  }
+}

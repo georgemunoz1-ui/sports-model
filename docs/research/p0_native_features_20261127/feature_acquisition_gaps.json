@@ -1,0 +1,47 @@
+{
+  "schema": "feature_acquisition_gaps.v1",
+  "status": "SOURCE_REVIEW_ONLY",
+  "base_commit": "4f499e5af44222632bc7256e10532d14bea191c0",
+  "leagues": {
+    "NFL": {
+      "source_receipts_verified": 0,
+      "acquisition_gap": "hourly weather source, confirmed starters, position-group availability and travel receipts; distinguish retrospective reports from archived pregame observations",
+      "limitation": "77 dimensions outside selected QB schema; no evidence that combined beats QB"
+    },
+    "CFB": {
+      "source_receipts_verified": 0,
+      "acquisition_gap": "source-bound PBP and personnel packages",
+      "limitation": "selected total head absent; separately fitted efficiency/personnel arms"
+    },
+    "NBA": {
+      "source_receipts_verified": 0,
+      "acquisition_gap": "historical/current possession box scores and authenticated player-impact/minutes feeds",
+      "limitation": "nine-feature baseline; existing v1.1 defense-direction fix; target-head-specific subsets; continuous joint law not exact settlement"
+    },
+    "CBB": {
+      "source_receipts_verified": 0,
+      "acquisition_gap": "D-I identity, orientation, possession and box-score history",
+      "limitation": "draft PR 108 only; no explicit pace/Four Factors in projection; conditional dispersion not established"
+    },
+    "WNBA": {
+      "source_receipts_verified": 0,
+      "acquisition_gap": "official regular-season history and roster availability receipts",
+      "limitation": "separate FF7 heads; correction engine defaults optional availability to zero; validate missingness"
+    },
+    "MLB": {
+      "source_receipts_verified": 0,
+      "acquisition_gap": "confirmed starter and lineup, bullpen workload, park and player game logs",
+      "limitation": "selected V13 winner scope; separate postseason feature increments; full-game score settlement not established"
+    },
+    "NHL": {
+      "source_receipts_verified": 0,
+      "acquisition_gap": "confirmed goalies, xG, rest and source-season scope",
+      "limitation": "initial baseline only; separate NHL simulator default parameters are not validated fit; margin adapter is uncalibrated"
+    },
+    "MLS": {
+      "source_receipts_verified": 0,
+      "acquisition_gap": "xG, lineup availability, schedule and regulation result receipts",
+      "limitation": "independent Poisson baseline; dependence/low-score calibration and spread settlement not established"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+# Evaluation v2 initial contract and prospective handoff
+
+Additive research-only implementation. The v2 schema and standalone validator accept all eight league labels, require complete population keys, target shape, training/cutoff/start chronology, probability bases, probability simplex, outcome status, grade references, explicit refusal states and distribution byte hash readback when present. They do not implement sport-specific settlement or attest source authenticity. Pairing refuses missing/duplicate rows, mismatched outcomes and generated-arm cutoffs. It retains void/push/refused/unresolved rows. A remote-prospective label cannot establish canonical qualification: the standalone validator refuses that scope until integrated with the existing authenticated registration writer.
+
+The legacy v1 evaluator and its three existing adapters remain unchanged. No v2 sport adapters, distribution-support validation, paired score/interval routines or native integration are claimed here. The added tests are synthetic and use the existing consolidation pytest path (requirements-consolidated.txt includes jsonschema). They are not model evaluation.
+
+Prospective capture: use the existing diagnostic-shadow-card workflow with a fresh source-bound native package artifact ID and SHA-256; the current session cannot dispatch arbitrary Actions workflows or fetch live source packages. Do not substitute a synthetic registration, backdate a forecast, or insert a second registry. Reuse the existing writer, independently verified external archive and authenticated final grader. Begin the first isolated feature-group experiment only after actual source acquisition, admission and fitted consumption evidence exist. Preserve all other league research availability.
+
+No production promotion, selector, fitted-state or wagering change.

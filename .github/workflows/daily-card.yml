@@ -19,7 +19,9 @@ on:
     paths:
       - '.github/workflows/daily-card.yml'
       - 'scripts/daily_card_workflow.py'
+      - 'scripts/nhl_atomic_capture.py'
       - 'tests/test_daily_card_workflow.py'
+      - 'tests/test_nhl_atomic_capture.py'
 
 permissions:
   contents: read
@@ -40,11 +42,62 @@ jobs:
         run: |
           python -m py_compile scripts/daily_card_workflow.py
           python -m unittest discover -s tests -p 'test_daily_card_workflow.py' -v
+          python -m unittest discover -s tests -p 'test_nhl_atomic_capture.py' -v
           for script in capture_operational_inputs capture_model_recovery prepare_cfb_current capture_team_histories prepare_initial_baselines generate_card_force advance_nfl_weekly_state prepare_nfl_weekly_events run_fresh_nfl_research check_cutoff_integrity; do
             python "scripts/$script.py" --help >/dev/null
           done
       - name: Lint workflow
         run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7 .github/workflows/daily-card.yml
+      - name: Build transient-lock artifact regression fixture
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from unittest.mock import patch
+          from scripts import daily_card_workflow as d
+          from scripts import nhl_atomic_capture as atomic
+
+          root = Path("artifact-contract-fixture")
+          root.mkdir()
+          history = root / "history"
+
+          def fake_capture(script, *args):
+              history.mkdir()
+              (history / ".collector.lock").touch()
+              (history / "report.json").write_text('{"status":"SYNTHETIC_FIXTURE"}')
+              (history / "dependency.lock").write_bytes(b"retained evidence")
+              atomic.manifest(history)
+
+          with patch.object(d, "run", fake_capture):
+              d.capture_nhl_history(history)
+          d.verify_manifest(history)
+          d.write(root / "stage_manifest.json", d.manifest(root, "stage_manifest.json"))
+          PY
+      - name: Upload regression fixture with normal hidden-file policy
+        uses: actions/upload-artifact@v4
+        with:
+          name: contract-lockfile-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifact-contract-fixture
+          include-hidden-files: false
+          if-no-files-found: error
+          retention-days: 1
+      - name: Download regression fixture
+        uses: actions/download-artifact@v4
+        with:
+          name: contract-lockfile-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifact-contract-readback
+      - name: Verify downloaded fixture and nested native manifest
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from scripts import daily_card_workflow as d
+
+          root = Path("artifact-contract-readback")
+          d.verify_manifest(root, "stage_manifest.json")
+          d.verify_manifest(root / "history")
+          assert not (root / "history/.collector.lock").exists()
+          assert (root / "history/dependency.lock").read_bytes() == b"retained evidence"
+          print("LOCKFILE_ARTIFACT_ROUNDTRIP_PASS")
+          PY
 
   validate:
     # A single live research acceptance on this owner-authorized, same-repo

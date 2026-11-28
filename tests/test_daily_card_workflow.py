@@ -84,6 +84,77 @@ class WorkflowContracts(unittest.TestCase):
             with self.assertRaises(ValueError):
                 d.captured_schedule(op, "nba", "2026-11-28", cutoff)
 
+    def test_nhl_lock_excluded_before_native_and_stage_manifests(self):
+        from scripts import nhl_atomic_capture as atomic
+        from shutil import copytree, ignore_patterns
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            stage = root / "stage"
+            stage.mkdir()
+            history = stage / "history"
+
+            def fake(script, *args):
+                self.assertEqual(script, "capture_team_histories")
+                self.assertEqual(args[-1], history)
+                history.mkdir()
+                (history / ".collector.lock").touch()
+                (history / "evidence.json").write_bytes(b"source bytes")
+                # A real nonhidden lock-named evidence file must not be discarded.
+                (history / "dependency.lock").write_bytes(b"retain")
+                atomic.manifest(history)
+                self.assertTrue((history / ".collector.lock").exists())
+                self.assertNotIn(".collector.lock", d.read(history / "manifest.json"))
+
+            with patch.object(d, "run", fake):
+                d.capture_nhl_history(history)
+            self.assertFalse((history / ".collector.lock").exists())
+            d.verify_manifest(history)
+            d.write(stage / "stage_manifest.json", d.manifest(stage, "stage_manifest.json"))
+            self.assertNotIn("history/.collector.lock", d.read(stage / "stage_manifest.json"))
+            self.assertIn("history/dependency.lock", d.read(stage / "stage_manifest.json"))
+            # Model the uploader's default omission of hidden files.
+            restored = root / "restored"
+            copytree(stage, restored, ignore=ignore_patterns(".*"))
+            d.verify_manifest(restored, "stage_manifest.json")
+            d.verify_manifest(restored / "history")
+            (restored / "history/evidence.json").unlink()
+            with self.assertRaises(ValueError):
+                d.verify_manifest(restored, "stage_manifest.json")
+
+    def test_nhl_failed_capture_preserves_receipts_and_removes_lock(self):
+        from scripts import nhl_atomic_capture as atomic
+        with tempfile.TemporaryDirectory() as folder:
+            history = Path(folder) / "history"
+
+            def fail(script, *args):
+                history.mkdir()
+                (history / ".collector.lock").touch()
+                (history / "report.json").write_bytes(b'{"status":"INCOMPLETE"}')
+                atomic.manifest(history)
+                raise RuntimeError("capture_team_histories:EXIT_2")
+
+            with patch.object(d, "run", fail):
+                with self.assertRaisesRegex(RuntimeError, "EXIT_2"):
+                    d.capture_nhl_history(history)
+            self.assertFalse((history / ".collector.lock").exists())
+            self.assertTrue((history / "report.json").exists())
+            d.verify_manifest(history)
+
+    def test_unexpected_hidden_evidence_is_not_silently_excluded(self):
+        from shutil import copytree, ignore_patterns
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            stage = root / "stage"
+            stage.mkdir()
+            (stage / ".evidence.json").write_bytes(b"must not disappear")
+            (stage / "visible.json").write_bytes(b"source")
+            d.write(stage / "stage_manifest.json", d.manifest(stage, "stage_manifest.json"))
+            self.assertIn(".evidence.json", d.read(stage / "stage_manifest.json"))
+            restored = root / "restored"
+            copytree(stage, restored, ignore=ignore_patterns(".*"))
+            with self.assertRaises(ValueError):
+                d.verify_manifest(restored, "stage_manifest.json")
+
     def test_nfl_missing_source_is_not_no_games(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

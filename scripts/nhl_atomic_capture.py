@@ -260,8 +260,12 @@ def capture_one(root, spec, transport, clock, hook=None):
 
 
 def manifest(root):
+    # The root collector lock coordinates processes, not source evidence.
+    # Keep its inode for resumable collectors, but never bind it into evidence.
+    root = Path(root)
     files = {str(p.relative_to(root)): digest(inside(root, str(p.relative_to(root))).read_bytes())
-             for p in sorted(root.rglob("*")) if p.is_file() and p.name != "manifest.json"}
+             for p in sorted(root.rglob("*")) if p.is_file() and p.name != "manifest.json"
+             and p != root / ".collector.lock"}
     atomic(inside(root, "manifest.json"), encoded(files), replace=True)
 
 

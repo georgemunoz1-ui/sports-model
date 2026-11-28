@@ -297,6 +297,24 @@ def native_status(result):
     return "VERIFIED_NATIVE_OUTPUT"
 
 
+def capture_nhl_history(history):
+    """Capture in a fresh, private stage root; discard only the known transient lock."""
+    history = Path(history)
+    if history.exists() or history.is_symlink():
+        raise FileExistsError("FRESH_NHL_HISTORY_ROOT_REQUIRED")
+    try:
+        run("capture_team_histories", "--league", "nhl", "--season-scope", SCOPE, "--output", history)
+    finally:
+        # subprocess.run has returned or raised after the child has stopped.
+        # This is a non-resumable per-job root, never a shared collector store.
+        lock = history / ".collector.lock"
+        if lock.exists() or lock.is_symlink():
+            if history.is_symlink() or lock.is_symlink() or not lock.is_file() or lock.stat().st_size != 0:
+                raise ValueError("UNEXPECTED_NHL_COLLECTOR_LOCK")
+            lock.unlink()
+            print("Removed transient history/.collector.lock before stage manifest", flush=True)
+
+
 def shared(league, day, inputs, output):
     operational, recovery = inputs / "operational", inputs / "recovery"
     packages = output / "packages"
@@ -317,7 +335,7 @@ def shared(league, day, inputs, output):
         elif league == "nhl":
             current = output / "current"
             make_nhl_current(operational, day, current)
-            run("capture_team_histories", "--league", league, "--season-scope", SCOPE, "--output", history)
+            capture_nhl_history(history)
             extra = ["--season-scope", SCOPE]
         else:
             raise ValueError("UNSUPPORTED_SHARED_LEAGUE")

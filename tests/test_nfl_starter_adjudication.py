@@ -155,6 +155,39 @@ class ReviewedTeamAlias(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'TEAM_ALIAS_IDENTITY'):
             reviewed_team(team, {'provider_team_binding_review':binding})
 
+    def test_rams_requires_its_own_complete_review(self):
+        from models.nfl.contextual.starter_adjudication import reviewed_team
+        team = {'abbreviation': 'LAR', 'id': '14', 'displayName': 'Los Angeles Rams'}
+        binding = {'provider_code': 'LAR', 'canonical_code': 'LA',
+                   'provider_team_id': '14', 'provider_display_name': 'Los Angeles Rams'}
+        self.assertEqual(reviewed_team(team, {'provider_team_binding_review': binding}), 'LA')
+        for review in ({}, {'provider_team_binding_review': {**binding, 'canonical_code': 'LAC'}},
+                       {'provider_team_binding_review': {**binding, 'provider_team_id': '24'}}):
+            with self.subTest(review=review), self.assertRaisesRegex(ValueError, 'EXPLICIT_TEAM_ALIAS'):
+                reviewed_team(team, review)
+        for changed in ({**team, 'id': '24'}, {**team, 'displayName': 'Los Angeles Chargers'}):
+            with self.subTest(team=changed), self.assertRaisesRegex(ValueError, 'TEAM_ALIAS_IDENTITY'):
+                reviewed_team(changed, {'provider_team_binding_review': binding})
+        self.assertEqual(reviewed_team({'abbreviation': 'LA'}, {}), 'LA')
+
+    def test_rams_alias_in_opponent_final_keeps_qb_binding(self):
+        games, pbp, r = fixture()
+        games['away_team'] = 'LA'
+        j = json.loads(r['evidence']['text'])
+        j['header']['competitions'][0]['competitors'][1]['team'] = {
+            'abbreviation': 'LAR', 'id': '14', 'displayName': 'Los Angeles Rams'}
+        r['evidence']['text'] = json.dumps(j)
+        r['evidence']['receipt']['sha256'] = hashlib.sha256(r['evidence']['text'].encode()).hexdigest()
+        with self.assertRaisesRegex(ValueError, 'EXPLICIT_TEAM_ALIAS'):
+            apply(games, pbp, [r], r['reviewed_at_utc'])
+        r['provider_team_binding_review'] = {
+            'provider_code': 'LAR', 'canonical_code': 'LA', 'provider_team_id': '14',
+            'provider_display_name': 'Los Angeles Rams'}
+        actual = apply(games, pbp, [r], r['reviewed_at_utc'])
+        self.assertEqual(actual.iloc[0].home_qb_id, 'new')
+        self.assertEqual(actual.iloc[0].away_team, 'LA')
+        self.assertEqual(games.iloc[0].home_qb_id, 'old')
+
 class NominalAdversarial(NominalStarter):
     def test_unrelated_excerpt_and_scramble_refused(self):
         games, pbp, base = self.nominal()

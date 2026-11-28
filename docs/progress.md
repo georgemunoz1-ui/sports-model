@@ -5021,3 +5021,45 @@ PR38 closed as already incorporated via82. PR45 strict health/evidence blockers
 remain separate and unwaived. Hosted integration CI and artifact readback are
 required before merge. All predictive limitations remain; authority OFF.
 See docs/REMAINING_PR_REPAIR_20261024.md and current execution receipts.
+
+
+## 2026-11-22 — Native forecast recovery exercised; release remains RED/HOLD
+
+Owner requested numerical forecasts across the supported leagues after quote-only
+cards. Restored complete source and current source-bound packages; executed 37
+CBB, 11 NFL, seven NBA and five NHL forecasts for November 22, plus two CFB
+previews for November 24. All precede scheduled starts. Eight November 22 fixture
+refusals are explicit population/history boundaries; no old forecast was backfilled.
+
+Added a reviewed Rams provider-identity binding, reusable CFB fixed-fit state
+refresh, and an immutable stage-execution receipt wrapper. Independent review
+found and resolved missing consumed-file manifest coverage, timeout descendants,
+and pre-existing-output attribution. Focused suite: 21 passed. Real refresh and
+native output replay evidence is retained with the recovery artifacts. See
+`docs/research/FORECAST_RECOVERY_20261122.md` for source scope, executed checks,
+product limits and repeatable command interface.
+
+NBA/NHL builders performed their existing fixed-hyperparameter deployment fits;
+CFB/NFL fitted parameters stayed unchanged. State/rest, personnel and MLS playoff
+scope limitations remain. Health failures were retained and no release-health
+pass is claimed. Code is a candidate branch, not a deployed scheduler. Canonical
+registrations created: 0. NO_PICK, ACTION_OFF, official units 0; no automatic merge
+or model promotion.
+
+
+## 2026-11-22 — Procedure version and immutable state policy amendment
+
+Recorded the owner's rule 3 addition and exact rule 5 replacement in
+`docs/research/MODEL_VERSION_STATE_CONTRACT.md`. Routine documented state
+refreshes retain model version and existing validation scope only with unchanged
+parameters, residual bank, feature definitions, history/cutoff rules and
+settlement logic. Distinct states require retained immutable snapshots and
+separate full state digests; state refresh grants no new validation credit.
+
+Two read-only source reviews mapped shared/NFL freeze paths, field propagation,
+canonical grouping and separate CBB/external HTML integration. Nine acceptance
+cases are planned, not run. Preserve pinned numerical/RNG source and old cards.
+This amendment changes documentation only; no inference, fitting, forecast
+registration, settlement, deployment, promotion or wagering change. Startup
+health remains RED (9 failures, 6 warnings in this environment); its full output
+and checkout identity were retained. No automatic merge.
